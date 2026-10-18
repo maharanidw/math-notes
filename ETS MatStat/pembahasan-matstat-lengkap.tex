@@ -1,0 +1,3864 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+
+% =============================================================================
+% 1. PENGATURAN KERTAS B5 LOOSE LEAF (26 HOLES) DUPLEX
+% =============================================================================
+\usepackage[
+  paperwidth=182mm,
+  paperheight=257.5mm,
+  inner=2.4cm,
+  outer=1.3cm,
+  top=1.5cm,
+  bottom=1.5cm,
+  headheight=14pt,
+  headsep=10pt,
+  footskip=20pt
+]{geometry}
+
+% =============================================================================
+% 2. IDENTITAS & INFORMASI MATA KULIAH
+% =============================================================================
+\newcommand{\matakuliah}{Matematika Statistika}
+\newcommand{\kodemk}{KM184501}
+\newcommand{\semester}{Semester Gasal 2025/2026}
+\newcommand{\penyusun}{Nama Mahasiswa}
+\newcommand{\nrp}{500xxxxxxxx}
+
+% =============================================================================
+% 3. PAKET TAMPILAN, WARNA, & KOTAK SOAL
+% =============================================================================
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows, decorations.pathmorphing}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.18cm}
+\setlist{noitemsep, topsep=2pt, leftmargin=1.3em}
+
+\tcbset{
+  enhanced, breakable, arc=2.5pt, boxrule=0.6pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  before skip=6pt, after skip=6pt,
+  fonttitle=\bfseries\small, coltitle=white
+}
+
+\newtcolorbox{soalbox}[1]{
+  colback=purple!4, colframe=purple!70!black,
+  title={\textbf{#1}}
+}
+
+\newtcolorbox{solbox}[1]{
+  colback=teal!4, colframe=teal!70!black,
+  title={\textbf{Pembahasan: #1}}
+}
+
+\newtcolorbox{tipbox}[1]{
+  colback=yellow!8, colframe=orange!80!black,
+  title={\textbf{Rumus Kunci / Catatan: #1}}
+}
+
+% =============================================================================
+% 4. HEADER & FOOTER DINAMIS (TWOSIDE)
+% =============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO,RE]{\small\itshape \matakuliah}
+\fancyhead[RO,LE]{\small\nouppercase{\rightmark}}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\paketsoal}[2]{
+  \newpage
+  \markright{#1}
+  \begin{center}
+    {\large\bfseries #1}\\[2pt]
+    {\normalsize\itshape #2}
+  \end{center}
+  \vspace{0.2cm}
+}
+
+% =============================================================================
+\begin{document}
+
+\begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, arc=2pt, boxrule=0.5pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt]
+\small
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}ll r@{ : }l@{}}
+\textbf{Mata Kuliah} & : \matakuliah & \textbf{Penyusun} & \penyusun \\
+\textbf{Kode / Smt}  & : \kodemk{} / \semester & \textbf{NRP} & \nrp \\
+\end{tabular*}
+\end{tcolorbox}
+\vspace{-0.2cm}
+
+% =============================================================================
+% PAKET 1: ETS 2025
+% =============================================================================
+\paketsoal{PEMBAHASAN SOAL ETS 2025}{%
+Mata Kuliah: Matematika Statistika --- Materi: Order Statistics, CLT, Distribusi Sampling}
+
+%--- SOAL 1 -------------------------------------------------------------------
+\begin{soalbox}{Soal 1: Order Statistics \& Distribusi Terbatas (CDF Pareto $F(x) = 1 - x^{-2}$)}
+Perhatikan sampel acak berukuran $n$ dari suatu distribusi dengan CDF:
+\[
+F(x) = \begin{cases} 1 - x^{-2}, & \text{jika } x > 1 \\ 0, & \text{lainnya.} \end{cases}
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan CDF untuk $W_n = X_{n:n}$ (maksimum sampel).
+  \item Dapatkan CDF untuk $Y_n = n^{-1/2} X_{n:n}$.
+  \item Dapatkan distribusi terbatas untuk $Y_n$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Order Statistics: CDF Statistik Urutan Maksimum}
+Untuk sampel acak bebas dan berdistribusi identik (iid) $X_1, X_2, \dots, X_n$ dengan CDF populasi $F(x)$:
+\begin{itemize}
+  \item Maksimum sampel didefinisikan sebagai $X_{n:n} = \max(X_1, X_2, \dots, X_n)$.
+  \item Nilai maksimum kurang dari atau sama dengan suatu nilai $w$ jika dan hanya jika \textbf{seluruh} pengamatan sampel kurang dari atau sama dengan $w$:
+  \[
+  F_{X_{n:n}}(w) = P(X_{n:n} \le w) = P(X_1 \le w, X_2 \le w, \dots, X_n \le w) = \prod_{i=1}^n P(X_i \le w) = [F(w)]^n
+  \]
+  \item Identitas batas eksponensial Euler: $\displaystyle\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^n = e^c$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): Menentukan CDF dari $W_n = X_{n:n}$}
+\textbf{Langkah 1: Tinjau fungsi distribusi kumulatif (CDF) populasi.}
+Fungsi distribusi kumulatif dari peubah acak asal $X$ adalah:
+\[
+F(x) = \begin{cases} 0, & x \le 1 \\ 1 - x^{-2}, & x > 1 \end{cases}
+\]
+Perhatikan bahwa domain nilai dari populasi $X$ adalah $(1, \infty)$, sehingga $P(X \le 1) = 0$.
+
+\textbf{Langkah 2: Konstruksi peristiwa untuk maksimum sampel $W_n$.}
+Maksimum sampel $W_n = X_{n:n} = \max(X_1, \dots, X_n)$ bernilai $\le w$ jika dan hanya jika setiap pengamatan sampel berada di bawah atau sama dengan $w$:
+\[
+F_{W_n}(w) = P(W_n \le w) = P(X_1 \le w \text{ dan } X_2 \le w \text{ dan } \dots \text{ dan } X_n \le w)
+\]
+Karena $X_1, X_2, \dots, X_n$ saling independen dan berdistribusi identik:
+\[
+F_{W_n}(w) = P(X_1 \le w) \times P(X_2 \le w) \times \dots \times P(X_n \le w) = [F(w)]^n
+\]
+
+\textbf{Langkah 3: Evaluasi fungsi kumulatif berdasarkan daerah domain $w$.}
+\begin{itemize}
+  \item Untuk $w \le 1$: Karena tidak ada pengamatan yang bernilai $\le 1$, $F(w) = 0$, sehingga:
+  \[
+  F_{W_n}(w) = [0]^n = 0
+  \]
+  \item Untuk $w > 1$: Substitusikan nilai $F(w) = 1 - w^{-2} = 1 - \dfrac{1}{w^2}$:
+  \[
+  F_{W_n}(w) = \left(1 - w^{-2}\right)^n = \left(1 - \frac{1}{w^2}\right)^n
+  \]
+\end{itemize}
+
+\[
+\boxed{F_{W_n}(w) = \begin{cases} \left(1 - \dfrac{1}{w^2}\right)^n, & w > 1 \\ 0, & w \le 1 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Menentukan CDF dari $Y_n = n^{-1/2} X_{n:n}$}
+\textbf{Langkah 1: Menentukan batas domain nilai $Y_n$.}
+Diberikan transformasi skala:
+\[
+Y_n = n^{-1/2} X_{n:n} = \frac{X_{n:n}}{\sqrt{n}}
+\]
+Karena domain pengamatan asal memenuhi $X_{n:n} > 1$, maka nilai terendah yang mungkin untuk $Y_n$ adalah:
+\[
+Y_n > \frac{1}{\sqrt{n}} = n^{-1/2}
+\]
+Artinya, untuk nilai $y \le n^{-1/2}$, peristiwa $\{Y_n \le y\}$ mustahil terjadi, sehingga $F_{Y_n}(y) = 0$.
+
+\textbf{Langkah 2: Transformasi peristiwa kumulatif untuk $y > n^{-1/2}$.}
+Gunakan metode fungsi distribusi kumulatif:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P\left(\frac{X_{n:n}}{\sqrt{n}} \le y\right)
+\]
+Kalikan kedua ruas di dalam kurung probabilitas dengan $\sqrt{n} = n^{1/2}$ (karena $\sqrt{n} > 0$, arah pertidaksamaan tidak berubah):
+\[
+F_{Y_n}(y) = P\left(X_{n:n} \le \sqrt{n} y\right) = F_{W_n}\left(\sqrt{n} y\right)
+\]
+
+\textbf{Langkah 3: Substitusikan argumen $\sqrt{n} y$ ke dalam CDF $F_{W_n}$.}
+Karena $y > n^{-1/2} \implies \sqrt{n} y > 1$, kita gunakan bentuk $F_{W_n}(w) = (1 - w^{-2})^n$ dengan $w = \sqrt{n} y$:
+\[
+w^{-2} = \left(\sqrt{n} y\right)^{-2} = \frac{1}{\left(\sqrt{n} y\right)^2} = \frac{1}{n y^2}
+\]
+Dengan demikian:
+\[
+F_{Y_n}(y) = \left(1 - \frac{1}{n y^2}\right)^n = \left(1 - \frac{y^{-2}}{n}\right)^n
+\]
+
+\[
+\boxed{F_{Y_n}(y) = \begin{cases} \left(1 - \dfrac{1}{n y^2}\right)^n, & y > n^{-1/2} \\ 0, & y \le n^{-1/2} \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Menentukan Distribusi Terbatas (Limiting Distribution) untuk $Y_n$}
+\textbf{Langkah 1: Menghitung limit CDF saat ukuran sampel $n \to \infty$.}
+Tinjau nilai $y \in \mathbb{R}$:
+\begin{enumerate}[label=\arabic*.]
+  \item Untuk sebarang nilai $y > 0$ yang tetap:
+  Perhatikan bahwa seiring $n \to \infty$, batas bawah $n^{-1/2} = \dfrac{1}{\sqrt{n}} \to 0$.
+  Oleh karena itu, untuk nilai $n$ yang cukup besar, pasti berlaku $y > n^{-1/2}$.
+  Maka untuk setiap $y > 0$:
+  \[
+  \lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 - \frac{y^{-2}}{n}\right)^n = \lim_{n \to \infty} \left(1 + \frac{-y^{-2}}{n}\right)^n
+  \]
+  Gunakan identitas limit fundamental $\lim_{n \to \infty} \left(1 + \dfrac{c}{n}\right)^n = e^c$ dengan menetapkan konstanta $c = -y^{-2} = -\dfrac{1}{y^2}$:
+  \[
+  \lim_{n \to \infty} F_{Y_n}(y) = e^{-y^{-2}} = e^{-1/y^2}, \quad \text{untuk } y > 0
+  \]
+  \item Untuk $y \le 0$:
+  Karena $Y_n > n^{-1/2} > 0$ untuk setiap $n \ge 1$, peluang bahwa $Y_n \le y$ adalah 0 untuk seluruh $n$. Sehingga:
+  \[
+  \lim_{n \to \infty} F_{Y_n}(y) = 0, \quad \text{untuk } y \le 0
+  \]
+\end{enumerate}
+
+\textbf{Langkah 2: Verifikasi aksioma fungsi distribusi kumulatif.}
+Definisikan fungsi limit kumulatif:
+\[
+G(y) = \begin{cases} e^{-1/y^2}, & y > 0 \\ 0, & y \le 0 \end{cases}
+\]
+Periksa sifat-sifat validitas CDF:
+\begin{itemize}
+  \item Batas kiri: $\lim_{y \to 0^+} G(y) = \lim_{y \to 0^+} e^{-1/y^2} = e^{-\infty} = 0 = G(0)$.
+  \item Batas kanan: $\lim_{y \to \infty} G(y) = \lim_{y \to \infty} e^{-1/y^2} = e^0 = 1$.
+  \item Monoton tak-turun: Turunan pertamanya $g(y) = G'(y) = 2y^{-3} e^{-1/y^2} > 0$ untuk seluruh $y > 0$.
+\end{itemize}
+
+\textbf{Langkah 3: Identifikasi nama distribusi.}
+Fungsi $G(y) = e^{-(y/\beta)^{-\alpha}}$ untuk $y > 0$ adalah fungsi distribusi kumulatif dari **Distribusi FrÃ©chet (Distribusi Nilai Ekstrem Tipe II)** dengan parameter skala $\beta = 1$ dan parameter bentuk $\alpha = 2$.
+
+\[
+\boxed{Y_n \xrightarrow{d} G(y) = \begin{cases} e^{-1/y^2}, & y > 0 \\ 0, & y \le 0 \end{cases} \quad \text{(Distribusi FrÃ©chet dengan parameter bentuk } \alpha = 2\text{)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 2 -------------------------------------------------------------------
+\begin{soalbox}{Soal 2: Pendekatan Normal (CLT) untuk Jumlahan Uniform Standar $n=20$}
+Diberikan $X_i \sim \text{UNIF}(0,1)$, dimana $X_1, X_2, \cdots, X_{20}$ saling independen. Menggunakan pendekatan normal:
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan $P\left(\sum_{i=1}^{20} X_i \le 12\right)$.
+  \item Dapatkan persentil ke-90 dari $\sum_{i=1}^{20} X_i$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Central Limit Theorem \& Momen Distribusi Uniform}
+Untuk peubah acak kontinu $X \sim \text{UNIF}(a, b)$:
+\begin{itemize}
+  \item Mean populasi: $\mu = \dfrac{a + b}{2}$, \qquad Varians populasi: $\sigma^2 = \dfrac{(b - a)^2}{12}$.
+  \item Khusus untuk $\text{UNIF}(0, 1)$: $\mu = \dfrac{1}{2} = 0.5$, \qquad $\sigma^2 = \dfrac{1}{12}$.
+  \item Jumlahan $S_n = \sum_{i=1}^n X_i$ memiliki mean $\mu_S = n\mu$ dan varians $\sigma_S^2 = n\sigma^2$.
+  \item Menurut CLT, untuk $n$ yang cukup besar, $S_n \approx N(\mu_S, \sigma_S^2)$. (Distribusi uniform yang simetris konvergen sangat cepat ke normal bahkan untuk $n \ge 12$).
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 2(a): Menghitung $P\left(\sum_{i=1}^{20} X_i \le 12\right)$ via Pendekatan Normal}
+\textbf{Langkah 1: Penurunan analitik mean dan varians peubah asal $X_i$.}
+Fungsi kepekatan peluang (PDF) dari $X_i \sim \text{UNIF}(0, 1)$ adalah $f(x) = 1$ untuk $0 \le x \le 1$.
+\begin{itemize}
+  \item Nilai harapan:
+  \[
+  E(X_i) = \int_0^1 x \cdot (1) \, dx = \left[\frac{x^2}{2}\right]_0^1 = \frac{1}{2} - 0 = \frac{1}{2} = 0.5
+  \]
+  \item Momen kedua:
+  \[
+  E(X_i^2) = \int_0^1 x^2 \cdot (1) \, dx = \left[\frac{x^3}{3}\right]_0^1 = \frac{1}{3} - 0 = \frac{1}{3}
+  \]
+  \item Varians populasi:
+  \[
+  \mathrm{Var}(X_i) = E(X_i^2) - [E(X_i)]^2 = \frac{1}{3} - \left(\frac{1}{2}\right)^2 = \frac{1}{3} - \frac{1}{4} = \frac{4 - 3}{12} = \frac{1}{12}
+  \]
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung mean dan simpangan baku dari jumlahan $S_{20} = \sum_{i=1}^{20} X_i$.}
+Karena $X_1, X_2, \dots, X_{20}$ saling independen:
+\begin{itemize}
+  \item Nilai harapan jumlahan:
+  \[
+  \mu_S = E(S_{20}) = E\left[\sum_{i=1}^{20} X_i\right] = \sum_{i=1}^{20} E(X_i) = 20 \times \frac{1}{2} = 10
+  \]
+  \item Varians jumlahan:
+  \[
+  \sigma_S^2 = \mathrm{Var}(S_{20}) = \mathrm{Var}\left[\sum_{i=1}^{20} X_i\right] = \sum_{i=1}^{20} \mathrm{Var}(X_i) = 20 \times \frac{1}{12} = \frac{20}{12} = \frac{5}{3} \approx 1.6667
+  \]
+  \item Simpangan baku jumlahan:
+  \[
+  \sigma_S = \sqrt{\frac{5}{3}} = \frac{\sqrt{15}}{3} \approx 1.29099
+  \]
+\end{itemize}
+
+\textbf{Langkah 3: Menerapkan pendekatan Central Limit Theorem (CLT).}
+Berdasarkan Teorema Limit Pusat:
+\[
+S_{20} \approx N\left(\mu_S = 10, \ \sigma_S^2 = \frac{5}{3}\right)
+\]
+Lakukan standardisasi peubah acak menjadi peubah normal baku $Z \sim N(0, 1)$:
+\[
+Z = \frac{S_{20} - \mu_S}{\sigma_S} = \frac{S_{20} - 10}{\sqrt{5/3}}
+\]
+
+\textbf{Langkah 4: Menghitung nilai skor-Z untuk batas atas 12.}
+\[
+z = \frac{12 - 10}{\sqrt{5/3}} = \frac{2}{\sqrt{5/3}} = 2 \times \sqrt{\frac{3}{5}} = \frac{2\sqrt{15}}{5} \approx \frac{2 \times 3.87298}{5} = \frac{7.74597}{5} \approx 1.5492 \approx 1.55
+\]
+
+\textbf{Langkah 5: Evaluasi probabilitas menggunakan tabel normal baku.}
+\[
+P(S_{20} \le 12) = P\left(Z \le \frac{12 - 10}{\sqrt{5/3}}\right) \approx P(Z \le 1.55) = \Phi(1.55)
+\]
+Dari Tabel Distribusi Kumulatif Normal Baku:
+\[
+\Phi(1.55) \approx 0.9394 \quad (93.94\%)
+\]
+*(Jika dihitung tanpa pembulatan awal skor-$z$: $\Phi(1.5492) \approx 0.9393$)*.
+
+\[
+\boxed{P\left(\sum_{i=1}^{20} X_i \le 12\right) \approx 0.9394 \quad (93.94\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(b): Menentukan Persentil ke-90 dari $\sum_{i=1}^{20} X_i$}
+\textbf{Langkah 1: Definisi formal persentil ke-90.}
+Misalkan $s_{0.90}$ menyatakan persentil ke-90 dari peubah acak $S_{20}$.
+Secara matematis, $s_{0.90}$ adalah nilai sedemikian sehingga $90\%$ dari distribusi probabilitas berada di bawah nilai tersebut:
+\[
+P(S_{20} \le s_{0.90}) = 0.90
+\]
+
+\textbf{Langkah 2: Menstandardisasi ke distribusi Normal Baku.}
+Berdasarkan pendekatan normal $S_{20} \approx N(10, 5/3)$:
+\[
+P\left(\frac{S_{20} - 10}{\sqrt{5/3}} \le \frac{s_{0.90} - 10}{\sqrt{5/3}}\right) = 0.90 \iff \Phi\left(\frac{s_{0.90} - 10}{\sqrt{5/3}}\right) = 0.90
+\]
+
+\textbf{Langkah 3: Menentukan nilai kritis $z_{0.90}$ dari tabel distribusi normal.}
+Kita mencari nilai $z$ yang memenuhi $\Phi(z) = 0.90$:
+\begin{itemize}
+  \item Dari tabel normal baku: $\Phi(1.28) \approx 0.8997$ dan $\Phi(1.29) \approx 0.9015$.
+  \item Interpolasi linier:
+  \[
+  z_{0.90} \approx 1.28 + \frac{0.9000 - 0.8997}{0.9015 - 0.8997} \times 0.01 = 1.28 + \frac{0.0003}{0.0018} \times 0.01 \approx 1.2816 \approx 1.282
+  \]
+\end{itemize}
+
+\textbf{Langkah 4: Menghitung nilai $s_{0.90}$.}
+Substitusikan nilai kritis $z_{0.90} = 1.282$:
+\[
+\frac{s_{0.90} - 10}{\sqrt{5/3}} = 1.282 \implies s_{0.90} = 10 + 1.282 \times \sqrt{\frac{5}{3}}
+\]
+Hitung secara numerik:
+\[
+s_{0.90} = 10 + 1.282 \times 1.29099 = 10 + 1.65505 \approx 11.655
+\]
+
+\[
+\boxed{\text{Persentil ke-90 dari } \sum_{i=1}^{20} X_i \text{ adalah } s_{0.90} \approx 11.655} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 -------------------------------------------------------------------
+\begin{soalbox}{Soal 3: Transformasi Distribusi Gamma ke Chi-Square untuk Peluang Klaim}
+Sebuah perusahaan asuransi ingin memodelkan jumlah klaim yang digunakan oleh pemegang polis dalam satu tahun. Berdasarkan data historis, perusahaan asuransi tersebut menemukan jumlah klaim mengikuti distribusi Gamma, dengan $\theta = 1.5$ dan $\kappa = 2$. Jika perusahaan tersebut ingin mengetahui peluang bahwa jumlah klaim dalam satu tahun adalah 6 atau lebih, bagaimana mereka menggunakan distribusi Chi-Square untuk menyelesaikannya?
+\end{soalbox}
+
+\begin{tipbox}{Relasi Distribusi Gamma dan Distribusi Chi-Square}
+\begin{itemize}
+  \item \textbf{Notasi Standar Bain \& Engelhardt:} $X \sim \text{GAM}(\theta, \kappa)$ memiliki parameter skala $\theta > 0$ dan parameter bentuk $\kappa > 0$, dengan MGF:
+  \[
+  M_X(t) = (1 - \theta t)^{-\kappa}, \quad t < \frac{1}{\theta}
+  \]
+  \item \textbf{Teorema Transformasi Chi-Square:} Peubah terukur $Q = \dfrac{2X}{\theta}$ memiliki MGF:
+  \[
+  M_Q(t) = M_X\left(\frac{2t}{\theta}\right) = \left(1 - \theta \cdot \frac{2t}{\theta}\right)^{-\kappa} = (1 - 2t)^{-\kappa} = (1 - 2t)^{-(2\kappa)/2}
+  \]
+  Berdasarkan keunikan MGF, ini adalah MGF dari distribusi Chi-Square dengan derajat kebebasan $r = 2\kappa$:
+  \[
+  \frac{2X}{\theta} \sim \chi^2(2\kappa)
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 3: Penurunan Analitik dan Perhitungan Menggunakan Distribusi $\chi^2$}
+\textbf{Langkah 1: Identifikasi model dan parameter distribusi.}
+Misalkan peubah acak $X$ menyatakan besar/jumlah klaim tahunan:
+\[
+X \sim \text{GAM}(\theta = 1.5, \ \kappa = 2)
+\]
+Fungsi kepekatan peluang (PDF) dari $X$ adalah:
+\[
+f_X(x) = \frac{1}{\Gamma(\kappa) \theta^\kappa} x^{\kappa - 1} e^{-x/\theta} = \frac{1}{\Gamma(2) (1.5)^2} x^{2-1} e^{-x/1.5} = \frac{1}{1 \times 2.25} x e^{-2x/3} = \frac{4}{9} x e^{-2x/3}, \quad x > 0
+\]
+
+\textbf{Langkah 2: Menemukan transformasi ke distribusi Chi-Square.}
+Agar dapat memanfaatkan tabel atau sifat distribusi Chi-Square, kita bentuk peubah acak terstandardisasi $Q$:
+\[
+Q = \frac{2X}{\theta}
+\]
+Substitusikan parameter $\theta = 1.5 = \dfrac{3}{2}$ dan $\kappa = 2$:
+\[
+Q = \frac{2X}{1.5} = \frac{2X}{3/2} = \frac{4X}{3}
+\]
+Berdasarkan teorema relasi Gamma--Chi-Square:
+\[
+Q = \frac{4X}{3} \sim \chi^2(r = 2\kappa = 2 \times 2 = 4)
+\]
+Jadi, peubah $\dfrac{4X}{3}$ berdistribusi Chi-Square dengan derajat kebebasan $r = 4$.
+
+\textbf{Langkah 3: Mentransformasikan pernyataan peluang target.}
+Perusahaan asuransi ingin mencari peluang bahwa jumlah klaim dalam satu tahun bernilai 6 atau lebih ($P(X \ge 6)$).
+Kalikan kedua ruas pertidaksamaan dengan faktor skala $\dfrac{4}{3} > 0$:
+\[
+P(X \ge 6) = P\left(\frac{4X}{3} \ge \frac{4 \times 6}{3}\right) = P\left(Q \ge \frac{24}{3}\right) = P(Q \ge 8), \quad \text{di mana } Q \sim \chi^2(4)
+\]
+
+\textbf{Langkah 4: Perhitungan nilai probabilitas $P(\chi^2(4) \ge 8)$.}
+Kita dapat menyelesaikannya melalui dua cara yang saling mengonfirmasi:
+
+\textbf{Metode A: Perhitungan Eksak via Integrasi PDF Chi-Square (Erlang)}
+Karena $r = 4$ genap, peubah $\chi^2(4) \equiv \text{Gamma}(\alpha = 2, \beta = 2)$ memiliki PDF:
+\[
+f_Q(q) = \frac{1}{\Gamma(2) 2^2} q^{2-1} e^{-q/2} = \frac{1}{4} q e^{-q/2}, \quad q > 0
+\]
+Peluang ekor kanan:
+\[
+P(Q \ge 8) = \int_8^\infty \frac{1}{4} q e^{-q/2} \, dq
+\]
+Gunakan integrasi parsial: misalkan $u = \dfrac{q}{4} \implies du = \dfrac{1}{4} dq$, dan $dv = e^{-q/2} dq \implies v = -2e^{-q/2}$:
+\[
+\int \frac{1}{4} q e^{-q/2} \, dq = -\frac{q}{2} e^{-q/2} - \int \left(-2e^{-q/2}\right) \frac{1}{4} dq = -\frac{q}{2} e^{-q/2} - e^{-q/2}
+\]
+Evaluasi batas dari 8 hingga $\infty$:
+\[
+P(Q \ge 8) = \left[-\left(\frac{q}{2} + 1\right) e^{-q/2}\right]_8^\infty = 0 - \left[-\left(\frac{8}{2} + 1\right) e^{-8/2}\right] = (4 + 1) e^{-4} = 5 e^{-4}
+\]
+Karena $e \approx 2.71828 \implies e^{-4} \approx 0.0183156$:
+\[
+P(X \ge 6) = 5 \times 0.0183156 = 0.091578 \approx \mathbf{0.0916}
+\]
+
+\textbf{Metode B: Pembacaan Tabel Distribusi Chi-Square}
+Dari Tabel Persentil Distribusi Chi-Square untuk derajat bebas $r = 4$:
+\begin{itemize}
+  \item Nilai kritis untuk $\alpha = 0.10$ adalah $\chi_{0.10}^2(4) = 7.779$ (luas ekor kanan $= 0.10$).
+  \item Nilai kritis untuk $\alpha = 0.05$ adalah $\chi_{0.05}^2(4) = 9.488$ (luas ekor kanan $= 0.05$).
+\end{itemize}
+Karena nilai batas kita adalah $q = 8$, dan berada di antara kedua nilai kritis tersebut ($7.779 < 8 < 9.488$), maka nilai peluangnya dipastikan berada di antara $0.05$ dan $0.10$:
+\[
+0.05 < P(\chi^2(4) \ge 8) < 0.10
+\]
+Melalui interpolasi linier sederhana pada tabel:
+\[
+P \approx 0.10 - \frac{8 - 7.779}{9.488 - 7.779} \times (0.10 - 0.05) = 0.10 - \frac{0.221}{1.709} \times 0.05 \approx 0.10 - 0.0065 = 0.0935
+\]
+
+\textbf{Kesimpulan Jawaban:}
+Perusahaan asuransi mentransformasikan jumlah klaim $X$ menjadi peubah $Q = \dfrac{4X}{3} \sim \chi^2(4)$, sehingga persoalan tereduksi menjadi mencari luas ekor kanan $P(\chi^2(4) \ge 8) = 5e^{-4} \approx 0.0916$.
+
+\[
+\boxed{P(X \ge 6) = P\left(\chi^2(4) \ge 8\right) = 5e^{-4} \approx 0.0916 \quad (9.16\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 4 -------------------------------------------------------------------
+\begin{soalbox}{Soal 4: Distribusi Sampling Sampel Normal Standar $N(0, 1)$, $n=16$}
+Misalkan variabel acak independen $Z_i \sim N(0,1)$ untuk $i = 1, 2, \cdots, 16$, dan $\bar{Z}$ menyatakan suatu mean sampel. Dapatkan:
+\begin{enumerate}[label=(\alph*)]
+  \item $P\left(\bar{Z} < \dfrac{1}{2}\right)$.
+  \item $P(Z_1 - Z_2 < 2)$.
+  \item Bentuklah suatu statistik $T$ berdistribusi $t$ dengan derajat kebebasan $\nu$, $T \sim t(\nu)$, lalu dapatkan $P(-2.131 < T < 2.131)$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Teorema Distribusi Sampling Populasi Normal}
+Jika $Z_1, \dots, Z_n \overset{\mathrm{iid}}{\sim} N(0, 1)$:
+\begin{itemize}
+  \item Rata-rata sampel: $\bar{Z} \sim N\left(0, \ \dfrac{1}{n}\right) \implies \sqrt{n}\bar{Z} \sim N(0, 1)$.
+  \item Selisih dua peubah acak normal bebas: $Z_1 - Z_2 \sim N(0 - 0, \ 1 + 1) = N(0, 2)$.
+  \item Varians sampel: $S^2 = \dfrac{1}{n-1}\sum_{i=1}^n (Z_i - \bar{Z})^2$ memenuhi $(n-1)S^2 \sim \chi^2(n-1)$, dan saling independen terhadap $\bar{Z}$.
+  \item Definisi peubah Student-$t$: Jika $Z^* \sim N(0, 1)$ dan $U \sim \chi^2(\nu)$ saling independen, maka $\dfrac{Z^*}{\sqrt{U/\nu}} \sim t(\nu)$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4(a): Menghitung $P\left(\bar{Z} < \frac{1}{2}\right)$}
+\textbf{Langkah 1: Menentukan distribusi dari rata-rata sampel $\bar{Z}$.}
+Diketahui $Z_1, Z_2, \dots, Z_{16} \overset{\mathrm{iid}}{\sim} N(\mu = 0, \sigma^2 = 1)$ dengan ukuran sampel $n = 16$.
+Karena kombinasi linear dari peubah normal independen berdistribusi normal:
+\begin{itemize}
+  \item Nilai harapan mean sampel:
+  \[
+  E(\bar{Z}) = E\left[\frac{1}{16}\sum_{i=1}^{16} Z_i\right] = \frac{1}{16}\sum_{i=1}^{16} E(Z_i) = \frac{1}{16}(16 \times 0) = 0
+  \]
+  \item Varians mean sampel:
+  \[
+  \mathrm{Var}(\bar{Z}) = \mathrm{Var}\left[\frac{1}{16}\sum_{i=1}^{16} Z_i\right] = \frac{1}{16^2}\sum_{i=1}^{16} \mathrm{Var}(Z_i) = \frac{16 \times 1}{256} = \frac{1}{16}
+  \]
+  \item Simpangan baku mean sampel:
+  \[
+  \sigma_{\bar{Z}} = \sqrt{\frac{1}{16}} = \frac{1}{4} = 0.25
+  \]
+\end{itemize}
+Sehingga:
+\[
+\bar{Z} \sim N\left(0, \ \frac{1}{16}\right)
+\]
+
+\textbf{Langkah 2: Standardisasi ke peubah Normal Baku $Z$.}
+\[
+P\left(\bar{Z} < \frac{1}{2}\right) = P\left(\frac{\bar{Z} - 0}{\sigma_{\bar{Z}}} < \frac{1/2 - 0}{1/4}\right) = P\left(Z < \frac{0.5}{0.25}\right) = P(Z < 2)
+\]
+
+\textbf{Langkah 3: Evaluasi probabilitas.}
+Dari Tabel Distribusi Kumulatif Normal Baku:
+\[
+P(Z < 2) = \Phi(2.00) \approx 0.9772 \quad (97.72\%)
+\]
+
+\[
+\boxed{P\left(\bar{Z} < \frac{1}{2}\right) = \Phi(2) \approx 0.9772} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(b): Menghitung $P(Z_1 - Z_2 < 2)$}
+\textbf{Langkah 1: Menentukan distribusi selisih $D = Z_1 - Z_2$.}
+Definisikan $D = Z_1 - Z_2 = (1)Z_1 + (-1)Z_2$.
+Karena $Z_1$ dan $Z_2$ independen dan masing-masing berdistribusi $N(0, 1)$:
+\begin{itemize}
+  \item Nilai harapan:
+  \[
+  E(D) = E(Z_1) - E(Z_2) = 0 - 0 = 0
+  \]
+  \item Varians:
+  \[
+  \mathrm{Var}(D) = (1)^2 \mathrm{Var}(Z_1) + (-1)^2 \mathrm{Var}(Z_2) = 1(1) + 1(1) = 2
+  \]
+  \item Simpangan baku:
+  \[
+  \sigma_D = \sqrt{2} \approx 1.4142
+  \]
+\end{itemize}
+Oleh karena itu:
+\[
+D = Z_1 - Z_2 \sim N(0, 2)
+\]
+
+\textbf{Langkah 2: Standardisasi peubah selisih.}
+\[
+P(Z_1 - Z_2 < 2) = P(D < 2) = P\left(\frac{D - 0}{\sqrt{2}} < \frac{2 - 0}{\sqrt{2}}\right) = P\left(Z < \frac{2}{\sqrt{2}}\right) = P(Z < \sqrt{2})
+\]
+Karena $\sqrt{2} \approx 1.414$:
+\[
+P(Z < \sqrt{2}) \approx P(Z < 1.41) = \Phi(1.414)
+\]
+Dari tabel normal baku: $\Phi(1.41) \approx 0.9207$ dan $\Phi(1.42) \approx 0.9222$.
+Interpolasi memberikan:
+\[
+\Phi(1.414) \approx 0.9213 \quad (92.13\%)
+\]
+
+\[
+\boxed{P(Z_1 - Z_2 < 2) = \Phi(\sqrt{2}) \approx 0.9213} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(c): Pembentukan Statistik $T \sim t(\nu)$ dan Peluang $P(-2.131 < T < 2.131)$}
+\textbf{Langkah 1: Teori dasar pembentukan peubah acak Student-$t$.}
+Berdasarkan definisi formal (William S. Gosset / Fisher):
+Jika suatu peubah acak $Z^* \sim N(0, 1)$ dan peubah acak $U \sim \chi^2(\nu)$ saling independen, maka peubah acak rasio:
+\[
+T = \frac{Z^*}{\sqrt{U / \nu}}
+\]
+mengikuti distribusi Student-$t$ dengan derajat kebebasan $\nu$, dinotasikan $T \sim t(\nu)$.
+
+\textbf{Langkah 2: Membentuk statistik $T$ dari sampel acak $Z_1, \dots, Z_{16}$.}
+Kita dapat membentuk statistik $T$ secara alamiah menggunakan statistik sampel:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Pembilang (Normal Baku):}
+  Dari bagian (a), $\bar{Z} \sim N(0, 1/16)$. Dengan mengalikan $\sqrt{16} = 4$:
+  \[
+  Z^* = \frac{\bar{Z} - 0}{\sqrt{1/16}} = 4\bar{Z} \sim N(0, 1)
+  \]
+  \item \textbf{Penyebut (Chi-Square):}
+  Definisikan varians sampel dari ke-16 pengamatan tersebut:
+  \[
+  S^2 = \frac{1}{16 - 1} \sum_{i=1}^{16} (Z_i - \bar{Z})^2 = \frac{1}{15} \sum_{i=1}^{16} (Z_i - \bar{Z})^2
+  \]
+  Berdasarkan sifat fundamental sampel acak dari distribusi normal, kuadrat deviasi terpusat terhadap rata-rata sampel berdistribusi Chi-Square:
+  \[
+  U = \frac{(n - 1)S^2}{\sigma^2} = \frac{15 S^2}{1} = 15 S^2 = \sum_{i=1}^{16} (Z_i - \bar{Z})^2 \sim \chi^2(\nu = 15)
+  \]
+  \item \textbf{Sifat Independensi (Teorema Cochran):}
+  Rata-rata sampel $\bar{Z}$ terbukti independen secara stokastik terhadap varians sampel $S^2$, sehingga $Z^*$ independen terhadap $U$.
+  \item \textbf{Konstruksi Statistik $T$:}
+  \[
+  T = \frac{Z^*}{\sqrt{U / 15}} = \frac{4\bar{Z}}{\sqrt{15 S^2 / 15}} = \frac{4\bar{Z}}{\sqrt{S^2}} = \frac{4\bar{Z}}{S} = \frac{\bar{Z}}{S / \sqrt{16}} \sim t(15)
+  \]
+  Jadi statistik $T$ memiliki derajat kebebasan $\nu = 15$.
+\end{enumerate}
+*(Catatan: Alternatif konstruksi langsung tanpa varians sampel adalah mempartisi sampel: ambil $Z^* = Z_{16} \sim N(0, 1)$ dan $U = \sum_{i=1}^{15} Z_i^2 \sim \chi^2(15)$, maka $T = \dfrac{Z_{16}}{\sqrt{\frac{1}{15}\sum_{i=1}^{15} Z_i^2}} \sim t(15)$)*.
+
+\textbf{Langkah 3: Menghitung nilai peluang $P(-2.131 < T < 2.131)$.}
+\begin{itemize}
+  \item Tinjau Tabel Distribusi Student-$t$ untuk derajat kebebasan $\nu = 15$:
+  Cari nilai $t = 2.131$.
+  Tabel memberikan nilai luas ekor atas:
+  \[
+  P(T \ge 2.131) = t_{0.025}(15) = 0.025
+  \]
+  \item Karena PDF distribusi Student-$t$ bersifat simetris sempurna terhadap pusatnya $t = 0$:
+  \[
+  P(T \le -2.131) = P(T \ge 2.131) = 0.025
+  \]
+  \item Menggunakan hukum probabilitas komplementer untuk interval dua sisi:
+  \[
+  P(-2.131 < T < 2.131) = 1 - [P(T \le -2.131) + P(T \ge 2.131)]
+  \]
+  \[
+  P(-2.131 < T < 2.131) = 1 - [0.025 + 0.025] = 1 - 0.050 = 0.95 \quad (95\%)
+  \]
+\end{itemize}
+
+\[
+\boxed{T = \frac{\bar{Z}}{S / \sqrt{16}} \sim t(15), \qquad P(-2.131 < T < 2.131) = 0.95 \quad (95\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+% =============================================================================
+% PAKET 2: KUIS 1 -- BU SENA
+% =============================================================================
+\paketsoal{PEMBAHASAN SOAL KUIS 1 (Bu Sena)}{%
+Materi: Order Statistics (Minimum), CLT, Asimtotik Normal, Ketidaksamaan Chebyshev, Konvergensi Stokastik}
+
+%--- SOAL 1 KUIS --------------------------------------------------------------
+\begin{soalbox}{Soal 1: PDF, CDF, \& Distribusi Terbatas dari $Y_1 = X_{1:n}$ (Statistik Minimum)}
+Misalkan $X_1, X_2, \dots, X_n$ merupakan sampel acak berukuran $n$ dari suatu distribusi dengan PDF:
+\[
+f(x) = \frac{1}{x^2}, \quad 1 \le x < \infty
+\]
+Misalkan $Y_1 = X_{1:n} = \min(X_1, X_2, \dots, X_n)$ adalah statistik terurut terkecil.
+\begin{enumerate}
+  \item (15 pts) Tentukan PDF dan CDF dari $Y_1$.
+  \item (10 pts) Dapatkan distribusi terbatas dari $Y_1$.
+  \item (15 pts) Dapatkan distribusi terbatas dari $W_n = n(Y_1 - 1)$.
+\end{enumerate}
+\textbf{Petunjuk:} $\displaystyle\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^{nb} = e^{cb}$.
+\end{soalbox}
+
+\begin{tipbox}{Rumus CDF dan PDF Minimum Sampel $Y_1 = X_{1:n}$}
+Untuk sampel acak iid $X_1, \dots, X_n$ dengan CDF $F(x)$ dan PDF $f(x)$, statistik urutan terkecil (minimum) memiliki:
+\begin{itemize}
+  \item \textbf{CDF:} $G_1(y) = P(Y_1 \le y) = 1 - [1 - F(y)]^n$
+  \item \textbf{PDF:} $g_1(y) = n\,[1 - F(y)]^{n-1}\,f(y)$
+\end{itemize}
+\textbf{Penurunan rumus CDF minimum:} Peristiwa $\{Y_1 > y\}$ terjadi jika dan hanya jika \textit{semua} $n$ pengamatan bernilai $> y$:
+\[
+P(Y_1 > y) = P(X_1 > y, X_2 > y, \dots, X_n > y) = \prod_{i=1}^n P(X_i > y) = [1-F(y)]^n
+\]
+Sehingga $G_1(y) = 1 - P(Y_1 > y) = 1 - [1-F(y)]^n$.
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): Mencari CDF dan PDF dari $Y_1 = X_{1:n}$}
+\textbf{Langkah 1: Menentukan CDF populasi $F(x)$ dari PDF yang diberikan.}
+
+Diberikan PDF $f(x) = x^{-2}$ untuk $x \ge 1$. CDF diperoleh dengan mengintegrasikan PDF:
+\[
+F(x) = \int_{-\infty}^{x} f(t)\,dt = \int_1^x \frac{1}{t^2}\,dt
+\]
+Hitung integral tersebut:
+\[
+F(x) = \int_1^x t^{-2}\,dt = \left[\frac{t^{-2+1}}{-2+1}\right]_1^x = \left[-\frac{1}{t}\right]_1^x = \left(-\frac{1}{x}\right) - \left(-\frac{1}{1}\right) = 1 - \frac{1}{x}
+\]
+Maka:
+\[
+\boxed{F(x) = 1 - \frac{1}{x}, \quad x \ge 1}
+\]
+Dengan demikian, komplemen CDF (ekor kanan) adalah:
+\[
+1 - F(x) = 1 - \left(1 - \frac{1}{x}\right) = \frac{1}{x} = x^{-1}, \quad x \ge 1
+\]
+
+\textbf{Langkah 2: Menghitung CDF minimum $G_1(y)$ menggunakan rumus order statistics.}
+
+Substitusikan $1 - F(y) = y^{-1}$ ke dalam rumus CDF minimum:
+\[
+G_1(y) = 1 - [1 - F(y)]^n = 1 - \left(y^{-1}\right)^n = 1 - y^{-n}
+\]
+
+Untuk menyatakan secara lengkap dengan domain:
+\[
+\boxed{G_1(y) = \begin{cases} 0, & y < 1 \\ 1 - y^{-n}, & y \ge 1 \end{cases}}
+\]
+\textit{(Untuk $y < 1$: mustahil semua $X_i \ge 1$ bernilai di bawah 1, jadi $G_1(y) = 0$.)
+}
+
+\textbf{Langkah 3: Menurunkan PDF minimum $g_1(y)$ dengan mendifferensiasikan CDF.}
+
+Turunkan $G_1(y)$ terhadap $y$ untuk $y \ge 1$:
+\[
+g_1(y) = \frac{d}{dy}\,G_1(y) = \frac{d}{dy}\left(1 - y^{-n}\right) = 0 - (-n)\,y^{-n-1} = n\,y^{-(n+1)}
+\]
+
+\textbf{Verifikasi konsistensi dengan rumus PDF minimum:}
+Gunakan formula $g_1(y) = n[1-F(y)]^{n-1} f(y)$:
+\[
+g_1(y) = n \cdot (y^{-1})^{n-1} \cdot y^{-2} = n \cdot y^{-(n-1)} \cdot y^{-2} = n \cdot y^{-(n-1+2)} = n\,y^{-(n+1)} \quad \checkmark
+\]
+
+\[
+\boxed{g_1(y) = n\,y^{-(n+1)}, \quad y \ge 1} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Distribusi Terbatas dari $Y_1$ ketika $n \to \infty$}
+\textbf{Langkah 1: Tinjau limit dari CDF $G_1(y)$ saat $n \to \infty$.}
+
+Dari bagian (a), CDF minimum adalah $G_1(y) = 1 - y^{-n}$ untuk $y \ge 1$. Hitung limitnya:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Untuk $y < 1$:} $G_1(y) = 0$ untuk semua $n$, sehingga:
+  \[
+  \lim_{n \to \infty} G_1(y) = 0
+  \]
+  \item \textbf{Untuk $y = 1$:} $G_1(1) = 1 - 1^{-n} = 1 - 1 = 0$ untuk semua $n$, sehingga:
+  \[
+  \lim_{n \to \infty} G_1(1) = 0
+  \]
+  \item \textbf{Untuk $y > 1$:} Karena $y > 1$, maka $\dfrac{1}{y} \in (0, 1)$, sehingga $y^{-1} < 1$. Akibatnya:
+  \[
+  y^{-n} = \left(\frac{1}{y}\right)^n \xrightarrow{n \to \infty} 0 \quad (\text{bilangan antara 0 dan 1 dipangkatkan } \infty)
+  \]
+  Oleh karena itu:
+  \[
+  \lim_{n \to \infty} G_1(y) = \lim_{n \to \infty} (1 - y^{-n}) = 1 - 0 = 1
+  \]
+\end{enumerate}
+
+\textbf{Langkah 2: Fungsi distribusi terbatas.}
+\[
+\lim_{n \to \infty} G_1(y) = \begin{cases} 0, & y \le 1 \\ 1, & y > 1 \end{cases}
+\]
+
+\textbf{Langkah 3: Identifikasi distribusi terbatas.}
+
+Fungsi di atas adalah CDF dari distribusi \textbf{degenerat} (titik massa tunggal) di titik $c = 1$, yaitu:
+\[
+G(y) = \begin{cases} 0, & y < 1 \\ 1, & y \ge 1 \end{cases}
+\]
+Distribusi ini ekuivalen dengan peubah acak yang bernilai tepat 1 dengan peluang 1. Hal ini dapat diinterpretasikan: seiring bertambahnya ukuran sampel, nilai minimum $X_{1:n}$ semakin mendekati batas bawah domain distribusi, yaitu $x = 1$.
+
+\[
+\boxed{Y_1 \xrightarrow{d} 1 \;\text{(distribusi degenerat/titik-massa di } c = 1)}, \quad \text{sehingga juga } Y_1 \xrightarrow{P} 1
+\] \qquad $\blacksquare$
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Distribusi Terbatas dari $W_n = n(Y_1 - 1)$ (Normalisasi Minimum)}
+\textbf{Latar Belakang.}
+Dari bagian (b), diketahui bahwa $Y_1 \xrightarrow{P} 1$. Namun CDF limit dari $Y_1$ sendiri bersifat degenerat (tidak informatif). Untuk mendapatkan distribusi terbatas yang non-degenerat, kita perlu melakukan \textbf{normalisasi (rescaling)} terhadap $Y_1$. Di sini kita mendefinisikan:
+\[
+W_n = n(Y_1 - 1)
+\]
+Variabel $W_n$ mengukur seberapa jauh $Y_1$ dari batas bawahnya (1), diskalakan dengan faktor $n$.
+
+\textbf{Langkah 1: Menentukan domain nilai $W_n$.}
+Karena $Y_1 = X_{1:n} \ge 1$ (nilai minimum populasi adalah 1), maka:
+\[
+W_n = n(Y_1 - 1) \ge n(1 - 1) = 0
+\]
+Jadi domain nilai $W_n$ adalah $[0, \infty)$.
+
+\textbf{Langkah 2: Menghitung CDF dari $W_n$ yaitu $H_n(w) = P(W_n \le w)$.}
+
+Untuk $w \ge 0$, tuliskan peristiwa probabilitas:
+\[
+H_n(w) = P(W_n \le w) = P(n(Y_1 - 1) \le w)
+\]
+Bagi kedua ruas di dalam kurung probabilitas dengan $n > 0$:
+\[
+H_n(w) = P\left(Y_1 - 1 \le \frac{w}{n}\right) = P\left(Y_1 \le 1 + \frac{w}{n}\right) = G_1\left(1 + \frac{w}{n}\right)
+\]
+Substitusikan rumus $G_1(y) = 1 - y^{-n}$ dengan argumen $y = 1 + \dfrac{w}{n}$:
+\[
+H_n(w) = 1 - \left(1 + \frac{w}{n}\right)^{-n}
+\]
+
+\textbf{Langkah 3: Menghitung limit $\lim_{n \to \infty} H_n(w)$.}
+
+Dengan menggunakan petunjuk soal: $\lim_{n \to \infty} \left(1 + \dfrac{c}{n}\right)^{nb} = e^{cb}$, dengan menetapkan $c = w$ dan $b = -1$:
+\[
+\lim_{n \to \infty} \left(1 + \frac{w}{n}\right)^{-n} = \lim_{n \to \infty} \left(1 + \frac{w}{n}\right)^{n \cdot (-1)} = e^{w \cdot (-1)} = e^{-w}
+\]
+Sehingga:
+\[
+\lim_{n \to \infty} H_n(w) = 1 - e^{-w}, \quad w > 0
+\]
+Untuk $w \le 0$, peristiwa $\{W_n \le w\}$ mustahil (karena $W_n \ge 0$), sehingga $H_n(w) = 0$.
+
+\textbf{Langkah 4: Identifikasi distribusi terbatas.}
+
+Fungsi distribusi terbatas:
+\[
+H(w) = \begin{cases} 0, & w \le 0 \\ 1 - e^{-w}, & w > 0 \end{cases}
+\]
+Ini adalah CDF dari distribusi \textbf{Eksponensial dengan parameter $\theta = 1$}, yaitu $\mathrm{EXP}(1)$.
+
+\[
+\boxed{W_n = n(Y_1 - 1) \xrightarrow{d} \mathrm{EXP}(1), \quad \text{dengan CDF terbatas } H(w) = 1 - e^{-w},\; w > 0} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 2 KUIS --------------------------------------------------------------
+\begin{soalbox}{Soal 2: Distribusi Normal Asimtotik $\bar{X}_{64}$ dari $X_i \sim \mathrm{EXP}(\theta = 4)$}
+Misalkan $X_1, X_2, \dots, X_n$ adalah sampel acak berukuran $n = 64$ dari waktu tunggu pelanggan (dalam menit) di suatu bank, mengikuti distribusi eksponensial $X_i \overset{\mathrm{iid}}{\sim} \mathrm{EXP}(\theta)$ dengan $\theta = 4$.
+
+Berdasarkan Teorema Limit Pusat (TLP/CLT), tunjukkan bahwa $\bar{X}_{64}$ berdistribusi normal secara asimtotik, serta tentukan mean dan varians asimtotiknya. (20 pts)
+\end{soalbox}
+
+\begin{tipbox}{Momen Distribusi $\mathrm{EXP}(\theta)$ dan Teorema Limit Pusat}
+\begin{itemize}
+  \item Untuk $X_i \sim \mathrm{EXP}(\theta)$: $E(X_i) = \theta$ dan $\mathrm{Var}(X_i) = \theta^2$.
+  \item \textbf{Teorema Limit Pusat (CLT):} Misalkan $X_1, X_2, \dots, X_n$ adalah sampel acak iid dengan mean $\mu = E(X_i)$ dan varians $\sigma^2 = \mathrm{Var}(X_i) < \infty$. Maka:
+  \[
+  \frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} = \frac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma} \xrightarrow{d} N(0, 1) \quad \text{ketika } n \to \infty
+  \]
+  Sehingga $\bar{X}_n$ berdistribusi normal asimtotik (asymptotically normal) dengan notasi:
+  \[
+  \bar{X}_n \stackrel{\mathrm{asy}}{\sim} N\!\left(\mu, \frac{\sigma^2}{n}\right)
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi: Penerapan CLT untuk $\bar{X}_{64}$}
+\textbf{Langkah 1: Identifikasi parameter distribusi populasi.}
+
+Diberikan $X_i \overset{\mathrm{iid}}{\sim} \mathrm{EXP}(\theta = 4)$. Berdasarkan sifat distribusi eksponensial:
+\begin{align*}
+\mu &= E(X_i) = \theta = 4 \\
+\sigma^2 &= \mathrm{Var}(X_i) = \theta^2 = 4^2 = 16
+\end{align*}
+Standar deviasi populasi: $\sigma = \sqrt{16} = 4$.
+
+\textbf{Langkah 2: Verifikasi syarat CLT.}
+
+Syarat CLT adalah $\sigma^2 < \infty$. Di sini $\sigma^2 = 16 < \infty$, sehingga \textbf{CLT dapat diterapkan}.
+
+\textbf{Langkah 3: Terapkan CLT untuk membentuk statistik normal baku.}
+
+Dengan $n = 64$, standar error rata-rata adalah:
+\[
+\frac{\sigma}{\sqrt{n}} = \frac{4}{\sqrt{64}} = \frac{4}{8} = \frac{1}{2}
+\]
+Berdasarkan CLT, statistik terstandardisasi berikut berdistribusi normal baku secara asimtotik:
+\[
+Z_n = \frac{\bar{X}_{64} - \mu}{\sigma / \sqrt{n}} = \frac{\bar{X}_{64} - 4}{4/8} = \frac{\bar{X}_{64} - 4}{1/2} = 2(\bar{X}_{64} - 4) \xrightarrow{d} N(0, 1)
+\]
+
+\textbf{Langkah 4: Tentukan distribusi asimtotik $\bar{X}_{64}$.}
+
+Dari persamaan $Z_n = 2(\bar{X}_{64} - 4) \xrightarrow{d} N(0,1)$, kita dapat mengembalikan ke skala asli:
+\[
+\bar{X}_{64} = 4 + \frac{1}{2} Z_n \xrightarrow{d} N\!\left(4,\; \left(\frac{1}{2}\right)^2\right) = N\!\left(4,\; \frac{1}{4}\right)
+\]
+Sehingga secara asimtotik:
+\[
+\bar{X}_{64} \stackrel{\mathrm{asy}}{\sim} N\!\left(\mu,\; \frac{\sigma^2}{n}\right) = N\!\left(4,\; \frac{16}{64}\right) = N\!\left(4,\; \frac{1}{4}\right)
+\]
+
+\[
+\boxed{\bar{X}_{64} \stackrel{\mathrm{asy}}{\sim} N\!\left(4,\;\frac{1}{4}\right); \quad \text{Mean asimtotik} = 4, \quad \text{Varians asimtotik} = \frac{1}{4} = 0.25} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 KUIS --------------------------------------------------------------
+\begin{soalbox}{Soal 3: Distribusi Asimtotik Median Sampel dari $X_i \sim \mathrm{UNIF}(0,1)$}
+Misalkan $X_1, X_2, \dots, X_n$ adalah sampel acak berdistribusi seragam, $X_i \sim \mathrm{UNIF}(0,1)$, dengan $n$ ganjil dan $k = (n+1)/2$ sehingga $X_{k:n}$ adalah statistik urutan tengah (median sampel).
+
+Tentukan nilai $x_p$ dan $c^2$ untuk kasus ini. (15 pts)
+\end{soalbox}
+
+\begin{tipbox}{Teorema Distribusi Asimtotik Normal Order Statistics}
+Untuk sampel acak iid dari distribusi dengan PDF $f(x)$ dan CDF $F(x)$, misalkan $k/n \to p$ saat $n \to \infty$ dengan $0 < p < 1$. Maka:
+\[
+\sqrt{n}\,(X_{k:n} - x_p) \xrightarrow{d} N\!\left(0,\; c^2\right) \quad \text{di mana } c^2 = \frac{p(1-p)}{[f(x_p)]^2}
+\]
+dan $x_p$ adalah persentil ke-$p$ dari populasi, yaitu $F(x_p) = p$.\\
+Sehingga: $X_{k:n} \stackrel{\mathrm{asy}}{\sim} N\!\left(x_p,\; \dfrac{c^2}{n}\right) = N\!\left(x_p,\; \dfrac{p(1-p)}{n[f(x_p)]^2}\right)$.
+\end{tipbox}
+
+\begin{solbox}{Solusi: Menentukan $x_p$ dan $c^2$ untuk Median Sampel UNIF$(0,1)$}
+\textbf{Langkah 1: Menentukan nilai $p$ dari rasio $k/n$.}
+
+Diberikan $k = (n+1)/2$ (median sampel, untuk $n$ ganjil). Hitung limit $k/n$ saat $n \to \infty$:
+\[
+\frac{k}{n} = \frac{(n+1)/2}{n} = \frac{n+1}{2n} = \frac{1}{2} + \frac{1}{2n} \xrightarrow{n \to \infty} \frac{1}{2}
+\]
+Maka $p = \dfrac{1}{2}$ (kita berurusan dengan persentil ke-50 atau median).
+
+\textbf{Langkah 2: Menentukan $x_p$ (persentil ke-$p$ dari UNIF$(0,1)$).}
+
+Untuk distribusi UNIF$(0, 1)$, CDF-nya adalah $F(x) = x$ untuk $0 \le x \le 1$. Persentil ke-$p$ memenuhi:
+\[
+F(x_p) = p \implies x_p = p
+\]
+Substitusikan $p = 1/2$:
+\[
+x_p = \frac{1}{2}
+\]
+\[
+\boxed{x_p = \frac{1}{2}}
+\]
+
+\textbf{Langkah 3: Mengevaluasi $f(x_p)$ (nilai PDF di persentil ke-$p$).}
+
+Untuk distribusi UNIF$(0, 1)$, PDF-nya konstan:
+\[
+f(x) = 1, \quad 0 \le x \le 1
+\]
+Oleh karena itu:
+\[
+f(x_p) = f\left(\frac{1}{2}\right) = 1
+\]
+
+\textbf{Langkah 4: Menghitung $c^2$.}
+
+Substitusikan $p = 1/2$ dan $f(x_p) = 1$ ke dalam rumus:
+\[
+c^2 = \frac{p(1-p)}{[f(x_p)]^2} = \frac{\frac{1}{2} \cdot \frac{1}{2}}{[1]^2} = \frac{1/4}{1} = \frac{1}{4}
+\]
+
+\textbf{Kesimpulan: Distribusi asimtotik median sampel.}
+\[
+\boxed{x_p = \frac{1}{2}, \quad c^2 = \frac{1}{4}, \qquad X_{k:n} \stackrel{\mathrm{asy}}{\sim} N\!\left(\frac{1}{2},\;\frac{1}{4n}\right)} \qquad \blacksquare
+\]
+Artinya: untuk $n$ yang besar, median sampel dari UNIF$(0,1)$ hampir berdistribusi normal dengan mean $1/2$ dan varians $1/(4n)$, atau standar error $\approx 1/(2\sqrt{n})$.
+\end{solbox}
+
+%--- SOAL 4 KUIS --------------------------------------------------------------
+\begin{soalbox}{Soal 4: Konvergensi Stokastik $\hat{p}_n$ Menggunakan Ketidaksamaan Chebyshev}
+Sebuah pabrik ingin menaksir proporsi $p$ produk cacat. Diambil $n$ produk secara acak:
+$X_i = 1$ (cacat) atau $X_i = 0$ (tidak cacat), sehingga $X_1, \dots, X_n \overset{\mathrm{iid}}{\sim} \mathrm{Bernoulli}(p)$.
+
+Misalkan $Y_n = \displaystyle\sum_{i=1}^{n} X_i$ dan $\hat{p}_n = Y_n / n$ (proporsi sampel).
+\begin{enumerate}[label=(\alph*)]
+  \item (10 pts) Tentukan $E(\hat{p}_n)$ dan $\mathrm{Var}(\hat{p}_n)$.
+  \item (15 pts) Dengan ketidaksamaan Chebyshev, tunjukkan bahwa $\hat{p}_n \xrightarrow{P} p$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Ketidaksamaan Chebyshev dan Konvergensi Stokastik}
+\begin{itemize}
+  \item \textbf{Ketidaksamaan Chebyshev:} Untuk peubah acak $X$ dengan mean $\mu$ dan varians $\sigma^2 < \infty$, berlaku untuk setiap $\epsilon > 0$:
+  \[
+  P(|X - \mu| \ge \epsilon) \le \frac{\sigma^2}{\epsilon^2} = \frac{\mathrm{Var}(X)}{\epsilon^2}
+  \]
+  \item \textbf{Definisi Konvergensi Stokastik:} $Y_n \xrightarrow{P} c$ jika $\forall\, \epsilon > 0$: $\lim_{n \to \infty} P(|Y_n - c| \ge \epsilon) = 0$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4(a): Menghitung $E(\hat{p}_n)$ dan $\mathrm{Var}(\hat{p}_n)$}
+\textbf{Langkah 1: Momen distribusi Bernoulli$(p)$.}
+
+Diketahui $X_i \overset{\mathrm{iid}}{\sim} \mathrm{Bernoulli}(p)$ dengan $q = 1 - p$. Berdasarkan sifat distribusi Bernoulli:
+\[
+E(X_i) = p \qquad \text{dan} \qquad \mathrm{Var}(X_i) = p(1-p) = pq
+\]
+
+\textbf{Langkah 2: Menghitung $E(Y_n)$ dan $\mathrm{Var}(Y_n)$.}
+
+Karena $Y_n = \sum_{i=1}^n X_i$ dan $X_i$ saling independen:
+\begin{align*}
+E(Y_n) &= \sum_{i=1}^n E(X_i) = \sum_{i=1}^n p = np \\
+\mathrm{Var}(Y_n) &= \sum_{i=1}^n \mathrm{Var}(X_i) = \sum_{i=1}^n pq = npq
+\end{align*}
+
+\textbf{Langkah 3: Menghitung $E(\hat{p}_n)$ dan $\mathrm{Var}(\hat{p}_n)$ dari $\hat{p}_n = Y_n / n$.}
+
+Gunakan sifat linearitas harapan dan sifat varians terhadap konstanta:
+\begin{align*}
+E(\hat{p}_n) &= E\left(\frac{Y_n}{n}\right) = \frac{1}{n}\,E(Y_n) = \frac{1}{n} \cdot np = p \\
+\mathrm{Var}(\hat{p}_n) &= \mathrm{Var}\left(\frac{Y_n}{n}\right) = \frac{1}{n^2}\,\mathrm{Var}(Y_n) = \frac{1}{n^2} \cdot npq = \frac{pq}{n}
+\end{align*}
+
+\[
+\boxed{E(\hat{p}_n) = p \;\text{(estimator tak berbias untuk } p\text{)}, \qquad \mathrm{Var}(\hat{p}_n) = \frac{pq}{n} = \frac{p(1-p)}{n}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(b): Pembuktian $\hat{p}_n \xrightarrow{P} p$ via Ketidaksamaan Chebyshev}
+\textbf{Pernyataan yang akan dibuktikan:}
+Untuk setiap $\epsilon > 0$:
+\[
+\lim_{n \to \infty} P(|\hat{p}_n - p| \ge \epsilon) = 0
+\]
+
+\textbf{Langkah 1: Terapkan Ketidaksamaan Chebyshev pada $\hat{p}_n$.}
+
+Dari bagian (a), diketahui $E(\hat{p}_n) = p$ (mean) dan $\mathrm{Var}(\hat{p}_n) = pq/n$ (varians). Ketidaksamaan Chebyshev memberikan, untuk setiap $\epsilon > 0$:
+\[
+P(|\hat{p}_n - p| \ge \epsilon) \le \frac{\mathrm{Var}(\hat{p}_n)}{\epsilon^2} = \frac{pq/n}{\epsilon^2} = \frac{pq}{n\epsilon^2}
+\]
+
+\textbf{Langkah 2: Membentuk rantai ketidaksamaan.}
+
+Karena peluang selalu bernilai non-negatif, kita miliki:
+\[
+0 \;\le\; P\!\left(|\hat{p}_n - p| \ge \epsilon\right) \;\le\; \frac{pq}{n\epsilon^2}
+\]
+
+\textbf{Langkah 3: Ambil limit $n \to \infty$ pada seluruh ruas.}
+
+Perhatikan bahwa $p$, $q = 1-p$, dan $\epsilon > 0$ adalah konstanta yang tidak bergantung pada $n$. Maka:
+\[
+\lim_{n \to \infty} \frac{pq}{n\epsilon^2} = pq\epsilon^{-2} \cdot \lim_{n \to \infty} \frac{1}{n} = pq\epsilon^{-2} \cdot 0 = 0
+\]
+Dengan demikian kedua batas (bawah dan atas) konvergen ke 0. Berdasarkan \textbf{Teorema Apit (Squeeze Theorem)}:
+\[
+\lim_{n \to \infty} P\!\left(|\hat{p}_n - p| \ge \epsilon\right) = 0
+\]
+
+\textbf{Langkah 4: Simpulkan konvergensi stokastik.}
+
+Berdasarkan definisi, karena $\lim_{n \to \infty} P(|\hat{p}_n - p| \ge \epsilon) = 0$ untuk setiap $\epsilon > 0$, terbukti bahwa:
+\[
+\boxed{\hat{p}_n \xrightarrow{P} p \qquad (\text{Hukum Bilangan Besar untuk Bernoulli})} \qquad \blacksquare
+\]
+\textit{Interpretasi: Seiring bertambahnya ukuran sampel $n$, proporsi sampel $\hat{p}_n$ semakin memusat dan hampir pasti mendekati proporsi populasi sesungguhnya $p$.}
+\end{solbox}
+
+%--- SOAL OPTIONAL KUIS -------------------------------------------------------
+\begin{soalbox}{Soal Optional: Konvergensi Stokastik Estimator Distribusi Poisson}
+Misalkan $X_1, X_2, \dots, X_n$ adalah sampel acak dari distribusi Poisson dengan parameter $\lambda > 0$, sehingga $E(X_i) = \lambda$ dan $\mathrm{Var}(X_i) = \lambda$.
+\begin{enumerate}
+  \item (5 pts) Tunjukkan bahwa $\bar{X}_n \xrightarrow{P} \lambda$.
+  \item (5 pts) Tunjukkan bahwa $\sqrt{\bar{X}_n} \xrightarrow{P} \sqrt{\lambda}$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{solbox}{Solusi Optional (1): Membuktikan $\bar{X}_n \xrightarrow{P} \lambda$}
+\textbf{Langkah 1: Hitung momen $\bar{X}_n$.}
+
+Karena $X_i \overset{\mathrm{iid}}{\sim} \mathrm{Poi}(\lambda)$:
+\[
+E(\bar{X}_n) = \frac{1}{n}\sum_{i=1}^n E(X_i) = \frac{1}{n} \cdot n\lambda = \lambda
+\]
+\[
+\mathrm{Var}(\bar{X}_n) = \frac{1}{n^2}\sum_{i=1}^n \mathrm{Var}(X_i) = \frac{1}{n^2} \cdot n\lambda = \frac{\lambda}{n}
+\]
+
+\textbf{Langkah 2: Terapkan Ketidaksamaan Chebyshev.}
+
+Untuk sebarang $\epsilon > 0$:
+\[
+0 \;\le\; P\!\left(|\bar{X}_n - \lambda| \ge \epsilon\right) \;\le\; \frac{\mathrm{Var}(\bar{X}_n)}{\epsilon^2} = \frac{\lambda}{n\epsilon^2}
+\]
+
+\textbf{Langkah 3: Ambil limit.}
+\[
+\lim_{n \to \infty} \frac{\lambda}{n\epsilon^2} = 0 \quad \implies \quad \lim_{n \to \infty} P(|\bar{X}_n - \lambda| \ge \epsilon) = 0
+\]
+
+\[
+\boxed{\bar{X}_n \xrightarrow{P} \lambda \quad \text{(Hukum Bilangan Besar Lemah / WLLN)}} \quad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi Optional (2): Membuktikan $\sqrt{\bar{X}_n} \xrightarrow{P} \sqrt{\lambda}$}
+\textbf{Langkah 1: Acu ke hasil (1).}
+
+Dari bagian (1) yang telah terbukti:
+\[
+\bar{X}_n \xrightarrow{P} \lambda
+\]
+
+\textbf{Langkah 2: Identifikasi fungsi $g$ yang kontinu.}
+
+Perhatikan fungsi $g(x) = \sqrt{x}$. Fungsi ini kontinu di seluruh domain $x > 0$. Karena $\lambda > 0$, khususnya $g$ kontinu di titik $x = \lambda$.
+
+\textbf{Langkah 3: Terapkan Teorema Pemetaan Kontinu (Continuous Mapping Theorem).}
+
+\textbf{Teorema (CMT):} Jika $Y_n \xrightarrow{P} c$ dan fungsi $g$ kontinu di $c$, maka $g(Y_n) \xrightarrow{P} g(c)$.
+
+Dengan menetapkan $Y_n = \bar{X}_n$, $c = \lambda$, dan $g(x) = \sqrt{x}$ (kontinu di $\lambda > 0$):
+\[
+g(Y_n) = \sqrt{\bar{X}_n} \xrightarrow{P} g(\lambda) = \sqrt{\lambda}
+\]
+
+\[
+\boxed{\sqrt{\bar{X}_n} \xrightarrow{P} \sqrt{\lambda} \quad \text{(berdasarkan CMT)}} \quad \blacksquare
+\]
+\end{solbox}
+
+% =============================================================================
+% PAKET 3: ETS 2024
+% =============================================================================
+\paketsoal{PEMBAHASAN SOAL ETS 2024}{%
+Mata Kuliah: Matematika Statistika --- Materi: Order Statistics, Distribusi Gamma/Erlang, Rasio Sampling $F$, CLT Chi-Square}
+
+%--- SOAL 1 ETS 2024 ----------------------------------------------------------
+\begin{soalbox}{Soal 1: Order Statistics \& Distribusi Terbatas (CDF Pareto $F(x) = 1 - 3/x$)}
+Perhatikan sampel acak yang mempunyai CDF:
+\[
+F(x) = 1 - \frac{3}{x}, \quad 3 \le x < \infty
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan CDF dari order statistik $Y_n = X_{n:n}$.
+  \item Dapatkan distribusi terbatas dari $Y_n$.
+  \item Apakah $Y_n$ konvergen stokastik ke $c = 3$? Jika iya, jelaskan!
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Order Statistics \& Distribusi Terbatas}
+\begin{itemize}
+  \item \textbf{Maksimum Sampel:} $Y_n = X_{n:n} = \max(X_1, \dots, X_n)$. Karena $X_i$ saling bebas dan berdistribusi identik (iid), CDF gabungannya adalah:
+  \[
+  F_{Y_n}(y) = P(Y_n \le y) = P(X_1 \le y, \dots, X_n \le y) = [F(y)]^n
+  \]
+  \item \textbf{Distribusi Terbatas (Limiting Distribution):} Diberikan oleh $\lim_{n \to \infty} F_{Y_n}(y)$. Jika fungsi limit identik nol untuk setiap nilai berhingga, maka distribusinya \textit{degenerate} di $+\infty$.
+  \item \textbf{Konvergensi Stokastik ($Y_n \xrightarrow{P} c$):} $\forall \epsilon > 0$, $\lim_{n \to \infty} P(|Y_n - c| \ge \epsilon) = 0 \iff \lim_{n \to \infty} P(|Y_n - c| < \epsilon) = 1$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): CDF dari Order Statistik $Y_n = X_{n:n}$}
+\textbf{Langkah 1: Tinjau CDF populasi $X$.}
+Fungsi distribusi kumulatif populasi didefinisikan sebagai:
+\[
+F(x) = \begin{cases} 0, & x < 3 \\ 1 - \dfrac{3}{x}, & x \ge 3 \end{cases}
+\]
+
+\textbf{Langkah 2: Menentukan CDF dari maksimum sampel $Y_n = X_{n:n}$.}
+Peristiwa $\{Y_n \le y\}$ terjadi jika dan hanya jika seluruh pengamatan sampel $X_1, X_2, \dots, X_n$ bernilai kurang dari atau sama dengan $y$:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P(X_1 \le y, X_2 \le y, \dots, X_n \le y)
+\]
+Karena $X_1, \dots, X_n$ saling independen:
+\[
+F_{Y_n}(y) = \prod_{i=1}^n P(X_i \le y) = [F(y)]^n
+\]
+
+\textbf{Langkah 3: Evaluasi untuk setiap domain $y$.}
+\begin{itemize}
+  \item Untuk $y < 3$: $F_{Y_n}(y) = [0]^n = 0$.
+  \item Untuk $y \ge 3$: $F_{Y_n}(y) = \left(1 - \dfrac{3}{y}\right)^n$.
+\end{itemize}
+
+\[
+\boxed{F_{Y_n}(y) = \begin{cases} 0, & y < 3 \\ \left(1 - \dfrac{3}{y}\right)^n, & y \ge 3 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Distribusi Terbatas dari $Y_n$}
+\textbf{Langkah 1: Menghitung limit CDF saat $n \to \infty$.}
+Ambil sebarang nilai $y \in \mathbb{R}$ yang berhingga:
+\begin{enumerate}[label=\arabic*.]
+  \item Jika $y < 3$: $F_{Y_n}(y) = 0$, sehingga $\lim_{n \to \infty} F_{Y_n}(y) = 0$.
+  \item Jika $y \ge 3$ berhingga: Karena $y$ berhingga dan $y \ge 3$, maka $\dfrac{3}{y} > 0$, yang berakibat:
+  \[
+  0 \le 1 - \frac{3}{y} < 1
+  \]
+  Untuk suatu bilangan riil $a \in [0, 1)$, diketahui bahwa $\lim_{n \to \infty} a^n = 0$. Oleh karena itu:
+  \[
+  \lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 - \frac{3}{y}\right)^n = 0
+  \]
+\end{enumerate}
+
+\textbf{Langkah 2: Kesimpulan distribusi terbatas.}
+Untuk seluruh $y \in (-\infty, \infty)$ yang berhingga:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = 0
+\]
+Karena $\lim_{y \to \infty} \left[\lim_{n \to \infty} F_{Y_n}(y)\right] = 0 \ne 1$, fungsi limit ini \textbf{bukan} merupakan fungsi distribusi kumulatif yang sah (distribusi sejati). Seluruh massa peluang meloloskan diri ke $+\infty$ ($Y_n \xrightarrow{P} \infty$).
+
+\[
+\boxed{\lim_{n \to \infty} F_{Y_n}(y) = 0, \quad \forall y \in \mathbb{R} \quad \text{(Distribusi degenerat di }+\infty\text{)}} \qquad \blacksquare
+\]
+
+\textbf{Catatan Tambahan (Pengayaan Normalisasi):}
+Agar diperoleh distribusi batas tak degenerat, peubah acak perlu dinormalisasi. Misalkan $Z_n = \dfrac{Y_n}{n}$, maka untuk $z > 0$:
+\[
+F_{Z_n}(z) = P\left(\frac{Y_n}{n} \le z\right) = F_{Y_n}(nz) = \left(1 - \frac{3}{nz}\right)^n \xrightarrow{n \to \infty} e^{-3/z}
+\]
+yang merupakan distribusi FrÃ©chet (Distribusi Nilai Ekstrem Tipe II).
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Uji Konvergensi Stokastik ke $c = 3$}
+\textbf{Pertanyaan:} Apakah $Y_n \xrightarrow{P} 3$?
+
+\textbf{Langkah 1: Definisi konvergensi dalam peluang (stokastik).}
+Suatu barisan peubah acak $Y_n$ konvergen stokastik ke konstanta $c$ ($Y_n \xrightarrow{P} c$) jika untuk setiap $\epsilon > 0$:
+\[
+\lim_{n \to \infty} P(|Y_n - c| \ge \epsilon) = 0 \iff \lim_{n \to \infty} P(|Y_n - c| < \epsilon) = 1
+\]
+
+\textbf{Langkah 2: Menghitung $P(|Y_n - 3| < \epsilon)$.}
+Karena $X_i \ge 3$ untuk setiap $i$, maka nilai statistik urutan maksimum selalu memenuhi $Y_n \ge 3$. Akibatnya $|Y_n - 3| = Y_n - 3 \ge 0$.
+Untuk sebarang $\epsilon > 0$:
+\[
+P(|Y_n - 3| < \epsilon) = P(3 \le Y_n < 3 + \epsilon) = F_{Y_n}(3 + \epsilon)
+\]
+Substitusikan ke dalam CDF yang diperoleh pada bagian (a):
+\[
+P(|Y_n - 3| < \epsilon) = \left(1 - \frac{3}{3 + \epsilon}\right)^n = \left(\frac{3 + \epsilon - 3}{3 + \epsilon}\right)^n = \left(\frac{\epsilon}{3 + \epsilon}\right)^n
+\]
+
+\textbf{Langkah 3: Ambil limit $n \to \infty$.}
+Karena $\epsilon > 0$, pembilang lebih kecil dari penyebut, sehingga:
+\[
+0 < \frac{\epsilon}{3 + \epsilon} < 1
+\]
+Akibatnya:
+\[
+\lim_{n \to \infty} P(|Y_n - 3| < \epsilon) = \lim_{n \to \infty} \left(\frac{\epsilon}{3 + \epsilon}\right)^n = 0 \ne 1
+\]
+Secara ekuivalen:
+\[
+\lim_{n \to \infty} P(|Y_n - 3| \ge \epsilon) = 1 - 0 = 1 \ne 0
+\]
+
+\textbf{Kesimpulan:}
+\[
+\boxed{\text{\textbf{TIDAK}}, \ Y_n \ \text{tidak konvergen stokastik ke } c = 3.} \qquad \blacksquare
+\]
+\textit{Penjelasan: $Y_n$ adalah maksimum sampel yang nilainya terus bertambah besar seiring bertambahnya ukuran sampel $n$, sehingga nilainya menyimpang menuju $+\infty$ dan tidak memusat di $c = 3$. (Peubah yang konvergen stokastik ke 3 adalah minimum sampel $X_{1:n}$, bukan $X_{n:n}$).}
+\end{solbox}
+
+%--- SOAL 2 ETS 2024 ----------------------------------------------------------
+\begin{soalbox}{Soal 2: Waktu Hidup Sistem, Distribusi Gamma/Erlang, \& CLT}
+Sebuah komponen digunakan untuk sistem pada mesin baru yang akan dioperasikan. Komponen tersebut memiliki 12 buah cadangan yang dapat digunakan jika sewaktu-waktu komponen lainnya rusak. Waktu hingga setiap komponen rusak dalam satuan hari mengikuti distribusi eksponensial yang independen, $T_i \sim \text{EXP}(120)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Tentukan distribusi dari $\sum_{i=1}^{n} T_i$ dimana $n$ adalah jumlah total komponen.
+  \item Berapakah peluang bahwa sistem dapat tetap beroperasi selama minimal 2 tahun?
+  \item Jika ingin memastikan bahwa sistem dapat beroperasi selama minimal 3 tahun dengan tingkat kepercayaan 99\%, berapa banyak komponen cadangan yang dibutuhkan?
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Distribusi Eksponensial dan Gamma}
+\begin{itemize}
+  \item \textbf{Parameterisasi Rata-Rata ($\theta = 120$ hari):} $T_i \sim \text{EXP}(\theta) \implies E(T_i) = \theta = 120$, $\mathrm{Var}(T_i) = \theta^2 = 14400$, MGF $M_{T_i}(t) = (1 - \theta t)^{-1}$ untuk $t < 1/\theta$.
+  \item \textbf{Jumlahan Eksponensial iid:} Jika $T_1, \dots, T_n \overset{\mathrm{iid}}{\sim} \text{EXP}(\theta)$, maka $S_n = \sum_{i=1}^n T_i \sim \text{Gamma}(\alpha = n, \beta = \theta)$.
+  \item \textbf{Mean \& Varians Gamma:} $E(S_n) = n\theta$, $\mathrm{Var}(S_n) = n\theta^2$.
+  \item \textbf{Hubungan Gamma-Poisson:} $P(S_n \ge t) = P(N(t) \le n - 1) = \sum_{k=0}^{n-1} \dfrac{(\lambda t)^k e^{-\lambda t}}{k!}$ dengan $\lambda = 1/\theta$.
+  \item \textbf{Aproksimasi Normal (CLT):} Untuk $n$ cukup besar, $S_n \approx N(n\theta, n\theta^2)$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 2(a): Distribusi dari $S_n = \sum_{i=1}^n T_i$}
+\textbf{Langkah 1: Menentukan MGF dari masing-masing $T_i$.}
+Diberikan $T_i \sim \text{EXP}(\theta = 120)$. Fungsi pembangkit momen (MGF) dari $T_i$ adalah:
+\[
+M_{T_i}(t) = E(e^{tT_i}) = \int_0^\infty e^{ts} \frac{1}{120} e^{-s/120} \, ds = (1 - 120t)^{-1}, \quad \text{untuk } t < \frac{1}{120}
+\]
+
+\textbf{Langkah 2: Menentukan MGF dari jumlahan $S_n = \sum_{i=1}^n T_i$.}
+Karena $T_1, T_2, \dots, T_n$ saling independen:
+\[
+M_{S_n}(t) = \prod_{i=1}^n M_{T_i}(t) = \left[(1 - 120t)^{-1}\right]^n = (1 - 120t)^{-n}, \quad t < \frac{1}{120}
+\]
+
+\textbf{Langkah 3: Mengidentifikasi distribusi berdasarkan keunikan MGF.}
+Bentuk $(1 - \beta t)^{-\alpha}$ adalah MGF dari distribusi Gamma dengan parameter bentuk $\alpha = n$ dan parameter skala $\beta = 120$ (distribusi Erlang).
+Dengan demikian:
+\[
+\boxed{S_n = \sum_{i=1}^n T_i \sim \text{Gamma}(\alpha = n, \ \beta = 120)} \qquad \blacksquare
+\]
+dengan fungsi kepekatan peluang (pdf):
+\[
+f_{S_n}(s) = \begin{cases} \dfrac{1}{\Gamma(n) 120^n} \, s^{n-1} e^{-s/120}, & s > 0 \\ 0, & s \le 0 \end{cases}
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(b): Peluang Sistem Beroperasi Minimal 2 Tahun}
+\textbf{Langkah 1: Menentukan total komponen yang tersedia.}
+Sistem beroperasi dengan 1 komponen aktif terpasang dan memiliki 12 buah cadangan pengganti berturut-turut. Jadi total komponen yang bekerja secara sekuensial adalah:
+\[
+n = 1 + 12 = 13 \text{ komponen}
+\]
+Waktu total operasi sistem hingga seluruh komponen habis adalah:
+\[
+S_{13} = \sum_{i=1}^{13} T_i \sim \text{Gamma}(\alpha = 13, \ \beta = 120)
+\]
+
+\textbf{Langkah 2: Karakteristik rata-rata dan deviasi standar $S_{13}$.}
+\[
+\mu = E(S_{13}) = n\beta = 13 \times 120 = 1560 \text{ hari}
+\]
+\[
+\sigma^2 = \mathrm{Var}(S_{13}) = n\beta^2 = 13 \times (120)^2 = 187.200 \text{ hari}^2
+\]
+\[
+\sigma = 120\sqrt{13} \approx 120 \times 3.60555 \approx 432.67 \text{ hari}
+\]
+
+\textbf{Langkah 3: Konversi target waktu 2 tahun ke dalam hari.}
+\begin{itemize}
+  \item Berdasarkan kalender standar ($1 \text{ tahun} = 365 \text{ hari}$): $t = 2 \times 365 = 730 \text{ hari}$.
+  \item (Atau kalender bisnis $1 \text{ tahun} = 360 \text{ hari}$: $t = 2 \times 360 = 720 \text{ hari}$).
+\end{itemize}
+
+\textbf{Langkah 4: Pendekatan Central Limit Theorem (CLT).}
+Karena $n = 13$ cukup besar dan jumlahan berdistribusi Gamma bersifat unimodal mulus, kita gunakan pendekatan Normal:
+\[
+Z = \frac{S_{13} - \mu}{\sigma} = \frac{S_{13} - 1560}{432.67} \approx N(0, 1)
+\]
+Untuk $t = 730$ hari:
+\[
+P(S_{13} \ge 730) = P\left(Z \ge \frac{730 - 1560}{432.67}\right) = P\left(Z \ge \frac{-830}{432.67}\right) \approx P(Z \ge -1.918)
+\]
+\[
+P(S_{13} \ge 730) = \Phi(1.92) \approx 0.9726 \quad (97.26\%)
+\]
+*(Jika menggunakan 720 hari: $P(Z \ge -1.94) = \Phi(1.94) \approx 0.9738$ atau $97.38\%$.)*
+
+\textbf{Langkah 5 (Eksak via Distribusi Poisson):}
+Dengan laju kegagalan $\lambda = 1/120$ hari$^{-1}$, rata-rata kejadian dalam $t = 720$ hari adalah $\mu_P = \lambda t = 720/120 = 6$. Peluang sistem bertahan minimal 2 tahun setara dengan banyak kerusakan pada $[0, 720]$ maksimal 12:
+\[
+P(S_{13} \ge 720) = \sum_{k=0}^{12} \frac{6^k e^{-6}}{k!} \approx 0.9892
+\]
+
+\[
+\boxed{P(S_{13} \ge 2 \text{ tahun}) \approx 0.9726 \quad (\text{aproksimasi CLT } 97.26\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(c): Menentukan Banyak Komponen Cadangan yang Dibutuhkan}
+\textbf{Langkah 1: Spesifikasi kebutuhan.}
+\begin{itemize}
+  \item Waktu operasional yang diinginkan: minimal 3 tahun $\implies t_0 = 3 \times 365 = 1095 \text{ hari}$ (atau $3 \times 360 = 1080 \text{ hari}$).
+  \item Tingkat kepercayaan: minimal $99\%$ $\implies P(S_n \ge t_0) \ge 0.99$.
+  \item Misalkan $n$ menyatakan total komponen (sehingga banyak cadangan adalah $n - 1$).
+\end{itemize}
+
+\textbf{Langkah 2: Transformasi variabel normal baku.}
+Dengan $S_n \sim \text{Gamma}(n, 120)$, pendekatan CLT memberikan $S_n \sim AN(\mu = 120n, \ \sigma = 120\sqrt{n})$.
+\[
+P(S_n \ge t_0) = P\left(Z \ge \frac{t_0 - 120n}{120\sqrt{n}}\right) \ge 0.99
+\]
+Dari tabel distribusi normal baku, $P(Z \ge -z_{0.01}) = 0.99$, di mana $z_{0.01} \approx 2.326$ (atau $2.33$). Maka haruslah dipenuhi:
+\[
+\frac{t_0 - 120n}{120\sqrt{n}} \le -2.326
+\]
+Kalikan kedua ruas dengan $120\sqrt{n}$:
+\[
+t_0 - 120n \le -2.326 \times 120 \sqrt{n} \iff 120n - 279.12\sqrt{n} - t_0 \ge 0
+\]
+Bagi kedua ruas dengan 120:
+\[
+n - 2.326\sqrt{n} - \frac{t_0}{120} \ge 0
+\]
+
+\textbf{Langkah 3: Menyelesaikan persamaan kuadrat dalam $u = \sqrt{n}$.}
+Gunakan $t_0 = 1095$ hari $\implies \dfrac{t_0}{120} = \dfrac{1095}{120} = 9.125$:
+\[
+u^2 - 2.326u - 9.125 = 0
+\]
+Rumus kuadratik:
+\[
+u = \frac{2.326 + \sqrt{(2.326)^2 - 4(1)(-9.125)}}{2} = \frac{2.326 + \sqrt{5.4103 + 36.5}}{2}
+\]
+\[
+u = \frac{2.326 + \sqrt{41.9103}}{2} = \frac{2.326 + 6.4738}{2} = \frac{8.7998}{2} \approx 4.40
+\]
+Sehingga nilai $n$:
+\[
+n = u^2 = (4.40)^2 \approx 19.36
+\]
+*(Jika menggunakan $t_0 = 1080$ hari: $u^2 - 2.326u - 9 = 0 \implies u \approx 4.38 \implies n = u^2 \approx 19.19$)*.
+
+Karena $n$ harus berupa bilangan bulat dan memenuhi ketaksamaan, kita bulatkan ke atas:
+\[
+n = 20 \text{ total komponen}
+\]
+
+\textbf{Langkah 4: Menentukan jumlah cadangan.}
+Karena 1 komponen digunakan sebagai komponen utama yang terpasang pada mesin:
+\[
+\text{Banyak cadangan} = n - 1 = 20 - 1 = 19 \text{ buah}
+\]
+
+\[
+\boxed{\text{Dibutuhkan minimal } 19 \text{ buah komponen cadangan (total 20 komponen).}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 ETS 2024 ----------------------------------------------------------
+\begin{soalbox}{Soal 3: Rasio Kuadrat Sampel Normal \& Distribusi Snedecor-$F$}
+Misalkan $X_1, X_2, \dots, X_4$ dan $Y_1, Y_2, \dots, Y_5$ masing-masing sampel acak berdistribusi normal standard.
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan distribusi dari $T = \dfrac{5}{4} \left( \dfrac{\sum_{i=1}^{4} X_i^2}{\sum_{i=1}^{5} Y_i^2} \right)$.
+  \item Dapatkan $t$ jika diketahui bahwa $P\left( \dfrac{\sum_{i=1}^{4} X_i^2}{\sum_{i=1}^{5} Y_i^2} < t \right) = 0.975$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Definisi Distribusi Snedecor-$F$}
+Jika $U \sim \chi^2(r_1)$ dan $V \sim \chi^2(r_2)$ saling independen, maka peubah acak:
+\[
+F = \frac{U / r_1}{V / r_2} \sim F(r_1, r_2)
+\]
+berdistribusi Snedecor-$F$ dengan derajat kebebasan pembilang $r_1$ dan penyebut $r_2$.
+\end{tipbox}
+
+\begin{solbox}{Solusi 3(a): Menentukan Distribusi dari $T$}
+\textbf{Langkah 1: Distribusi jumlahan kuadrat peubah acak normal baku.}
+\begin{itemize}
+  \item Karena $X_i \overset{\mathrm{iid}}{\sim} N(0, 1)$ untuk $i = 1, \dots, 4$, maka kuadrat peubah normal baku berdistribusi Chi-Square dengan derajat bebas 1 ($X_i^2 \sim \chi^2(1)$).
+  Berdasarkan sifat penjumlahan Chi-Square independen:
+  \[
+  U = \sum_{i=1}^4 X_i^2 \sim \chi^2(r_1 = 4)
+  \]
+  \item Sama halnya, karena $Y_j \overset{\mathrm{iid}}{\sim} N(0, 1)$ untuk $j = 1, \dots, 5$, maka:
+  \[
+  V = \sum_{j=1}^5 Y_j^2 \sim \chi^2(r_2 = 5)
+  \]
+\end{itemize}
+
+\textbf{Langkah 2: Independensi pembilang dan penyebut.}
+Karena sampel $X_1, \dots, X_4$ dan $Y_1, \dots, Y_5$ berasal dari dua kelompok sampel acak yang saling independen, maka $U$ dan $V$ saling independen.
+
+\textbf{Langkah 3: Bentuk rasio $T$.}
+Tuliskan peubah acak $T$ ke dalam bentuk rasio baku:
+\[
+T = \frac{5}{4} \left( \frac{\sum_{i=1}^{4} X_i^2}{\sum_{j=1}^{5} Y_j^2} \right) = \frac{\dfrac{1}{4} \sum_{i=1}^4 X_i^2}{\dfrac{1}{5} \sum_{j=1}^5 Y_j^2} = \frac{U / 4}{V / 5}
+\]
+Berdasarkan definisi distribusi $F$, pembilang adalah peubah $\chi^2(4)$ dibagi derajat bebasnya (4), dan penyebut adalah peubah $\chi^2(5)$ independen dibagi derajat bebasnya (5).
+Oleh karena itu:
+\[
+\boxed{T \sim F(4, 5)} \qquad \blacksquare
+\]
+\textit{Distribusi dari $T$ adalah distribusi $F$ dengan derajat bebas 4 dan 5.}
+\end{solbox}
+
+\begin{solbox}{Solusi 3(b): Menentukan Nilai Kritis $t$}
+\textbf{Langkah 1: Hubungkan pernyataan peluang dengan peubah $T$.}
+Dari definisi $T = \dfrac{5}{4} \left(\dfrac{\sum_{i=1}^4 X_i^2}{\sum_{j=1}^5 Y_j^2}\right)$, maka:
+\[
+\frac{\sum_{i=1}^4 X_i^2}{\sum_{j=1}^5 Y_j^2} = \frac{4}{5} T
+\]
+Pernyataan peluang yang diberikan adalah:
+\[
+P\left( \frac{\sum_{i=1}^4 X_i^2}{\sum_{j=1}^5 Y_j^2} < t \right) = 0.975 \iff P\left(\frac{4}{5} T < t\right) = 0.975
+\]
+Kalikan kedua ruas di dalam kurung dengan $\dfrac{5}{4}$:
+\[
+P\left( T < \frac{5}{4} t \right) = 0.975
+\]
+
+\textbf{Langkah 2: Mencari kuantil ke-0.975 dari distribusi $F(4, 5)$.}
+Nilai $\dfrac{5}{4} t$ adalah persentil ke-$97.5\%$ (kuantil atas ke-$2.5\%$) dari distribusi $F(4, 5)$, dinotasikan dengan $F_{0.025}(4, 5)$:
+\[
+\frac{5}{4} t = F_{0.025}(4, 5)
+\]
+Berdasarkan Tabel Distribusi $F$ untuk tingkat signifikansi $\alpha = 0.025$ dengan derajat bebas $r_1 = 4$ dan $r_2 = 5$:
+\[
+F_{0.025}(4, 5) = 7.39 \quad (\text{atau } 7.3879)
+\]
+
+\textbf{Langkah 3: Menghitung nilai $t$.}
+\[
+\frac{5}{4} t = 7.3879 \implies t = \frac{4}{5} \times 7.3879 = 5.9103 \approx 5.91
+\]
+
+\[
+\boxed{t = \frac{4}{5} F_{0.025}(4, 5) = \frac{4}{5}(7.39) \approx 5.91} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 4 ETS 2024 ----------------------------------------------------------
+\begin{soalbox}{Soal 4: Aproksimasi CLT untuk Rata-Rata Sampel Chi-Square}
+Misalkan $\bar{X}$ dinotasikan sebagai rata-rata dari sampel acak berukuran 100 dari sebuah distribusi chi-square dengan derajat bebas 50. Hitunglah pendekatan dari $P(49 < \bar{X} < 51)$.
+\end{soalbox}
+
+\begin{tipbox}{Central Limit Theorem (CLT) untuk Distribusi $\chi^2$}
+Jika $X_i \overset{\mathrm{iid}}{\sim} \chi^2(r)$, maka:
+\begin{itemize}
+  \item Rata-rata populasi: $\mu = E(X_i) = r$
+  \item Varians populasi: $\sigma^2 = \mathrm{Var}(X_i) = 2r \implies \sigma = \sqrt{2r}$
+  \item Berdasarkan CLT, untuk ukuran sampel $n$ yang besar ($n = 100 \ge 30$):
+  \[
+  \bar{X} \xrightarrow{d} N\left(\mu, \ \frac{\sigma^2}{n}\right) \implies Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1)
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4: Menghitung Pendekatan $P(49 < \bar{X} < 51)$}
+\textbf{Langkah 1: Menentukan parameter distribusi populasi $X$.}
+Diketahui setiap peubah acak sampel mengikuti distribusi Chi-Square dengan derajat bebas $r = 50$, yaitu $X_i \sim \chi^2(50)$.
+\begin{itemize}
+  \item Mean populasi: $\mu = E(X_i) = r = 50$.
+  \item Varians populasi: $\sigma^2 = \mathrm{Var}(X_i) = 2r = 2(50) = 100$.
+  \item Deviasi standar populasi: $\sigma = \sqrt{100} = 10$.
+\end{itemize}
+
+\textbf{Langkah 2: Menentukan distribusi sampling dari $\bar{X}$.}
+Ukuran sampel adalah $n = 100$. Berdasarkan Teorema Limit Pusat (CLT):
+\begin{itemize}
+  \item Mean sampling: $E(\bar{X}) = \mu = 50$.
+  \item Varians sampling: $\sigma_{\bar{X}}^2 = \dfrac{\sigma^2}{n} = \dfrac{100}{100} = 1$.
+  \item Standar error sampling: $\sigma_{\bar{X}} = \sqrt{1} = 1$.
+\end{itemize}
+Sehingga pendekatan distribusi sampling adalah:
+\[
+\bar{X} \approx N(\mu = 50, \ \sigma_{\bar{X}}^2 = 1)
+\]
+
+\textbf{Langkah 3: Standardisasi peubah ke variabel Normal Baku $Z$.}
+\[
+Z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}} = \frac{\bar{X} - 50}{1} = \bar{X} - 50 \sim N(0, 1)
+\]
+
+\textbf{Langkah 4: Menghitung nilai peluang.}
+\[
+P(49 < \bar{X} < 51) = P\left(\frac{49 - 50}{1} < Z < \frac{51 - 50}{1}\right) = P(-1 < Z < 1)
+\]
+Berdasarkan fungsi distribusi kumulatif normal baku $\Phi(z)$:
+\[
+P(-1 < Z < 1) = \Phi(1) - \Phi(-1) = \Phi(1) - [1 - \Phi(1)] = 2\Phi(1) - 1
+\]
+Dari tabel normal baku standar: $\Phi(1.00) \approx 0.8413$.
+\[
+P(49 < \bar{X} < 51) = 2(0.8413) - 1 = 1.6826 - 1 = 0.6826
+\]
+
+\[
+\boxed{P(49 < \bar{X} < 51) \approx 0.6826 \quad (68.26\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+% =============================================================================
+% PAKET 4: ETS 2023
+% =============================================================================
+\paketsoal{PEMBAHASAN SOAL ETS 2023}{%
+Mata Kuliah: Matematika Statistika --- Materi: Order Statistics, Ketidaksamaan Chebyshev, CLT Total Klaim, Rasio Kuadrat Normal Baku ($F$ dan $t$)}
+
+%--- SOAL 1 ETS 2023 ----------------------------------------------------------
+\begin{soalbox}{Soal 1: Order Statistics \& Konvergensi Stokastik (CDF $F(x) = 1 - 1/x$)}
+Perhatikan sampel acak yang mempunyai CDF:
+\[
+F(x) = 1 - \frac{1}{x}, \quad 1 \le x < \infty
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan CDF dari order statistik $Y_n = X_{n:n}$.
+  \item Dapatkan distribusi terbatas dari $Y_n$.
+  \item Apakah $Y_n$ konvergen stokastik ke $c = 1$? Jelaskan alasannya.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Konvergensi Stokastik Maksimum Sampel}
+Untuk distribusi Pareto dengan batas bawah $x_0 = 1$:
+\begin{itemize}
+  \item Nilai maksimum sampel $X_{n:n}$ bertambah besar seiring membesarnya ukuran sampel $n$.
+  \item Nilai yang konvergen stokastik ke batas bawah 1 adalah minimum sampel $X_{1:n}$, bukan maksimum sampel $X_{n:n}$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): CDF dari Order Statistik $Y_n = X_{n:n}$}
+\textbf{Langkah 1: Tinjau CDF populasi $X$.}
+\[
+F(x) = \begin{cases} 0, & x < 1 \\ 1 - \dfrac{1}{x}, & x \ge 1 \end{cases}
+\]
+
+\textbf{Langkah 2: Menentukan CDF maksimum sampel $Y_n = X_{n:n} = \max(X_1, \dots, X_n)$.}
+Karena pengamatan sampel saling independen:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P(X_1 \le y, X_2 \le y, \dots, X_n \le y) = \prod_{i=1}^n P(X_i \le y) = [F(y)]^n
+\]
+
+\textbf{Langkah 3: Evaluasi domain $y$.}
+\begin{itemize}
+  \item Untuk $y < 1$: $F_{Y_n}(y) = 0$.
+  \item Untuk $y \ge 1$: $F_{Y_n}(y) = \left(1 - \dfrac{1}{y}\right)^n$.
+\end{itemize}
+
+\[
+\boxed{F_{Y_n}(y) = \begin{cases} 0, & y < 1 \\ \left(1 - \dfrac{1}{y}\right)^n, & y \ge 1 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Distribusi Terbatas dari $Y_n$}
+\textbf{Langkah 1: Menghitung limit $F_{Y_n}(y)$ saat $n \to \infty$.}
+Tinjau untuk setiap nilai $y \in \mathbb{R}$ yang berhingga:
+\begin{enumerate}[label=\arabic*.]
+  \item Untuk $y < 1$: $F_{Y_n}(y) = 0 \implies \lim_{n \to \infty} F_{Y_n}(y) = 0$.
+  \item Untuk $y \ge 1$ berhingga: Karena $y$ berhingga, nilai $\dfrac{1}{y} > 0$, sehingga:
+  \[
+  0 \le 1 - \frac{1}{y} < 1
+  \]
+  Akibatnya:
+  \[
+  \lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 - \frac{1}{y}\right)^n = 0
+  \]
+\end{enumerate}
+
+\textbf{Langkah 2: Kesimpulan.}
+Untuk setiap nilai riil berhingga $y$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = 0
+\]
+Karena fungsi limit bernilai 0 untuk seluruh $y \in (-\infty, \infty)$, maka batas limit ini \textbf{bukan merupakan fungsi distribusi kumulatif yang wajar} (distribusi degenerat di $+\infty$, di mana peluang menyebar ke tak hingga).
+
+\[
+\boxed{\lim_{n \to \infty} F_{Y_n}(y) = 0, \quad \forall y \in \mathbb{R} \quad \text{(Distribusi degenerat di }+\infty\text{)}} \qquad \blacksquare
+\]
+*(Catatan: Jika dinormalisasi $Z_n = \dfrac{Y_n}{n}$, maka $F_{Z_n}(z) = \left(1 - \dfrac{1}{nz}\right)^n \xrightarrow{n \to \infty} e^{-1/z}$ untuk $z > 0$, yang merupakan distribusi FrÃ©chet).*
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Uji Konvergensi Stokastik ke $c = 1$}
+\textbf{Pertanyaan:} Apakah $Y_n \xrightarrow{P} 1$?
+
+\textbf{Langkah 1: Definisi konvergensi stokastik.}
+$Y_n \xrightarrow{P} c$ jika dan hanya jika untuk setiap $\epsilon > 0$:
+\[
+\lim_{n \to \infty} P(|Y_n - c| \ge \epsilon) = 0 \iff \lim_{n \to \infty} P(|Y_n - c| < \epsilon) = 1
+\]
+
+\textbf{Langkah 2: Evaluasi probabilitas untuk $c = 1$.}
+Karena domain $X_i \ge 1$, nilai minimum yang mungkin untuk $Y_n$ adalah 1, sehingga $|Y_n - 1| = Y_n - 1 \ge 0$.
+Untuk sebarang $\epsilon > 0$:
+\[
+P(|Y_n - 1| < \epsilon) = P(1 \le Y_n < 1 + \epsilon) = F_{Y_n}(1 + \epsilon)
+\]
+Substitusikan ke dalam fungsi kumulatif $F_{Y_n}$:
+\[
+P(|Y_n - 1| < \epsilon) = \left(1 - \frac{1}{1 + \epsilon}\right)^n = \left(\frac{1 + \epsilon - 1}{1 + \epsilon}\right)^n = \left(\frac{\epsilon}{1 + \epsilon}\right)^n
+\]
+
+\textbf{Langkah 3: Menghitung limit saat $n \to \infty$.}
+Karena $\epsilon > 0$, maka rasio $\dfrac{\epsilon}{1 + \epsilon} < 1$. Oleh karena itu:
+\[
+\lim_{n \to \infty} P(|Y_n - 1| < \epsilon) = \lim_{n \to \infty} \left(\frac{\epsilon}{1 + \epsilon}\right)^n = 0 \ne 1
+\]
+Secara ekuivalen:
+\[
+\lim_{n \to \infty} P(|Y_n - 1| \ge \epsilon) = 1 - 0 = 1 \ne 0
+\]
+
+\textbf{Kesimpulan:}
+\[
+\boxed{\text{\textbf{TIDAK}}, \ Y_n \ \text{tidak konvergen stokastik ke } c = 1.} \qquad \blacksquare
+\]
+\textit{Alasan: $Y_n = X_{n:n}$ adalah nilai terbesar dalam sampel. Seiring bertambahnya ukuran sampel $n$, nilai maksimum akan cenderung membesar dan mendekati $+\infty$, bukan terkumpul di batas bawah 1. Variabel yang konvergen stokastik ke 1 adalah minimum sampel $X_{1:n}$.}
+\end{solbox}
+
+%--- SOAL 2 ETS 2023 ----------------------------------------------------------
+\begin{soalbox}{Soal 2: Ketidaksamaan Chebyshev \& Konvergensi Stokastik Rata-Rata Bernoulli}
+Misalkan $X_1, X_2, \dots$ adalah variabel acak distribusi Bernoulli yang saling independen, $X_i \sim \text{BIN}(1, p_i)$ dan
+\[
+Y_n = \sum_{i=1}^{n} \frac{X_i - p_i}{n}
+\]
+Tunjukkan menggunakan ketidaksamaan Chebyshev bahwa barisan $Y_1, Y_2, \dots$ konvergen stokastik ke $c = 0$ untuk $n \to \infty$.
+\end{soalbox}
+
+\begin{tipbox}{Ketidaksamaan Chebyshev \& Sifat Varians Bernoulli}
+\begin{itemize}
+  \item \textbf{Ketidaksamaan Chebyshev:} Jika peubah acak $Y$ memiliki nilai harapan $\mu$ dan varians $\sigma^2 < \infty$, maka untuk setiap konstanta $\epsilon > 0$:
+  \[
+  P(|Y - \mu| \ge \epsilon) \le \frac{\mathrm{Var}(Y)}{\epsilon^2}
+  \]
+  \item \textbf{Varians Maksimum Bernoulli:} Untuk $X_i \sim \text{BIN}(1, p_i)$, $\mathrm{Var}(X_i) = p_i(1 - p_i) \le \frac{1}{4}$ untuk setiap $p_i \in [0, 1]$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 2: Pembuktian $Y_n \xrightarrow{P} 0$ via Chebyshev}
+\textbf{Langkah 1: Menghitung nilai harapan $E(Y_n)$.}
+Diberikan $Y_n = \dfrac{1}{n} \sum_{i=1}^n (X_i - p_i)$. Karena $E(X_i) = p_i$, berdasarkan sifat kelinieran nilai harapan:
+\[
+E(Y_n) = E\left[\frac{1}{n} \sum_{i=1}^n (X_i - p_i)\right] = \frac{1}{n} \sum_{i=1}^n \left[E(X_i) - p_i\right] = \frac{1}{n} \sum_{i=1}^n (p_i - p_i) = 0
+\]
+
+\textbf{Langkah 2: Menghitung varians $\mathrm{Var}(Y_n)$.}
+Karena $X_1, X_2, \dots$ saling independen, maka suku-suku $(X_i - p_i)$ juga saling independen:
+\[
+\mathrm{Var}(Y_n) = \mathrm{Var}\left(\frac{1}{n} \sum_{i=1}^n (X_i - p_i)\right) = \frac{1}{n^2} \sum_{i=1}^n \mathrm{Var}(X_i - p_i) = \frac{1}{n^2} \sum_{i=1}^n \mathrm{Var}(X_i)
+\]
+Untuk setiap variabel acak Bernoulli $X_i \sim \text{BIN}(1, p_i)$, variansnya adalah:
+\[
+\mathrm{Var}(X_i) = p_i(1 - p_i)
+\]
+
+\textbf{Langkah 3: Mencari batas atas untuk varians $\mathrm{Var}(Y_n)$.}
+Perhatikan fungsi parabola $g(p) = p(1 - p) = p - p^2$. Nilai ekstrem dicapai pada turunan pertama:
+\[
+g'(p) = 1 - 2p = 0 \implies p = \frac{1}{2} \implies g\left(\frac{1}{2}\right) = \frac{1}{2}\left(1 - \frac{1}{2}\right) = \frac{1}{4}
+\]
+Karena $g''(p) = -2 < 0$, nilai $1/4$ adalah nilai maksimum mutlak untuk seluruh $p_i \in [0, 1]$.
+Akibatnya:
+\[
+\mathrm{Var}(Y_n) = \frac{1}{n^2} \sum_{i=1}^n p_i(1 - p_i) \le \frac{1}{n^2} \sum_{i=1}^n \frac{1}{4} = \frac{1}{n^2} \left(n \cdot \frac{1}{4}\right) = \frac{1}{4n}
+\]
+
+\textbf{Langkah 4: Menerapkan Ketidaksamaan Chebyshev.}
+Dengan $\mu = E(Y_n) = 0$, untuk setiap $\epsilon > 0$:
+\[
+0 \le P(|Y_n - 0| \ge \epsilon) \le \frac{\mathrm{Var}(Y_n)}{\epsilon^2} \le \frac{\dfrac{1}{4n}}{\epsilon^2} = \frac{1}{4n\epsilon^2}
+\]
+
+\textbf{Langkah 5: Mengambil limit $n \to \infty$ (Prinsip Apit / Squeeze Theorem).}
+Untuk nilai $\epsilon > 0$ sembarang yang tetap:
+\[
+\lim_{n \to \infty} \frac{1}{4n\epsilon^2} = 0
+\]
+Berdasarkan Prinsip Apit:
+\[
+0 \le \lim_{n \to \infty} P(|Y_n - 0| \ge \epsilon) \le 0 \implies \lim_{n \to \infty} P(|Y_n - 0| \ge \epsilon) = 0
+\]
+
+Berdasarkan definisi konvergensi stokastik (konvergensi dalam peluang):
+\[
+\boxed{Y_n \xrightarrow{P} 0 \quad \text{saat } n \to \infty} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 ETS 2023 ----------------------------------------------------------
+\begin{soalbox}{Soal 3: Teorema Limit Pusat (CLT) untuk Total Klaim Asuransi}
+Misalkan sebuah perusahaan asuransi memiliki pemegang polis sebanyak 10.000. Klaim tiap tahun yang diharapkan dari setiap pemegang polis sebesar $\$240$ dengan simpangan bakunya $\$800$. Dapatkan peluang jumlah klaim tiap tahun dari seluruh pemegang polis lebih besar dari $\$2.6$ juta.
+\end{soalbox}
+
+\begin{tipbox}{CLT untuk Jumlahan Variabel Acak $S_n = \sum X_i$}
+Jika $X_1, \dots, X_n$ independen dengan mean $\mu$ dan varians $\sigma^2$, maka untuk ukuran sampel $n$ yang sangat besar ($n = 10.000 \gg 30$):
+\[
+S_n = \sum_{i=1}^n X_i \xrightarrow{d} N(n\mu, \ n\sigma^2) \implies Z = \frac{S_n - n\mu}{\sqrt{n}\sigma} \xrightarrow{d} N(0, 1)
+\]
+\end{tipbox}
+
+\begin{solbox}{Solusi 3: Menghitung Peluang Total Klaim $> \$2.6$ Juta}
+\textbf{Langkah 1: Identifikasi variabel acak dan parameter populasi.}
+Misalkan $X_i$ adalah besar klaim tahunan yang diajukan oleh pemegang polis ke-$i$ ($i = 1, 2, \dots, n$):
+\begin{itemize}
+  \item Ukuran populasi pemegang polis: $n = 10.000$.
+  \item Nilai harapan klaim per individu: $\mu = E(X_i) = \$240$.
+  \item Simpangan baku klaim per individu: $\sigma = \$800 \implies \sigma^2 = (800)^2 = 640.000$.
+  \item Total klaim tahunan dari seluruh pemegang polis: $S_n = \sum_{i=1}^{10.000} X_i$.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung nilai harapan dan varians dari total klaim $S_n$.}
+\[
+E(S_n) = n\mu = 10.000 \times 240 = \$2.400.000 \quad (\text{yaitu } \$2.4 \text{ juta})
+\]
+\[
+\mathrm{Var}(S_n) = n\sigma^2 = 10.000 \times (800)^2 = 10.000 \times 640.000 = 6.4 \times 10^9
+\]
+Simpangan baku dari jumlahan total klaim:
+\[
+\sigma_{S_n} = \sqrt{n}\sigma = \sqrt{10.000} \times 800 = 100 \times 800 = \$80.000
+\]
+
+\textbf{Langkah 3: Menerapkan Teorema Limit Pusat (CLT).}
+Karena $n = 10.000$ sangat besar, berdasarkan CLT distribusi dari $S_n$ mendekati distribusi Normal:
+\[
+S_n \approx N(\mu_{S_n} = 2.400.000, \ \sigma_{S_n}^2 = (80.000)^2)
+\]
+
+\textbf{Langkah 4: Menghitung probabilitas $P(S_n > 2.600.000)$.}
+Target nilai adalah $\$2.6 \text{ juta} = \$2.600.000$. Lakukan standardisasi:
+\[
+Z = \frac{S_n - \mu_{S_n}}{\sigma_{S_n}} = \frac{S_n - 2.400.000}{80.000}
+\]
+Maka nilai kritis normal bakunya:
+\[
+z = \frac{2.600.000 - 2.400.000}{80.000} = \frac{200.000}{80.000} = 2.5
+\]
+Peluang yang dicari adalah:
+\[
+P(S_n > 2.600.000) = P(Z > 2.5) = 1 - \Phi(2.5)
+\]
+Dari tabel kumulatif normal baku: $\Phi(2.50) \approx 0.9938$.
+\[
+P(S_n > 2.600.000) = 1 - 0.9938 = 0.0062
+\]
+
+\[
+\boxed{P(\text{Klaim} > \$2.6 \text{ juta}) \approx 0.0062 \quad (0.62\%)} \qquad \blacksquare
+\]
+\textit{Interpretasi: Hanya terdapat sekitar 0.62\% kemungkinan total klaim tahunan melebihi 2.6 juta dolar.}
+\end{solbox}
+
+%--- SOAL 4 ETS 2023 ----------------------------------------------------------
+\begin{soalbox}{Soal 4: Distribusi Rasio Kuadrat Sampel Normal \& Persentil 95\%}
+Andaikan $X_1, X_2, \dots, X_6$ dan $Y_1, Y_2, \dots, Y_9$ saling independen terdistribusi Normal dengan mean nol dan varians $\sigma^2$. Dapatkan percentil 95\% dari:
+\[
+W = \frac{\left(\sum_{i=1}^{6} X_i\right)^2}{\left(\sum_{j=1}^{9} Y_j\right)^2}
+\]
+\end{soalbox}
+
+\begin{tipbox}{Relasi Distribusi Normal, Chi-Square, $F$, dan Student-$t$}
+\begin{itemize}
+  \item \textbf{Jumlahan Normal:} Jika $X_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)$, maka $\sum_{i=1}^m X_i \sim N(0, m\sigma^2)$.
+  \item \textbf{Kuadrat Normal Baku:} Jika $Z \sim N(0, 1)$, maka $Z^2 \sim \chi^2(1)$.
+  \item \textbf{Distribusi $F(1, 1)$:} Rasio $\dfrac{Z_1^2 / 1}{Z_2^2 / 1} \sim F(1, 1)$.
+  \item \textbf{Sifat Khusus $F(1, 1) = [t(1)]^2$:} Peubah $t(1)$ adalah distribusi Cauchy standar, dengan kuantil atas $t_{\alpha/2}(1) = \tan\left(\left(1 - \frac{\alpha}{2}\right)\frac{\pi}{2}\right)$. Kuantil $F_{1-\alpha}(1, 1) = \left[t_{\alpha/2}(1)\right]^2$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4: Menentukan Persentil 95\% dari $W$}
+\textbf{Langkah 1: Menentukan distribusi dari jumlahan peubah acak normal.}
+Misalkan $S_X = \sum_{i=1}^6 X_i$ dan $S_Y = \sum_{j=1}^9 Y_j$.
+\begin{itemize}
+  \item Karena $X_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)$ untuk $i = 1, \dots, 6$:
+  \[
+  S_X = \sum_{i=1}^6 X_i \sim N\left(0, \ \sum_{i=1}^6 \sigma^2\right) = N(0, \ 6\sigma^2)
+  \]
+  \item Karena $Y_j \overset{\mathrm{iid}}{\sim} N(0, \ \sigma^2)$ untuk $j = 1, \dots, 9$:
+  \[
+  S_Y = \sum_{j=1}^9 Y_j \sim N\left(0, \ \sum_{j=1}^9 \sigma^2\right) = N(0, \ 9\sigma^2)
+  \]
+\end{itemize}
+
+\textbf{Langkah 2: Menstandardisasi menjadi peubah Normal Baku.}
+Bagi masing-masing peubah dengan deviasi standarnya:
+\[
+Z_1 = \frac{S_X}{\sqrt{6}\sigma} \sim N(0, 1), \qquad Z_2 = \frac{S_Y}{\sqrt{9}\sigma} = \frac{S_Y}{3\sigma} \sim N(0, 1)
+\]
+Karena kelompok sampel $X$ dan $Y$ saling independen, maka $Z_1$ dan $Z_2$ independen.
+
+\textbf{Langkah 3: Mengkuadratkan peubah normal baku.}
+\[
+Z_1^2 = \frac{S_X^2}{6\sigma^2} \sim \chi^2(1), \qquad Z_2^2 = \frac{S_Y^2}{9\sigma^2} \sim \chi^2(1)
+\]
+
+\textbf{Langkah 4: Membentuk peubah acak distribusi $F$.}
+Tinjau rasio dari $Z_1^2$ dan $Z_2^2$ yang masing-masing dibagi derajat bebasnya ($r_1 = 1, r_2 = 1$):
+\[
+\frac{Z_1^2 / 1}{Z_2^2 / 1} = \frac{\dfrac{S_X^2}{6\sigma^2}}{\dfrac{S_Y^2}{9\sigma^2}} = \frac{9\sigma^2}{6\sigma^2} \cdot \frac{S_X^2}{S_Y^2} = \frac{3}{2} \cdot \frac{S_X^2}{S_Y^2}
+\]
+Perhatikan bahwa $W = \dfrac{S_X^2}{S_Y^2} = \dfrac{\left(\sum_{i=1}^6 X_i\right)^2}{\left(\sum_{j=1}^9 Y_j\right)^2}$. Oleh karena itu:
+\[
+\frac{3}{2} W \sim F(1, 1) \iff W = \frac{2}{3} F, \quad \text{di mana } F \sim F(1, 1)
+\]
+
+\textbf{Langkah 5: Mencari persentil ke-95 ($w_{0.95}$) dari $W$.}
+Berdasarkan definisi persentil:
+\[
+P(W \le w_{0.95}) = 0.95 \iff P\left(\frac{3}{2} W \le \frac{3}{2} w_{0.95}\right) = 0.95
+\]
+\[
+P\left(F \le \frac{3}{2} w_{0.95}\right) = 0.95 \implies \frac{3}{2} w_{0.95} = F_{0.05}(1, 1)
+\]
+di mana $F_{0.05}(1, 1)$ adalah kuantil atas ke-$5\%$ (persentil ke-$95\%$) dari distribusi $F(1, 1)$.
+
+\textbf{Langkah 6: Menghitung nilai kritis $F_{0.05}(1, 1)$.}
+Ingat sifat fundamental: $F(1, r) \equiv [t(r)]^2$. Untuk $r = 1$:
+\[
+F_{0.05}(1, 1) = \left[t_{0.025}(1)\right]^2
+\]
+Distribusi $t(1)$ adalah distribusi Cauchy standar dengan CDF $F_T(t) = \frac{1}{2} + \frac{1}{\pi}\arctan(t)$.
+Kuantil ke-$97.5\%$ ($t_{0.025}(1)$) dicari dari:
+\[
+\frac{1}{2} + \frac{1}{\pi}\arctan(t) = 0.975 \implies \arctan(t) = 0.475\pi \implies t = \tan(0.475\pi) \approx 12.7062
+\]
+Sehingga nilai kritis distribusi $F$:
+\[
+F_{0.05}(1, 1) = (12.7062)^2 \approx 161.45
+\]
+*(Nilai ini persis sesuai dengan Tabel Distribusi $F$ untuk $\alpha = 0.05$, $r_1 = 1, r_2 = 1$ yaitu $161.45$)*.
+
+\textbf{Langkah 7: Menghitung $w_{0.95}$.}
+\[
+\frac{3}{2} w_{0.95} = 161.4476 \implies w_{0.95} = \frac{2}{3} \times 161.4476 = 107.6317 \approx 107.63
+\]
+
+\[
+\boxed{\text{Persentil 95\% dari } W \text{ adalah } w_{0.95} = \frac{2}{3} F_{0.05}(1, 1) \approx 107.63} \qquad \blacksquare
+\]
+\end{solbox}
+
+% =============================================================================
+% PAKET 5: LATIHAN BAB 1 - BARISAN VARIABEL ACAK & LIMITING DISTRIBUTION
+% =============================================================================
+\paketsoal{LATIHAN SOAL BAB 1: BARISAN PEUBAH ACAK \& DISTRIBUSI LIMIT}{%
+Mata Kuliah: Matematika Statistika --- Materi: Order Statistics, Distribusi Limit, Teorema Limit Pusat, Metode Delta, Ketidaksamaan Chebyshev}
+
+%--- SOAL 1.1 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.1: Limiting Distribution dari $Y_n = n X_{(1:n)}$ untuk Pareto $\text{PAR}(1,1)$}
+Misalkan $X_1, X_2, \dots, X_n$ adalah suatu sampel acak dari distribusi Pareto, dengan $X_i \sim \text{PAR}(1,1)$. Misalkan $Y_n = nX_{(1:n)}$. Dapatkan limiting distribution dari barisan $Y_n$.
+\end{soalbox}
+
+\begin{tipbox}{Distribusi Pareto \& Statistik Urutan Minimum}
+\begin{itemize}
+  \item CDF Pareto $\text{PAR}(\theta=1, \kappa=1)$: $F(x) = 1 - \dfrac{1}{x}$, untuk $x \ge 1$ (dan 0 untuk $x < 1$).
+  \item CDF Minimum Sampel: $G_{1:n}(y) = P(X_{(1:n)} \le y) = 1 - [1 - F(y)]^n$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.1: Limiting Distribution dari $Y_n = n X_{(1:n)}$}
+\textbf{Langkah 1: Menentukan CDF dari $X_{(1:n)}$.}
+Untuk $x \ge 1$:
+\[
+F_{X_{(1:n)}}(x) = 1 - [1 - F(x)]^n = 1 - \left[\frac{1}{x}\right]^n = 1 - x^{-n}
+\]
+dan $F_{X_{(1:n)}}(x) = 0$ untuk $x < 1$.
+
+\textbf{Langkah 2: Menentukan CDF dari $Y_n = n X_{(1:n)}$.}
+Untuk sebarang nilai $y \in \mathbb{R}$:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P\left(n X_{(1:n)} \le y\right) = P\left(X_{(1:n)} \le \frac{y}{n}\right)
+\]
+Karena $X_{(1:n)} \ge 1$, maka:
+\begin{itemize}
+  \item Jika $\dfrac{y}{n} < 1 \iff y < n$, maka $F_{Y_n}(y) = 0$.
+  \item Jika $\dfrac{y}{n} \ge 1 \iff y \ge n$, maka $F_{Y_n}(y) = 1 - \left(\dfrac{y}{n}\right)^{-n} = 1 - \left(\dfrac{n}{y}\right)^n$.
+\end{itemize}
+
+\textbf{Langkah 3: Menghitung limit saat $n \to \infty$.}
+Ambil sebarang nilai riil tetap $y$. Karena $n \to \infty$, untuk nilai $n$ yang cukup besar pasti berlaku $n > y$. Akibatnya, untuk setiap $y$ yang berhingga:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = 0
+\]
+Karena limit bernilai nol untuk seluruh nilai berhingga $y \in \mathbb{R}$, maka barisan $Y_n = n X_{(1:n)}$ \textbf{tidak mempunyai distribusi terbatas yang sejati} (degenerat di $+\infty$, $Y_n \xrightarrow{P} \infty$).
+
+\[
+\boxed{\lim_{n \to \infty} F_{Y_n}(y) = 0, \quad \forall y \in \mathbb{R} \quad \text{(Distribusi degenerat di }+\infty\text{)}} \qquad \blacksquare
+\]
+
+\textbf{Catatan Pengayaan:}
+Bentuk normalisasi yang memiliki limit tak degenerat adalah pemusatan di batas bawah $x_0 = 1$, yaitu $W_n = n(X_{(1:n)} - 1)$. Untuk $w > 0$:
+\[
+P(W_n \le w) = P\left(X_{(1:n)} \le 1 + \frac{w}{n}\right) = 1 - \left(1 + \frac{w}{n}\right)^{-n} \xrightarrow{n \to \infty} 1 - e^{-w} \implies W_n \xrightarrow{d} \text{EXP}(1).
+\]
+\end{solbox}
+
+%--- SOAL 1.2 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.2: Limiting Distribution dari $Y_n = X_{(n:n)}$ untuk Pareto $\text{PAR}(1,1)$}
+Kerjakan ulang soal nomor 1, dengan $Y_n = X_{(n:n)}$ (maksimum sampel).
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.2: Limiting Distribution dari Maksimum Sampel}
+\textbf{Langkah 1: Menentukan CDF dari $Y_n = X_{(n:n)}$.}
+\[
+F_{Y_n}(y) = P(X_{(n:n)} \le y) = [F(y)]^n = \begin{cases} 0, & y < 1 \\ \left(1 - \dfrac{1}{y}\right)^n, & y \ge 1 \end{cases}
+\]
+
+\textbf{Langkah 2: Menghitung limit saat $n \to \infty$.}
+Untuk setiap nilai $y \ge 1$ yang berhingga, berlaku $0 \le 1 - \dfrac{1}{y} < 1$. Oleh karena itu:
+\[
+\lim_{n \to \infty} \left(1 - \frac{1}{y}\right)^n = 0
+\]
+Sedangkan untuk $y < 1$, $F_{Y_n}(y) = 0$.
+Dengan demikian, untuk seluruh $y \in \mathbb{R}$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = 0
+\]
+
+\[
+\boxed{\lim_{n \to \infty} F_{Y_n}(y) = 0, \quad \forall y \in \mathbb{R} \quad \text{(Tidak ada limiting distribution sejati, degenerat di }+\infty\text{)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.3 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.3: Limiting Distribution dari $Y_n = \frac{1}{n}X_{(n:n)}$ untuk Pareto $\text{PAR}(1,1)$}
+Kerjakan ulang soal nomor 1, dengan $Y_n = \dfrac{1}{n}X_{(n:n)}$.
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.3: Normalisasi Penskalaan Maksimum Sampel}
+\textbf{Langkah 1: Menentukan CDF dari $Y_n = \frac{1}{n}X_{(n:n)}$.}
+Untuk $y > 0$:
+\[
+F_{Y_n}(y) = P\left(\frac{1}{n}X_{(n:n)} \le y\right) = P(X_{(n:n)} \le ny) = [F(ny)]^n
+\]
+Untuk $n$ yang cukup besar sehingga $ny \ge 1$ (yaitu $n \ge 1/y$):
+\[
+F_{Y_n}(y) = \left(1 - \frac{1}{ny}\right)^n
+\]
+Untuk $y \le 0$, $F_{Y_n}(y) = 0$.
+
+\textbf{Langkah 2: Mengambil limit $n \to \infty$.}
+Gunakan sifat limit eksponensial $\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^n = e^c$ dengan $c = -1/y$:
+\[
+\lim_{n \to \infty} \left(1 - \frac{1/y}{n}\right)^n = e^{-1/y}, \quad \text{untuk } y > 0
+\]
+
+\textbf{Langkah 3: Verifikasi fungsi CDF limit.}
+Fungsi batas:
+\[
+F_Y(y) = \begin{cases} e^{-1/y}, & y > 0 \\ 0, & y \le 0 \end{cases}
+\]
+memenuhi syarat CDF sejati: $\lim_{y \to 0^+} e^{-1/y} = 0$, $\lim_{y \to \infty} e^{-1/y} = 1$, dan monoton naik.
+Fungsi ini merupakan CDF dari distribusi FrÃ©chet (Distribusi Nilai Ekstrem Tipe II) dengan indeks bentuk $\alpha = 1$.
+
+\[
+\boxed{F_Y(y) = \begin{cases} e^{-1/y}, & y > 0 \\ 0, & y \le 0 \end{cases} \quad \left(Y_n \xrightarrow{d} \text{FrÃ©chet}(1)\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.4 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.4: Analisis Sampel Acak Pareto $F(x) = 1 - 1/x, x \ge 1$}
+Perhatikan sampel acak berukuran $n$ dengan CDF:
+\[
+F(x) = \begin{cases} 1 - \frac{1}{x}, & 1 \le x < \infty \\ 0, & \text{lainnya.} \end{cases}
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan CDF dari order statistic $X_{(1:n)}$.
+  \item Dapatkan limiting distribution dari $X_{(1:n)}$.
+  \item Dapatkan limiting distribution dari $X_{(1:n)}^n$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.4: CDF dan Distribusi Limit dari Statistik Urutan Minimum}
+\textbf{Bagian (a): Menentukan CDF $X_{(1:n)}$.}
+\[
+F_{X_{(1:n)}}(y) = 1 - [1 - F(y)]^n = \begin{cases} 0, & y < 1 \\ 1 - \left(\dfrac{1}{y}\right)^n = 1 - y^{-n}, & y \ge 1 \end{cases}
+\]
+
+\[
+\boxed{F_{X_{(1:n)}}(y) = \begin{cases} 0, & y < 1 \\ 1 - y^{-n}, & y \ge 1 \end{cases}} \qquad \blacksquare
+\]
+
+\textbf{Bagian (b): Limiting distribution dari $X_{(1:n)}$.}
+Ambil limit $n \to \infty$ pada CDF di atas:
+\begin{itemize}
+  \item Jika $y < 1$: $F_{X_{(1:n)}}(y) = 0 \implies \lim_{n \to \infty} F_{X_{(1:n)}}(y) = 0$.
+  \item Jika $y = 1$: $F_{X_{(1:n)}}(1) = 1 - 1^{-n} = 0$.
+  \item Jika $y > 1$: Karena $y > 1$, maka $\lim_{n \to \infty} y^{-n} = 0$, sehingga $\lim_{n \to \infty} (1 - y^{-n}) = 1$.
+\end{itemize}
+Fungsi limitnya adalah:
+\[
+F^*(y) = \begin{cases} 0, & y \le 1 \\ 1, & y > 1 \end{cases}
+\]
+Ini adalah fungsi tangga di titik 1, yang merepresentasikan distribusi degenerat di titik $c = 1$.
+\[
+\boxed{X_{(1:n)} \xrightarrow{d} 1 \quad \text{(atau } X_{(1:n)} \xrightarrow{P} 1 \text{, degenerat pada } c = 1\text{)}} \qquad \blacksquare
+\]
+
+\textbf{Bagian (c): Limiting distribution dari $Y_n = X_{(1:n)}^n$.}
+Tinjau CDF dari $Y_n$ untuk $y \ge 1$:
+\[
+F_{Y_n}(y) = P(X_{(1:n)}^n \le y) = P(X_{(1:n)} \le y^{1/n}) = 1 - \left(y^{1/n}\right)^{-n} = 1 - y^{-1} = 1 - \frac{1}{y}
+\]
+Untuk $y < 1$, $F_{Y_n}(y) = 0$.
+
+Perhatikan bahwa untuk setiap nilai $n$, $F_{Y_n}(y) = 1 - \dfrac{1}{y}$ sama persis dan tidak bergantung pada $n$!
+Oleh karena itu:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = \begin{cases} 0, & y < 1 \\ 1 - \dfrac{1}{y}, & y \ge 1 \end{cases}
+\]
+Distribusi limit dari $X_{(1:n)}^n$ adalah distribusi Pareto $\text{PAR}(1, 1)$ itu sendiri!
+\[
+\boxed{X_{(1:n)}^n \sim \text{PAR}(1, 1) \quad (\text{untuk setiap } n) \implies X_{(1:n)}^n \xrightarrow{d} \text{PAR}(1, 1)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.5 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.5: Eksistensi Limiting Distribution untuk Sampel Pareto $F(x) = 1 - x^{-2}$}
+Perhatikan sampel acak berukuran $n$ dari suatu distribusi dengan CDF:
+\[
+F(x) = \begin{cases} 1 - x^{-2}, & x \ge 1 \\ 0, & \text{lainnya.} \end{cases}
+\]
+Tunjukkan apakah barisan sampel acak berikut mempunyai limiting distribution. Jika ada, tentukan limiting distribution-nya:
+\begin{enumerate}[label=(\alph*)]
+  \item $X_{(1:n)}$
+  \item $X_{(n:n)}$
+  \item $n^{-1/2}X_{(n:n)}$
+\end{enumerate}
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.5: Uji Limiting Distribution untuk Ketiga Barisan}
+\textbf{Bagian (a): Untuk $X_{(1:n)}$.}
+CDF dari $X_{(1:n)}$ untuk $x \ge 1$:
+\[
+G_{1:n}(x) = 1 - [1 - F(x)]^n = 1 - [x^{-2}]^n = 1 - x^{-2n}
+\]
+Untuk $x > 1$: $\lim_{n \to \infty} x^{-2n} = 0 \implies \lim_{n \to \infty} G_{1:n}(x) = 1$.
+Untuk $x \le 1$: $\lim_{n \to \infty} G_{1:n}(x) = 0$.
+\[
+\boxed{\text{Ada: } X_{(1:n)} \text{ mempunyai limiting distribution degenerat di } c = 1 \ (X_{(1:n)} \xrightarrow{P} 1).} \quad \blacksquare
+\]
+
+\textbf{Bagian (b): Untuk $X_{(n:n)}$.}
+CDF dari $X_{(n:n)}$ untuk $x \ge 1$:
+\[
+G_{n:n}(x) = [F(x)]^n = (1 - x^{-2})^n
+\]
+Untuk setiap $x \ge 1$ berhingga, $0 \le 1 - x^{-2} < 1$, sehingga $\lim_{n \to \infty} (1 - x^{-2})^n = 0$.
+Untuk $x < 1$, nilainya identik nol. Jadi $\lim_{n \to \infty} G_{n:n}(x) = 0$ untuk seluruh $x \in \mathbb{R}$.
+\[
+\boxed{\text{\textbf{Tidak ada}} \text{ limiting distribution sejati (degenerat di }+\infty\text{)}.} \quad \blacksquare
+\]
+
+\textbf{Bagian (c): Untuk $Y_n = n^{-1/2}X_{(n:n)}$.}
+Untuk $y > 0$:
+\[
+F_{Y_n}(y) = P(X_{(n:n)} \le n^{1/2}y) = [F(n^{1/2}y)]^n = \left(1 - \frac{1}{(n^{1/2}y)^2}\right)^n = \left(1 - \frac{y^{-2}}{n}\right)^n
+\]
+Mengambil limit saat $n \to \infty$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 - \frac{y^{-2}}{n}\right)^n = e^{-y^{-2}} = e^{-1/y^2}, \quad \text{untuk } y > 0
+\]
+Untuk $y \le 0$, $F_{Y_n}(y) = 0$.
+Karena $\lim_{y \to 0^+} e^{-1/y^2} = 0$ dan $\lim_{y \to \infty} e^{-1/y^2} = 1$, ini adalah CDF sejati (distribusi FrÃ©chet dengan indeks $\alpha = 2$).
+\[
+\boxed{\text{\textbf{Ada}}, \text{ dengan CDF: } F_Y(y) = \begin{cases} e^{-1/y^2}, & y > 0 \\ 0, & y \le 0 \end{cases} \quad \left(n^{-1/2}X_{(n:n)} \xrightarrow{d} \text{FrÃ©chet}(2)\right)} \quad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.6 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.6: Momen Bagasi Pesawat \& Teorema Limit Pusat (CLT)}
+Misalkan $Y_i$ adalah berat bagasi penumpang ke-$i$ dari suatu pesawat terbang (dalam kg). Diasumsikan berat bagasi saling independen dengan pdf $f(y_i) = \theta \beta^{-\theta} y_i^{\theta-1}$ untuk $0 < y_i < \beta$. Jika diketahui $n = 100, \theta = 3, \beta = 80$, maka:
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan $E(Y_i)$ dan $\text{Var}(Y_i)$.
+  \item Dapatkan $E\left(\sum_{i=1}^{n}Y_i\right)$ dan $\text{Var}\left(\sum_{i=1}^{n}Y_i\right)$.
+  \item Dapatkan peluang total berat 100 bagasi paling sedikit 6025 kg.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Momen Distribusi Pangkat (Power Function Distribution)}
+Untuk $f(y) = \theta \beta^{-\theta} y^{\theta-1}$, $0 < y < \beta$:
+\[
+E(Y^k) = \int_0^\beta y^k \theta \beta^{-\theta} y^{\theta-1} \, dy = \theta \beta^{-\theta} \left[\frac{y^{\theta+k}}{\theta+k}\right]_0^\beta = \frac{\theta}{\theta+k}\beta^k
+\]
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.6: Ekspektasi, Varians, dan Aproksimasi Total Berat Bagasi}
+\textbf{Bagian (a): Menghitung $E(Y_i)$ dan $\mathrm{Var}(Y_i)$.}
+Dengan $\theta = 3$ dan $\beta = 80$:
+\begin{itemize}
+  \item Nilai harapan:
+  \[
+  E(Y_i) = \frac{\theta}{\theta+1}\beta = \frac{3}{3+1}(80) = \frac{3}{4}(80) = 60 \text{ kg}
+  \]
+  \item Momen kedua:
+  \[
+  E(Y_i^2) = \frac{\theta}{\theta+2}\beta^2 = \frac{3}{3+2}(80^2) = \frac{3}{5}(6400) = 3840 \text{ kg}^2
+  \]
+  \item Varians:
+  \[
+  \mathrm{Var}(Y_i) = E(Y_i^2) - [E(Y_i)]^2 = 3840 - 60^2 = 3840 - 3600 = 240 \text{ kg}^2
+  \]
+\end{itemize}
+
+\[
+\boxed{E(Y_i) = 60 \text{ kg}, \quad \mathrm{Var}(Y_i) = 240 \text{ kg}^2 \quad (\sigma \approx 15.49 \text{ kg})} \qquad \blacksquare
+\]
+
+\textbf{Bagian (b): Menghitung $E\left(\sum_{i=1}^{100}Y_i\right)$ dan $\mathrm{Var}\left(\sum_{i=1}^{100}Y_i\right)$.}
+Misalkan $S_n = \sum_{i=1}^{100} Y_i$. Karena $Y_i$ iid dengan $n = 100$:
+\[
+E(S_n) = \sum_{i=1}^{100} E(Y_i) = 100 \times 60 = 6000 \text{ kg}
+\]
+\[
+\mathrm{Var}(S_n) = \sum_{i=1}^{100} \mathrm{Var}(Y_i) = 100 \times 240 = 24.000 \text{ kg}^2
+\]
+Simpangan baku total: $\sigma_{S_n} = \sqrt{24000} = 20\sqrt{60} = 40\sqrt{15} \approx 154.92 \text{ kg}$.
+
+\[
+\boxed{E\left(\sum_{i=1}^{100}Y_i\right) = 6000 \text{ kg}, \quad \mathrm{Var}\left(\sum_{i=1}^{100}Y_i\right) = 24.000 \text{ kg}^2} \qquad \blacksquare
+\]
+
+\textbf{Bagian (c): Menghitung Peluang $P(S_n \ge 6025)$.}
+Berdasarkan Teorema Limit Pusat (CLT) karena $n = 100 \ge 30$:
+\[
+S_n \approx N(\mu_{S_n} = 6000, \ \sigma_{S_n}^2 = 24.000)
+\]
+Standardisasi ke peubah normal baku $Z$:
+\[
+Z = \frac{S_n - 6000}{\sqrt{24000}} = \frac{S_n - 6000}{154.92}
+\]
+Untuk nilai target 6025 kg:
+\[
+z = \frac{6025 - 6000}{154.92} = \frac{25}{154.92} \approx 0.1614 \approx 0.16
+\]
+Maka nilai peluang:
+\[
+P(S_n \ge 6025) \approx P(Z \ge 0.16) = 1 - \Phi(0.16) = 1 - 0.5636 = 0.4364
+\]
+
+\[
+\boxed{P\left(\sum_{i=1}^{100} Y_i \ge 6025\right) \approx 0.4364 \quad (43.64\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.7 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.7: Konvergensi Stokastik \& Distribusi Limit $Y_n = n(\theta - X_{n:n})$ dari Uniform}
+Misalkan $X_1, X_2, \dots, X_n$ adalah barisan variabel acak independen berdistribusi uniform, $X_i \sim \text{UNIF}(0,\theta)$ dan diberikan $Y_n = n(\theta - X_{n:n})$.
+\begin{enumerate}[label=(\alph*)]
+  \item Tunjukkan bahwa $X_{n:n}$ konvergen stokastik pada $\theta$.
+  \item Dapatkan distribusi terbatas $Y_n$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.7: Asimtotik Maksimum Sampel Uniform}
+\textbf{Bagian (a): Membuktikan $X_{n:n} \xrightarrow{P} \theta$.}
+CDF populasi $X \sim \text{UNIF}(0, \theta)$ adalah $F(x) = \dfrac{x}{\theta}$ untuk $0 \le x \le \theta$.
+CDF dari maksimum sampel $X_{n:n}$ adalah:
+\[
+F_{X_{n:n}}(x) = [F(x)]^n = \left(\frac{x}{\theta}\right)^n, \quad 0 \le x \le \theta
+\]
+Karena $0 \le X_{n:n} \le \theta$, maka untuk sebarang $0 < \epsilon < \theta$:
+\[
+P(|X_{n:n} - \theta| < \epsilon) = P(\theta - \epsilon < X_{n:n} \le \theta) = F_{X_{n:n}}(\theta) - F_{X_{n:n}}(\theta - \epsilon)
+\]
+\[
+P(|X_{n:n} - \theta| < \epsilon) = 1 - \left(\frac{\theta - \epsilon}{\theta}\right)^n = 1 - \left(1 - \frac{\epsilon}{\theta}\right)^n
+\]
+Karena $0 < \epsilon < \theta$, rasio $0 < 1 - \dfrac{\epsilon}{\theta} < 1$, sehingga $\lim_{n \to \infty} \left(1 - \dfrac{\epsilon}{\theta}\right)^n = 0$.
+Akibatnya:
+\[
+\lim_{n \to \infty} P(|X_{n:n} - \theta| < \epsilon) = 1 - 0 = 1 \iff \lim_{n \to \infty} P(|X_{n:n} - \theta| \ge \epsilon) = 0
+\]
+\[
+\boxed{X_{n:n} \xrightarrow{P} \theta \quad \text{(Terbukti konvergen stokastik pada } \theta\text{)}} \qquad \blacksquare
+\]
+
+\textbf{Bagian (b): Distribusi terbatas dari $Y_n = n(\theta - X_{n:n})$.}
+Untuk $y > 0$:
+\[
+P(Y_n \le y) = P\left(n(\theta - X_{n:n}) \le y\right) = P\left(\theta - X_{n:n} \le \frac{y}{n}\right) = P\left(X_{n:n} \ge \theta - \frac{y}{n}\right)
+\]
+\[
+P(Y_n \le y) = 1 - F_{X_{n:n}}\left(\theta - \frac{y}{n}\right) = 1 - \left(\frac{\theta - y/n}{\theta}\right)^n = 1 - \left(1 - \frac{y/\theta}{n}\right)^n
+\]
+Mengambil limit $n \to \infty$:
+\[
+\lim_{n \to \infty} P(Y_n \le y) = 1 - e^{-y/\theta}, \quad \text{untuk } y > 0
+\]
+Untuk $y \le 0$, $P(Y_n \le y) = 0$.
+Bentuk $1 - e^{-y/\theta}$ adalah CDF dari distribusi Eksponensial dengan parameter skala $\theta$ (rata-rata $\theta$).
+\[
+\boxed{Y_n = n(\theta - X_{n:n}) \xrightarrow{d} \text{EXP}(\text{skala } \theta) \quad \left(f_Y(y) = \frac{1}{\theta} e^{-y/\theta}, \ y > 0\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.8 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.8: Bukti Chebyshev untuk Rata-Rata Poisson Bebas}
+Misalkan $X_1, X_2, \dots$ adalah variabel acak berdistribusi Poisson dengan $X_i \sim \text{POI}(\lambda_i)$ dan $Y_n = \sum_{i=1}^{n}\frac{X_i - \lambda_i}{n}$. Gunakan ketidaksamaan Chebychev untuk menunjukkan bahwa barisan $Y_1, Y_2, \dots$ konvergen stokastik ke $c = 0$ untuk $n \to \infty$.
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.8: Konvergensi Stokastik via Ketidaksamaan Chebyshev}
+\textbf{Langkah 1: Menghitung nilai harapan $E(Y_n)$.}
+Karena $E(X_i) = \lambda_i$:
+\[
+E(Y_n) = E\left[\frac{1}{n} \sum_{i=1}^n (X_i - \lambda_i)\right] = \frac{1}{n} \sum_{i=1}^n [E(X_i) - \lambda_i] = \frac{1}{n} \sum_{i=1}^n (\lambda_i - \lambda_i) = 0
+\]
+
+\textbf{Langkah 2: Menghitung varians $\mathrm{Var}(Y_n)$.}
+Karena $X_i$ saling bebas, $\mathrm{Var}(X_i) = \lambda_i$:
+\[
+\mathrm{Var}(Y_n) = \mathrm{Var}\left(\frac{1}{n}\sum_{i=1}^n (X_i - \lambda_i)\right) = \frac{1}{n^2}\sum_{i=1}^n \mathrm{Var}(X_i) = \frac{1}{n^2}\sum_{i=1}^n \lambda_i = \frac{\bar{\lambda}_n}{n}
+\]
+di mana $\bar{\lambda}_n = \dfrac{1}{n}\sum_{i=1}^n \lambda_i$ adalah rata-rata parameter Poisson. Asumsikan bahwa barisan parameter terbatas, yaitu terdapat $M < \infty$ sehingga $\lambda_i \le M$ untuk semua $i$ (atau $\bar{\lambda}_n \to \lambda < \infty$). Maka:
+\[
+\mathrm{Var}(Y_n) \le \frac{M}{n}
+\]
+
+\textbf{Langkah 3: Menerapkan Ketidaksamaan Chebyshev.}
+Untuk sebarang $\epsilon > 0$:
+\[
+0 \le P(|Y_n - 0| \ge \epsilon) \le \frac{\mathrm{Var}(Y_n)}{\epsilon^2} \le \frac{M}{n\epsilon^2}
+\]
+
+\textbf{Langkah 4: Mengambil limit $n \to \infty$ (Prinsip Apit).}
+\[
+\lim_{n \to \infty} \frac{M}{n\epsilon^2} = 0 \implies \lim_{n \to \infty} P(|Y_n - 0| \ge \epsilon) = 0
+\]
+Berdasarkan definisi konvergensi stokastik:
+\[
+\boxed{Y_n \xrightarrow{P} 0 \quad \text{saat } n \to \infty} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.9 -----------------------------------------------------------------
+\begin{soalbox}{Soal 1.9: Limiting Distribution via MGF untuk Transformasi Normal Standar}
+Diberikan $Z_1, Z_2, \dots, Z_n$ sampel random iid berdistribusi normal standar. Gunakan MGF untuk mencari distribusi terbatas dari:
+\[
+U_n = \sum_{i=1}^{n}\frac{Z_i + \frac{1}{n}}{\sqrt{n}}
+\]
+\end{soalbox}
+
+\begin{tipbox}{Fungsi Pembangkit Momen (MGF) Normal Standar}
+Jika $Z \sim N(0, 1)$, maka MGF dari $Z$ adalah $M_Z(t) = e^{t^2/2}$.
+Untuk konstanta $c$, MGF dari $cZ$ adalah $M_Z(ct) = e^{(ct)^2/2} = e^{c^2 t^2/2}$.
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.9: Penurunan Limiting Distribution Menggunakan MGF}
+\textbf{Langkah 1: Menyederhanakan bentuk peubah acak $U_n$.}
+Pisahkan suku acak dan suku konstanta pada pembilang:
+\[
+U_n = \sum_{i=1}^n \left(\frac{Z_i}{\sqrt{n}} + \frac{1}{n\sqrt{n}}\right) = \frac{1}{\sqrt{n}}\sum_{i=1}^n Z_i + \frac{n}{n\sqrt{n}} = \frac{\sum_{i=1}^n Z_i}{\sqrt{n}} + \frac{1}{\sqrt{n}}
+\]
+
+\textbf{Langkah 2: Menentukan MGF dari suku jumlahan acak.}
+Misalkan $S_n = \dfrac{1}{\sqrt{n}}\sum_{i=1}^n Z_i$. Karena $Z_i \overset{\mathrm{iid}}{\sim} N(0, 1)$:
+\[
+M_{S_n}(t) = \prod_{i=1}^n M_{Z_i}\left(\frac{t}{\sqrt{n}}\right) = \left[e^{(t/\sqrt{n})^2 / 2}\right]^n = \left[e^{t^2 / (2n)}\right]^n = e^{n \cdot \frac{t^2}{2n}} = e^{t^2/2}
+\]
+
+\textbf{Langkah 3: Menentukan MGF dari $U_n = S_n + \dfrac{1}{\sqrt{n}}$.}
+Berdasarkan sifat MGF dengan penambahan konstanta $c_n = 1/\sqrt{n}$:
+\[
+M_{U_n}(t) = E\left[e^{t(S_n + 1/\sqrt{n})}\right] = e^{t/\sqrt{n}} M_{S_n}(t) = e^{t/\sqrt{n}} \cdot e^{t^2/2}
+\]
+
+\textbf{Langkah 4: Menghitung limit MGF saat $n \to \infty$.}
+Untuk setiap nilai $t \in \mathbb{R}$:
+\[
+\lim_{n \to \infty} \frac{t}{\sqrt{n}} = 0 \implies \lim_{n \to \infty} e^{t/\sqrt{n}} = e^0 = 1
+\]
+Sehingga:
+\[
+\lim_{n \to \infty} M_{U_n}(t) = 1 \cdot e^{t^2/2} = e^{t^2/2}
+\]
+
+\textbf{Langkah 5: Kesimpulan via Teorema Kontinuitas LÃ©vy.}
+Bentuk $e^{t^2/2}$ adalah MGF unik dari peubah acak berdistribusi Normal Standar $N(0, 1)$. Berdasarkan Teorema Kontinuitas LÃ©vy (Keunikan Limit MGF):
+\[
+\boxed{U_n \xrightarrow{d} N(0, 1)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.10 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.10: Transformasi Poisson, Metode Delta, \& Asimtotik Peluang}
+Diberikan $X_1, X_2, \dots, X_n$ sampel random berdistribusi Poisson, yaitu $X_i \sim \text{POI}(\mu)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Tunjukkan bahwa $Y_n = \exp(-\bar{X}_n)$ konvergen secara stokastik ke $P(X=0) = e^{-\mu}$.
+  \item Carilah distribusi normal asimtotik dari $Y_n$.
+  \item Tunjukkan bahwa $\bar{X}_n \exp(-\bar{X}_n)$ konvergen secara stokastik ke $P(X=1) = \mu e^{-\mu}$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Teorema Continuous Mapping \& Metode Delta}
+\begin{itemize}
+  \item \textbf{Continuous Mapping Theorem (CMT):} Jika $T_n \xrightarrow{P} \theta$ dan fungsi $g$ kontinu di $\theta$, maka $g(T_n) \xrightarrow{P} g(\theta)$.
+  \item \textbf{Metode Delta:} Jika $\sqrt{n}(T_n - \theta) \xrightarrow{d} N(0, \sigma^2)$ dan $g'(\theta) \ne 0$ kontinu, maka:
+  \[
+  \sqrt{n}[g(T_n) - g(\theta)] \xrightarrow{d} N\left(0, \ [g'(\theta)]^2 \sigma^2\right) \implies g(T_n) \sim AN\left(g(\theta), \ \frac{[g'(\theta)]^2 \sigma^2}{n}\right)
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.10: Analisis Asimtotik Penaksir Probabilitas Poisson}
+\textbf{Bagian (a): Membuktikan $Y_n = \exp(-\bar{X}_n) \xrightarrow{P} e^{-\mu}$.}
+\begin{enumerate}[label=\arabic*.]
+  \item Untuk $X_i \sim \text{POI}(\mu)$, $E(X_i) = \mu < \infty$. Berdasarkan Hukum Lemah Bilangan Besar (WLLN):
+  \[
+  \bar{X}_n \xrightarrow{P} \mu
+  \]
+  \item Fungsi $g(x) = e^{-x}$ kontinu pada seluruh bilangan riil $\mathbb{R}$, khususnya di $x = \mu > 0$.
+  \item Berdasarkan Continuous Mapping Theorem (CMT):
+  \[
+  g(\bar{X}_n) \xrightarrow{P} g(\mu) \iff \exp(-\bar{X}_n) \xrightarrow{P} e^{-\mu} = P(X = 0)
+  \]
+\end{enumerate}
+\[
+\boxed{Y_n = \exp(-\bar{X}_n) \xrightarrow{P} e^{-\mu} \quad \text{(Terbukti)}} \qquad \blacksquare
+\]
+
+\textbf{Bagian (b): Menentukan Distribusi Normal Asimtotik dari $Y_n$ via Metode Delta.}
+\begin{enumerate}[label=\arabic*.]
+  \item Karena $X_i \sim \text{POI}(\mu)$, varians populasinya adalah $\sigma^2 = \mathrm{Var}(X_i) = \mu$.
+  Berdasarkan Central Limit Theorem (CLT):
+  \[
+  \sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \ \mu)
+  \]
+  \item Definisikan fungsi transformasi $g(x) = e^{-x}$. Turunan pertamanya:
+  \[
+  g'(x) = -e^{-x} \implies g'(\mu) = -e^{-\mu} \ne 0
+  \]
+  \item Berdasarkan Metode Delta tingkat pertama:
+  \[
+  \sqrt{n}[g(\bar{X}_n) - g(\mu)] \xrightarrow{d} N\left(0, \ [g'(\mu)]^2 \sigma^2\right)
+  \]
+  Substitusikan parameter yang bersesuaian:
+  \[
+  [g'(\mu)]^2 \sigma^2 = (-e^{-\mu})^2 \cdot \mu = \mu e^{-2\mu}
+  \]
+  Sehingga:
+  \[
+  \sqrt{n}\left(\exp(-\bar{X}_n) - e^{-\mu}\right) \xrightarrow{d} N\left(0, \ \mu e^{-2\mu}\right)
+  \]
+\end{enumerate}
+\[
+\boxed{Y_n \sim AN\left(e^{-\mu}, \ \frac{\mu e^{-2\mu}}{n}\right)} \qquad \blacksquare
+\]
+
+\textbf{Bagian (c): Membuktikan $\bar{X}_n \exp(-\bar{X}_n) \xrightarrow{P} \mu e^{-\mu}$.}
+\begin{enumerate}[label=\arabic*.]
+  \item Dari WLLN, $\bar{X}_n \xrightarrow{P} \mu$.
+  \item Tinjau fungsi $h(x) = x e^{-x}$. Fungsi ini kontinu di setiap $x \in \mathbb{R}$.
+  \item Berdasarkan Continuous Mapping Theorem (CMT):
+  \[
+  h(\bar{X}_n) \xrightarrow{P} h(\mu) \iff \bar{X}_n \exp(-\bar{X}_n) \xrightarrow{P} \mu e^{-\mu} = P(X = 1)
+  \]
+\end{enumerate}
+\[
+\boxed{\bar{X}_n \exp(-\bar{X}_n) \xrightarrow{P} \mu e^{-\mu} \quad \text{(Terbukti)}} \qquad \blacksquare
+\]
+\textit{Catatan: Soal asli mencantumkan $X_n \exp(-X_n)$ yang merupakan variasi penulisan dari rata-rata sampel $\bar{X}_n \exp(-\bar{X}_n)$ sebagai penduga konsisten bagi peluang $P(X=1)$.}
+\end{solbox}
+
+%--- SOAL 1.11 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.11: Ekuivalensi Konvergensi Barisan Bilangan Riil \& Konvergensi Stokastik}
+Diberikan $(a_n)$ barisan bilangan real. Dengan kata lain, $(a_n)$ adalah barisan variabel random konstan (degenerate). Misalkan $a \in \mathbb{R}$. Tunjukkan bahwa $a_n$ konvergen ke $a$ ekuivalen dengan $a_n \xrightarrow{P} a$.
+\end{soalbox}
+
+\begin{solbox}{Soal 1.11: Pembuktian Dua Arah $(a_n \to a \iff a_n \xrightarrow{P} a)$}
+\textbf{Arah 1 ($\implies$): Andaikan $a_n \to a$ dalam pengertian analisis real.}
+\begin{enumerate}[label=\arabic*.]
+  \item Berdasarkan definisi limit barisan real: untuk setiap $\epsilon > 0$, terdapat bilangan bulat $N$ sehingga untuk semua $n \ge N$:
+  \[
+  |a_n - a| < \epsilon
+  \]
+  \item Karena $a_n$ dan $a$ adalah konstanta pasti (deterministik), untuk semua $n \ge N$, peristiwa $\{|a_n - a| \ge \epsilon\}$ adalah himpunan kosong $\emptyset$.
+  \item Oleh karena itu, probabilitasnya adalah:
+  \[
+  P(|a_n - a| \ge \epsilon) = 0, \quad \forall n \ge N
+  \]
+  \item Mengambil limit $n \to \infty$:
+  \[
+  \lim_{n \to \infty} P(|a_n - a| \ge \epsilon) = 0 \implies a_n \xrightarrow{P} a
+  \]
+\end{enumerate}
+
+\textbf{Arah 2 ($\impliedby$): Andaikan $a_n \xrightarrow{P} a$ dalam pengertian probabilitas.}
+\begin{enumerate}[label=\arabic*.]
+  \item Berdasarkan definisi: untuk setiap $\epsilon > 0$, $\lim_{n \to \infty} P(|a_n - a| \ge \epsilon) = 0$.
+  \item Perhatikan bahwa untuk peubah konstan $a_n$, nilai $|a_n - a|$ adalah bilangan tertentu. Akibatnya peristiwa $\{|a_n - a| \ge \epsilon\}$ hanya bernilai BENAR atau SALAH. Probabilitasnya hanya dapat bernilai:
+  \[
+  P(|a_n - a| \ge \epsilon) \in \{0, 1\}
+  \]
+  \item Suatu barisan bilangan yang nilainya hanya 0 atau 1 dapat memiliki limit 0 jika dan hanya jika nilainya pada akhirnya menjadi 0 untuk seluruh $n$ yang cukup besar.
+  Artinya, terdapat $N$ sedemikian sehingga untuk semua $n \ge N$:
+  \[
+  P(|a_n - a| \ge \epsilon) = 0
+  \]
+  \item Kondisi $P(|a_n - a| \ge \epsilon) = 0$ berarti peristiwa komplementernya bernilai pasti:
+  \[
+  |a_n - a| < \epsilon, \quad \forall n \ge N
+  \]
+  Ini persis merupakan definisi formal bahwa $\lim_{n \to \infty} a_n = a$.
+\end{enumerate}
+
+\[
+\boxed{a_n \to a \iff a_n \xrightarrow{P} a \quad \text{(Ekuivalensi Terbukti)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.12 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.12: Konvergensi Stokastik via Chebyshev dengan Varians Berorde $O(n^{-p})$}
+Misalkan $W_n$ adalah suatu variabel random dengan mean $\mu$ dan variansi $\text{Var}(W_n) = \dfrac{b}{n^p}$, dengan $p > 0, \mu, b$ adalah konstanta ($b > 0$). Gunakan ketidaksamaan Chebychev untuk menunjukkan bahwa $W_n \xrightarrow{P} \mu$.
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.12: Pembuktian Konsistensi $W_n \xrightarrow{P} \mu$}
+\textbf{Langkah 1: Menyatakan Ketidaksamaan Chebyshev.}
+Karena $E(W_n) = \mu$ dan $\mathrm{Var}(W_n) = \dfrac{b}{n^p} < \infty$, untuk sebarang konstanta $\epsilon > 0$:
+\[
+P(|W_n - \mu| \ge \epsilon) \le \frac{\mathrm{Var}(W_n)}{\epsilon^2}
+\]
+
+\textbf{Langkah 2: Substitusi varians ke dalam ketidaksamaan.}
+\[
+0 \le P(|W_n - \mu| \ge \epsilon) \le \frac{b}{n^p \epsilon^2}
+\]
+
+\textbf{Langkah 3: Mengambil limit $n \to \infty$.}
+Karena diasumsikan $p > 0$, maka $\lim_{n \to \infty} n^p = \infty$. Dengan konstanta $b > 0$ dan $\epsilon > 0$ tetap:
+\[
+\lim_{n \to \infty} \frac{b}{n^p \epsilon^2} = 0
+\]
+
+\textbf{Langkah 4: Kesimpulan dengan Prinsip Apit (Squeeze Theorem).}
+\[
+0 \le \lim_{n \to \infty} P(|W_n - \mu| \ge \epsilon) \le 0 \implies \lim_{n \to \infty} P(|W_n - \mu| \ge \epsilon) = 0
+\]
+Sesuai dengan definisi konvergensi dalam peluang:
+\[
+\boxed{W_n \xrightarrow{P} \mu \quad \text{saat } n \to \infty} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.13 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.13: Konvergensi Stokastik Statistik Urutan Minimum Eksponensial Bergeser}
+Diberikan $X_1, X_2, \dots, X_n$ sampel random iid dari suatu distribusi dengan PDF:
+\[
+f(x) = \begin{cases} e^{-(x-\theta)}, & x > \theta, -\infty < \theta < \infty, \\ 0, & \text{lainnya.} \end{cases}
+\]
+Misalkan $Y_n = \min\{X_1, \dots, X_n\}$. Tunjukkan bahwa $Y_n \xrightarrow{P} \theta$.\\
+\textit{Petunjuk:} Cari CDF dari $Y_n$ terlebih dahulu.
+\end{soalbox}
+
+\begin{solbox}{Solusi 1.13: Pembuktian $Y_n \xrightarrow{P} \theta$ Menggunakan CDF}
+\textbf{Langkah 1: Menentukan CDF populasi $X$.}
+Untuk $x > \theta$:
+\[
+F(x) = \int_\theta^x e^{-(u-\theta)} \, du = \left[-e^{-(u-\theta)}\right]_\theta^x = 1 - e^{-(x-\theta)}
+\]
+dan $F(x) = 0$ untuk $x \le \theta$.
+
+\textbf{Langkah 2: Menentukan CDF dari $Y_n = \min\{X_1, \dots, X_n\}$.}
+Karena $X_i$ independen, untuk $y > \theta$:
+\[
+F_{Y_n}(y) = 1 - [1 - F(y)]^n = 1 - \left[e^{-(y-\theta)}\right]^n = 1 - e^{-n(y-\theta)}
+\]
+dan $F_{Y_n}(y) = 0$ untuk $y \le \theta$.
+
+\textbf{Langkah 3: Menghitung $P(|Y_n - \theta| < \epsilon)$.}
+Karena $X_i > \theta$ untuk semua $i$, maka nilai minimum sampel selalu memenuhi $Y_n > \theta$. Akibatnya $|Y_n - \theta| = Y_n - \theta > 0$.
+Untuk sebarang $\epsilon > 0$:
+\[
+P(|Y_n - \theta| < \epsilon) = P(\theta < Y_n < \theta + \epsilon) = F_{Y_n}(\theta + \epsilon) - F_{Y_n}(\theta)
+\]
+Substitusikan ke dalam rumus CDF:
+\[
+P(|Y_n - \theta| < \epsilon) = \left(1 - e^{-n(\theta + \epsilon - \theta)}\right) - 0 = 1 - e^{-n\epsilon}
+\]
+
+\textbf{Langkah 4: Menghitung limit saat $n \to \infty$.}
+Karena $\epsilon > 0$, maka $\lim_{n \to \infty} (-n\epsilon) = -\infty$, sehingga:
+\[
+\lim_{n \to \infty} e^{-n\epsilon} = 0
+\]
+Oleh karena itu:
+\[
+\lim_{n \to \infty} P(|Y_n - \theta| < \epsilon) = 1 - 0 = 1 \iff \lim_{n \to \infty} P(|Y_n - \theta| \ge \epsilon) = 0
+\]
+
+\[
+\boxed{Y_n = \min\{X_1, \dots, X_n\} \xrightarrow{P} \theta \quad \text{(Terbukti)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.14 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.14: Menentukan Eksponen Normalisasi $p$ untuk Konvergensi Distribusi Weibull}
+Diberikan $Y_1 < Y_2 < \dots < Y_n$ order statistics dari sampel random suatu distribusi dengan PDF $f(x) = 5x^4$, $0 < x < 1$. Cari nilai pengali $p$ agar $Z_n = n^p Y_1 \xrightarrow{d} Z$.
+\end{soalbox}
+
+\begin{tipbox}{Statistik Urutan Minimum \& Distribusi Nilai Ekstrem Weibull}
+Untuk distribusi dengan $F(x) \approx c x^\alpha$ di dekat $x = 0$, peubah terstandarisasi $Z_n = n^{1/\alpha} Y_1$ berkonvergensi ke distribusi Weibull $P(Z \le z) = 1 - e^{-c z^\alpha}$.
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.14: Menentukan Nilai $p$ dan Distribusi Batas $Z$}
+\textbf{Langkah 1: Menentukan CDF populasi $X$.}
+Untuk $0 < x < 1$:
+\[
+F(x) = \int_0^x 5u^4 \, du = x^5
+\]
+
+\textbf{Langkah 2: Menentukan CDF dari $Y_1 = X_{(1:n)}$.}
+\[
+F_{Y_1}(y) = 1 - [1 - F(y)]^n = 1 - (1 - y^5)^n, \quad 0 < y < 1
+\]
+
+\textbf{Langkah 3: Menentukan CDF dari $Z_n = n^p Y_1$.}
+Untuk $z > 0$ dan nilai $n$ cukup besar sehingga $z/n^p < 1$:
+\[
+F_{Z_n}(z) = P(Z_n \le z) = P\left(Y_1 \le \frac{z}{n^p}\right) = 1 - \left[1 - \left(\frac{z}{n^p}\right)^5\right]^n = 1 - \left(1 - \frac{z^5}{n^{5p}}\right)^n
+\]
+
+\textbf{Langkah 4: Menyelidiki kondisi limit agar diperoleh distribusi tak degenerat.}
+Ingat sifat limit Euler $\lim_{n \to \infty} \left(1 - \frac{c}{n^k}\right)^n$:
+\begin{itemize}
+  \item Jika $5p > 1$, maka $\dfrac{z^5}{n^{5p}} = o(1/n)$, sehingga limitnya menjadi $1 - 1 = 0$ (degenerat di 0).
+  \item Jika $5p < 1$, limitnya menjadi $1 - 0 = 1$ (degenerat).
+  \item Agar limitnya menghasilkan fungsi distribusi sejati tak-nol, pangkat penyebut harus seimbang dengan $n$, yaitu:
+  \[
+  5p = 1 \iff p = \frac{1}{5}
+  \]
+\end{itemize}
+
+\textbf{Langkah 5: Evaluasi limit saat $p = 1/5$.}
+Substitusikan $p = 1/5$:
+\[
+\lim_{n \to \infty} F_{Z_n}(z) = \lim_{n \to \infty} \left[1 - \left(1 - \frac{z^5}{n}\right)^n\right] = 1 - e^{-z^5}, \quad z > 0
+\]
+Fungsi $F_Z(z) = 1 - e^{-z^5}$ untuk $z > 0$ adalah CDF dari distribusi Weibull dengan parameter bentuk $\alpha = 5$ dan skala $\beta = 1$.
+
+\[
+\boxed{p = \frac{1}{5} \quad \left(\text{sehingga } Z_n = n^{1/5} Y_1 \xrightarrow{d} \text{Weibull}(\text{bentuk } 5)\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.15 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.15: Ukuran Sampel Minimal Uji Proporsi Binomial via CLT}
+Diberikan $Y \sim \text{BIN}(n, 0.55)$. Tentukan nilai terkecil dari $n$ agar $P\left(\dfrac{Y}{n} > 0.5\right) \ge 0.95$.
+\end{soalbox}
+
+\begin{tipbox}{Aproksimasi Normal untuk Proporsi Sampel}
+Untuk $Y \sim \text{BIN}(n, p)$, proporsi sampel $\hat{p} = \dfrac{Y}{n}$ memiliki mean dan varians:
+\[
+E(\hat{p}) = p, \qquad \mathrm{Var}(\hat{p}) = \frac{p(1-p)}{n}
+\]
+Berdasarkan CLT: $Z = \dfrac{\hat{p} - p}{\sqrt{\dfrac{p(1-p)}{n}}} \approx N(0, 1)$.
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.15: Perhitungan Ukuran Sampel Minimal $n$}
+\textbf{Langkah 1: Menentukan parameter rata-rata dan deviasi standar.}
+Diketahui parameter proporsi sukses $p = 0.55$, sehingga $q = 1 - p = 0.45$:
+\[
+E\left(\frac{Y}{n}\right) = p = 0.55
+\]
+\[
+\mathrm{Var}\left(\frac{Y}{n}\right) = \frac{p(1-p)}{n} = \frac{0.55 \times 0.45}{n} = \frac{0.2475}{n}
+\]
+\[
+\sigma_{\hat{p}} = \sqrt{\frac{0.2475}{n}} = \frac{\sqrt{0.2475}}{\sqrt{n}} \approx \frac{0.49749}{\sqrt{n}}
+\]
+
+\textbf{Langkah 2: Menstandardisasi pernyataan peluang.}
+\[
+P\left(\frac{Y}{n} > 0.5\right) = P\left(\frac{\frac{Y}{n} - 0.55}{\sigma_{\hat{p}}} > \frac{0.5 - 0.55}{\sigma_{\hat{p}}}\right) \ge 0.95
+\]
+\[
+P\left(Z > \frac{-0.05}{\dfrac{0.49749}{\sqrt{n}}}\right) = P\left(Z > - \frac{0.05 \sqrt{n}}{0.49749}\right) \ge 0.95
+\]
+
+\textbf{Langkah 3: Menggunakan nilai kritis distribusi normal baku.}
+Dari tabel distribusi normal baku, diketahui $P(Z > -z_{0.05}) = 0.95 \iff \Phi(z_{0.05}) = 0.95$.
+Nilai kuantil atas ke-5\% adalah $z_{0.05} \approx 1.645$ (atau $1.6449$).
+Oleh karena itu, haruslah dipenuhi:
+\[
+-\frac{0.05 \sqrt{n}}{0.49749} \le -1.645 \iff \frac{0.05 \sqrt{n}}{0.49749} \ge 1.645
+\]
+
+\textbf{Langkah 4: Menyelesaikan ketidaksamaan untuk $n$.}
+\[
+\sqrt{n} \ge 1.645 \times \frac{0.49749}{0.05} = 1.645 \times 9.94987 \approx 16.3675
+\]
+Kuadratkan kedua ruas:
+\[
+n \ge (16.3675)^2 \approx 267.896
+\]
+Karena ukuran sampel $n$ harus berupa bilangan bulat positif:
+\[
+n_{\min} = 268
+\]
+
+*(Catatan: Jika digunakan koreksi kontinuitas $\dfrac{0.5n + 0.5 - 0.55n}{\sqrt{n(0.2475)}} \le -1.645$, diperoleh $n \approx 271$)*.
+
+\[
+\boxed{n_{\min} = 268 \quad (\text{atau } n = 271 \text{ dengan koreksi kontinuitas}) } \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 1.16 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.16: MGF \& Distribusi Jumlahan Peubah Acak Geometrik Bebas}
+Diberikan $X_1, X_2, \dots, X_n$ sampel random iid berdistribusi geometri, $X_i \sim \text{GEO}(p)$. Misalkan variabel random $Y = X_1 + X_2 + \dots + X_n$.
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan MGF dari $Y$.
+  \item Tentukan distribusi dari $Y$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Distribusi Geometrik dan Binomial Negatif}
+\begin{itemize}
+  \item \textbf{Definisi Percobaan (Bain \& Engelhardt):} Jika $X$ menyatakan banyak percobaan hingga sukses pertama ($x = 1, 2, \dots$), $P(X=x) = (1-p)^{x-1}p$, maka MGF adalah $M_X(t) = \dfrac{pe^t}{1 - (1-p)e^t}$.
+  \item \textbf{Distribusi Binomial Negatif:} Jumlahan $n$ peubah geometrik independen berdistribusi Binomial Negatif $\text{NB}(n, p)$ (banyak percobaan untuk mencapai $n$ kali sukses).
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.16: Penurunan MGF dan Identifikasi Distribusi $Y$}
+\textbf{Bagian (a): Menentukan MGF dari $Y = \sum_{i=1}^n X_i$.}
+\begin{enumerate}[label=\arabic*.]
+  \item Berdasarkan definisi standar peubah acak geometrik $X_i \sim \text{GEO}(p)$ dengan support $x = 1, 2, 3, \dots$:
+  \[
+  M_{X_i}(t) = E(e^{tX_i}) = \sum_{x=1}^\infty e^{tx} (1-p)^{x-1} p = p e^t \sum_{x=1}^\infty [(1-p)e^t]^{x-1}
+  \]
+  Gunakan rumus deret geometri tak hingga dengan rasio $(1-p)e^t < 1$ (yaitu untuk $t < -\ln(1-p)$):
+  \[
+  M_{X_i}(t) = \frac{p e^t}{1 - (1-p)e^t}
+  \]
+  \item Karena $X_1, X_2, \dots, X_n$ saling independen:
+  \[
+  M_Y(t) = \prod_{i=1}^n M_{X_i}(t) = \left[M_{X_i}(t)\right]^n = \left(\frac{p e^t}{1 - (1-p)e^t}\right)^n, \quad t < -\ln(1-p)
+  \]
+\end{enumerate}
+
+\[
+\boxed{M_Y(t) = \left(\frac{p e^t}{1 - (1-p)e^t}\right)^n, \quad \text{untuk } t < -\ln(1-p)} \qquad \blacksquare
+\]
+*(Jika menggunakan konvensi jumlah kegagalan $x = 0, 1, 2, \dots$, maka $M_Y(t) = \left[\dfrac{p}{1 - (1-p)e^t}\right]^n$)*.
+
+\textbf{Bagian (b): Menentukan distribusi dari $Y$.}
+Berdasarkan sifat ketunggalan fungsi pembangkit momen, bentuk $M_Y(t)$ di atas secara unik mengidentifikasi:
+\[
+\boxed{Y \sim \text{NB}(n, p) \quad \text{(Distribusi Binomial Negatif)}} \qquad \blacksquare
+\]
+dengan fungsi peluang:
+\[
+P(Y = y) = \binom{y - 1}{n - 1} p^n (1-p)^{y-n}, \quad y = n, n+1, n+2, \dots
+\]
+\textit{Interpretasi probabilistik: Jumlahan waktu tunggu (banyaknya percobaan) hingga tercapai sukses pertama dari $n$ tahapan independen setara dengan total percobaan hingga tercapai $n$ kali sukses, yang merupakan definisi eksak dari peubah acak Binomial Negatif.}
+\end{solbox}
+
+%--- SOAL 1.17 ----------------------------------------------------------------
+\begin{soalbox}{Soal 1.17: MGF \& Distribusi Jumlahan Peubah Acak Eksponensial Bebas}
+Diberikan $X_1, X_2, \dots, X_n$ sampel random iid berdistribusi eksponensial dengan mean 3, yaitu $X_i \sim \text{EXP}(3)$. Misalkan $n = 20$.
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan MGF dari $Y = \sum_{i=1}^{20} X_i$.
+  \item Tentukan distribusi dari $Y$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Relasi Distribusi Eksponensial dan Gamma}
+Jika $X_i \overset{\mathrm{iid}}{\sim} \text{EXP}(\theta) \equiv \text{Gamma}(1, \theta)$, maka:
+\[
+M_{X_i}(t) = (1 - \theta t)^{-1} \implies M_{\sum_{i=1}^n X_i}(t) = (1 - \theta t)^{-n} \implies \sum_{i=1}^n X_i \sim \text{Gamma}(n, \theta)
+\]
+\end{tipbox}
+
+\begin{solbox}{Solusi 1.17: Penurunan MGF dan Distribusi Jumlahan Eksponensial}
+\textbf{Bagian (a): Menentukan MGF dari $Y = \sum_{i=1}^{20} X_i$.}
+\begin{enumerate}[label=\arabic*.]
+  \item Diberikan $X_i \sim \text{EXP}(\theta = 3)$ (parameter skala/mean $\theta = 3$, dengan pdf $f(x) = \frac{1}{3}e^{-x/3}, x > 0$).
+  MGF dari masing-masing peubah acak $X_i$ adalah:
+  \[
+  M_{X_i}(t) = E(e^{tX_i}) = \int_0^\infty e^{tx} \frac{1}{3} e^{-x/3} \, dx = (1 - 3t)^{-1}, \quad \text{untuk } t < \frac{1}{3}
+  \]
+  \item Karena $X_1, X_2, \dots, X_{20}$ saling independen, MGF dari jumlahan adalah hasil kali MGF masing-masing peubah:
+  \[
+  M_Y(t) = \prod_{i=1}^{20} M_{X_i}(t) = \left[(1 - 3t)^{-1}\right]^{20} = (1 - 3t)^{-20}, \quad t < \frac{1}{3}
+  \]
+\end{enumerate}
+
+\[
+\boxed{M_Y(t) = (1 - 3t)^{-20}, \quad \text{untuk } t < \frac{1}{3}} \qquad \blacksquare
+\]
+
+\textbf{Bagian (b): Menentukan distribusi dari $Y$.}
+Berdasarkan teorema keunikan MGF, fungsi $(1 - \beta t)^{-\alpha}$ adalah MGF dari distribusi Gamma dengan parameter bentuk $\alpha$ dan parameter skala $\beta$.
+Di sini $\alpha = 20$ dan $\beta = 3$.
+Dengan demikian:
+\[
+\boxed{Y \sim \text{Gamma}(\alpha = 20, \ \beta = 3) \quad \text{(Distribusi Erlang)}} \qquad \blacksquare
+\]
+dengan fungsi kepekatan peluang (PDF):
+\[
+f_Y(y) = \begin{cases} \dfrac{1}{\Gamma(20) 3^{20}} \, y^{19} e^{-y/3}, & y > 0 \\ 0, & y \le 0 \end{cases}
+\]
+Karakteristik momen distribusi $Y$:
+\[
+E(Y) = \alpha \beta = 20 \times 3 = 60, \qquad \mathrm{Var}(Y) = \alpha \beta^2 = 20 \times 3^2 = 180.
+\]
+\end{solbox}
+
+% =============================================================================
+% PAKET 6: ETS 2022
+% =============================================================================
+\paketsoal{PEMBAHASAN SOAL ETS 2022}{%
+Mata Kuliah: Matematika Statistika --- Materi: Distribusi Logistik, Binomial Negatif \& WLLN, Relasi Eksponensial-$\chi^2$, Transformasi Student-$t$}
+
+%--- SOAL 1 ETS 2022 ----------------------------------------------------------
+\begin{soalbox}{Soal 1: Order Statistics \& Distribusi Limit $Y_n = \frac{1}{n}e^{W_n}$ dari Distribusi Logistik}
+Suatu sampel acak berukuran $n$ dari suatu distribusi dengan CDF $F(x) = (1 + e^{-x})^{-1} = \dfrac{e^x}{1 + e^x}$, $-\infty < x < \infty$.
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan CDF dari $W_n = X_{n:n}$.
+  \item Dapatkan CDF dari $Y_n = \dfrac{1}{n} e^{W_n}$.
+  \item Tentukan distribusi terbatas untuk $Y_n$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Distribusi Logistik Standar \& Penskalaan Nilai Ekstrem}
+\begin{itemize}
+  \item CDF Logistik: $F(x) = \dfrac{1}{1 + e^{-x}} = \dfrac{e^x}{1 + e^x}$, $x \in \mathbb{R}$.
+  \textit{(Catatan: Penulisan $(1 + e^x)^{-1}$ pada naskah soal aslinya merupakan kesalahan ketik umum tanda minus pada eksponen atau fungsi survival $S(x)$, karena CDF sejati harus monoton naik dari 0 ke 1).}
+  \item CDF Maksimum Sampel: $F_{W_n}(w) = [F(w)]^n$.
+  \item Limit FrÃ©chet: $\lim_{n \to \infty} \left(1 + \dfrac{c}{n}\right)^{-n} = e^{-c}$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): Menentukan CDF dari $W_n = X_{n:n}$}
+\textbf{Langkah 1: Tinjau definisi CDF maksimum sampel.}
+Peubah acak $W_n = X_{n:n} = \max(X_1, X_2, \dots, X_n)$ bernilai kurang dari atau sama dengan $w$ jika dan hanya jika seluruh pengamatan sampel $X_i \le w$.
+Karena $X_1, \dots, X_n$ saling independen dan berdistribusi identik:
+\[
+F_{W_n}(w) = P(W_n \le w) = \prod_{i=1}^n P(X_i \le w) = [F(w)]^n
+\]
+
+\textbf{Langkah 2: Substitusikan CDF distribusi logistik standar.}
+Dengan $F(w) = \dfrac{1}{1 + e^{-w}} = \dfrac{e^w}{1 + e^w}$:
+\[
+F_{W_n}(w) = \left(\frac{1}{1 + e^{-w}}\right)^n = (1 + e^{-w})^{-n} = \left(\frac{e^w}{1 + e^w}\right)^n, \quad -\infty < w < \infty
+\]
+
+\[
+\boxed{F_{W_n}(w) = (1 + e^{-w})^{-n} = \left(\frac{e^w}{1 + e^w}\right)^n, \quad w \in \mathbb{R}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Menentukan CDF dari $Y_n = \frac{1}{n} e^{W_n}$}
+\textbf{Langkah 1: Menentukan domain nilai $Y_n$.}
+Karena $W_n \in (-\infty, \infty)$, maka $e^{W_n} \in (0, \infty)$, sehingga $Y_n = \dfrac{1}{n} e^{W_n} > 0$.
+Untuk $y \le 0$, $F_{Y_n}(y) = P(Y_n \le y) = 0$.
+
+\textbf{Langkah 2: Transformasi peristiwa untuk $y > 0$.}
+Untuk $y > 0$:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P\left(\frac{1}{n} e^{W_n} \le y\right) = P\left(e^{W_n} \le ny\right)
+\]
+Karena fungsi logaritma natural $\ln(\cdot)$ monoton naik murni:
+\[
+P\left(e^{W_n} \le ny\right) = P\left(W_n \le \ln(ny)\right) = F_{W_n}(\ln(ny))
+\]
+
+\textbf{Langkah 3: Substitusikan ke dalam $F_{W_n}$.}
+Gunakan bentuk $F_{W_n}(w) = (1 + e^{-w})^{-n}$ dengan $w = \ln(ny)$:
+\[
+e^{-w} = e^{-\ln(ny)} = \frac{1}{e^{\ln(ny)}} = \frac{1}{ny}
+\]
+Sehingga diperoleh:
+\[
+F_{Y_n}(y) = \left(1 + \frac{1}{ny}\right)^{-n} = \left(1 + \frac{1/y}{n}\right)^{-n}, \quad y > 0
+\]
+
+\[
+\boxed{F_{Y_n}(y) = \begin{cases} \left(1 + \dfrac{1}{ny}\right)^{-n}, & y > 0 \\ 0, & y \le 0 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Menentukan Distribusi Terbatas untuk $Y_n$}
+\textbf{Langkah 1: Menghitung limit CDF saat $n \to \infty$.}
+Gunakan identitas limit fundamental kalkulus:
+\[
+\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^{-n} = \left[\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^n\right]^{-1} = (e^c)^{-1} = e^{-c}
+\]
+Di sini $c = \dfrac{1}{y} > 0$ untuk setiap nilai tetap $y > 0$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 + \frac{1/y}{n}\right)^{-n} = e^{-1/y}, \quad \text{untuk } y > 0
+\]
+Sedangkan untuk $y \le 0$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = 0
+\]
+
+\textbf{Langkah 2: Karakterisasi fungsi distribusi limit.}
+Definisikan fungsi limit:
+\[
+F_Y(y) = \begin{cases} e^{-1/y}, & y > 0 \\ 0, & y \le 0 \end{cases}
+\]
+Fungsi ini memenuhi semua aksioma CDF sejati:
+\begin{itemize}
+  \item Monoton naik: $F_Y'(y) = \dfrac{1}{y^2} e^{-1/y} > 0$ untuk $y > 0$.
+  \item Limit batas: $\lim_{y \to 0^+} e^{-1/y} = 0$ dan $\lim_{y \to \infty} e^{-1/y} = e^0 = 1$.
+\end{itemize}
+Fungsi ini merupakan CDF dari distribusi FrÃ©chet (Distribusi Nilai Ekstrem Tipe II) dengan parameter skala $\beta = 1$ dan parameter bentuk $\alpha = 1$.
+
+\[
+\boxed{F_Y(y) = \begin{cases} e^{-1/y}, & y > 0 \\ 0, & y \le 0 \end{cases} \quad \left(Y_n \xrightarrow{d} \text{FrÃ©chet}(1)\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 2 ETS 2022 ----------------------------------------------------------
+\begin{soalbox}{Soal 2: Momen Distribusi Binomial Negatif \& Konvergensi Stokastik}
+Misalkan $Y_n \sim \text{NB}(n, p)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Tentukan $E[Y_n]$ dan $\text{Var}[Y_n]$.
+  \item Tunjukkan bahwa $\dfrac{Y_n}{n}$ konvergen stokastik ke $\dfrac{1}{p}$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Distribusi Binomial Negatif sebagai Jumlahan Geometrik}
+\begin{itemize}
+  \item \textbf{Representasi Jumlahan iid:} Peubah acak $Y_n \sim \text{NB}(n, p)$ yang menyatakan total banyak percobaan hingga diperoleh $n$ kali sukses dapat dinyatakan sebagai $Y_n = \sum_{i=1}^n X_i$, di mana $X_i \overset{\mathrm{iid}}{\sim} \text{GEO}(p)$.
+  \item \textbf{Momen Peubah Geometrik:} Untuk $X_i \sim \text{GEO}(p)$ dengan support $x = 1, 2, \dots$:
+  \[
+  E[X_i] = \frac{1}{p}, \qquad \mathrm{Var}[X_i] = \frac{1-p}{p^2}
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 2(a): Menentukan $E[Y_n]$ dan $\mathrm{Var}[Y_n]$}
+\textbf{Langkah 1: Definisi model probabilistik.}
+Berdasarkan konvensi baku buku teks Matematika Statistika (Bain \& Engelhardt), peubah acak $Y_n \sim \text{NB}(n, p)$ memodelkan banyaknya percobaan Bernoulli saling bebas hingga dicapai $n$ kali sukses, dengan peluang sukses pada tiap percobaan adalah $p$.
+
+\textbf{Langkah 2: Menghitung nilai harapan $E[Y_n]$.}
+Tuliskan $Y_n = \sum_{i=1}^n X_i$, di mana $X_i$ adalah banyaknya percobaan tambahan yang diperlukan untuk menghasilkan sukses ke-$i$ setelah sukses ke-$(i-1)$ tercapai.
+Karena sifat \textit{memoryless} dari percobaan Bernoulli, $X_1, X_2, \dots, X_n \overset{\mathrm{iid}}{\sim} \text{GEO}(p)$ dengan $E[X_i] = \dfrac{1}{p}$.
+Berdasarkan sifat linearitas ekspektasi:
+\[
+E[Y_n] = E\left[\sum_{i=1}^n X_i\right] = \sum_{i=1}^n E[X_i] = n \cdot \frac{1}{p} = \frac{n}{p}
+\]
+
+\textbf{Langkah 3: Menghitung varians $\mathrm{Var}[Y_n]$.}
+Karena $X_1, \dots, X_n$ saling independen:
+\[
+\mathrm{Var}[Y_n] = \mathrm{Var}\left[\sum_{i=1}^n X_i\right] = \sum_{i=1}^n \mathrm{Var}[X_i] = n \cdot \frac{1-p}{p^2} = \frac{n(1-p)}{p^2}
+\]
+
+\[
+\boxed{E[Y_n] = \frac{n}{p}, \qquad \mathrm{Var}[Y_n] = \frac{n(1-p)}{p^2}} \qquad \blacksquare
+\]
+*(Catatan: Jika digunakan konvensi alternatif di mana peubah memodelkan jumlah kegagalan $K_n = Y_n - n$, maka $E[K_n] = \frac{n(1-p)}{p}$ dan $\mathrm{Var}[K_n] = \frac{n(1-p)}{p^2}$. Namun target konvergensi pada subsoal (b) membuktikan bahwa konvensi yang digunakan adalah total percobaan $Y_n$)*.
+\end{solbox}
+
+\begin{solbox}{Solusi 2(b): Membuktikan $\frac{Y_n}{n} \xrightarrow{P} \frac{1}{p}$}
+\textbf{Metode 1: Menggunakan Ketidaksamaan Chebyshev (Eksplisit).}
+\begin{enumerate}[label=\arabic*.]
+  \item Tinjau rata-rata peubah acak $T_n = \dfrac{Y_n}{n}$:
+  \[
+  E\left[\frac{Y_n}{n}\right] = \frac{E[Y_n]}{n} = \frac{n/p}{n} = \frac{1}{p}
+  \]
+  \[
+  \mathrm{Var}\left[\frac{Y_n}{n}\right] = \frac{1}{n^2} \mathrm{Var}[Y_n] = \frac{1}{n^2} \left[\frac{n(1-p)}{p^2}\right] = \frac{1-p}{n p^2}
+  \]
+  \item Terapkan Ketidaksamaan Chebyshev: untuk sebarang konstanta $\epsilon > 0$:
+  \[
+  0 \le P\left(\left|\frac{Y_n}{n} - \frac{1}{p}\right| \ge \epsilon\right) \le \frac{\mathrm{Var}\left(\dfrac{Y_n}{n}\right)}{\epsilon^2} = \frac{1-p}{n p^2 \epsilon^2}
+  \]
+  \item Ambil limit saat $n \to \infty$:
+  \[
+  \lim_{n \to \infty} \frac{1-p}{n p^2 \epsilon^2} = 0
+  \]
+  Berdasarkan Prinsip Apit (Squeeze Theorem):
+  \[
+  \lim_{n \to \infty} P\left(\left|\frac{Y_n}{n} - \frac{1}{p}\right| \ge \epsilon\right) = 0 \iff \frac{Y_n}{n} \xrightarrow{P} \frac{1}{p}
+  \]
+\end{enumerate}
+
+\textbf{Metode 2: Menggunakan Hukum Lemah Bilangan Besar (WLLN Khinchin).}
+Karena $\dfrac{Y_n}{n} = \dfrac{1}{n}\sum_{i=1}^n X_i = \bar{X}_n$ merupakan rata-rata sampel dari barisan peubah acak iid $X_i \sim \text{GEO}(p)$ dengan rata-rata berhingga $E[X_i] = \mu = \dfrac{1}{p} < \infty$, maka berdasarkan Teorema WLLN:
+\[
+\bar{X}_n = \frac{Y_n}{n} \xrightarrow{P} E[X_i] = \frac{1}{p}
+\]
+
+\[
+\boxed{\frac{Y_n}{n} \xrightarrow{P} \frac{1}{p} \quad \text{saat } n \to \infty \quad \text{(Terbukti)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 ETS 2022 ----------------------------------------------------------
+\begin{soalbox}{Soal 3: Pendekatan Normal (CLT) \& Chi-Square untuk Jumlahan Eksponensial}
+Diberikan $X_1, X_2, \dots, X_{100}$ adalah sampel acak dari distribusi Eksponensial, $X_i \sim \text{EXP}(1)$ dan $Y = \sum_{i=1}^{100} X_i$.
+\begin{enumerate}[label=(\alph*)]
+  \item Gunakan pendekatan normal untuk $P[Y > 110]$.
+  \item Gunakan pendekatan $\chi^2$ untuk $P[Y > 110]$. Kemudian, bandingkan hasilnya dengan (a).
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Relasi Distribusi Eksponensial, Gamma, dan Chi-Square}
+\begin{itemize}
+  \item Jika $X_i \overset{\mathrm{iid}}{\sim} \text{EXP}(1) \equiv \text{Gamma}(1, 1)$, maka $Y = \sum_{i=1}^n X_i \sim \text{Gamma}(n, 1)$.
+  \item Jika $X_i \sim \text{EXP}(1)$, maka peubah terukur $2X_i \sim \text{EXP}(2) \equiv \text{Gamma}(1, 2) \equiv \chi^2(2)$.
+  \item Akibatnya: $2Y = \sum_{i=1}^n (2X_i) \sim \chi^2(2n)$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 3(a): Pendekatan Normal (CLT) untuk $P[Y > 110]$}
+\textbf{Langkah 1: Menentukan parameter rata-rata dan varians dari populasi.}
+Untuk $X_i \sim \text{EXP}(\theta = 1)$:
+\[
+\mu = E(X_i) = 1, \qquad \sigma^2 = \mathrm{Var}(X_i) = 1^2 = 1 \implies \sigma = 1
+\]
+
+\textbf{Langkah 2: Menentukan mean dan simpangan baku jumlahan $Y = \sum_{i=1}^{100} X_i$.}
+Dengan $n = 100$:
+\[
+E(Y) = n\mu = 100 \times 1 = 100
+\]
+\[
+\mathrm{Var}(Y) = n\sigma^2 = 100 \times 1 = 100 \implies \sigma_Y = \sqrt{100} = 10
+\]
+
+\textbf{Langkah 3: Menerapkan Central Limit Theorem (CLT).}
+Karena $n = 100 \ge 30$, jumlahan $Y$ berdistribusi asimtotik Normal:
+\[
+Y \approx N(\mu_Y = 100, \ \sigma_Y^2 = 100)
+\]
+Standardisasi ke peubah normal baku $Z$:
+\[
+Z = \frac{Y - 100}{10} \sim N(0, 1)
+\]
+
+\textbf{Langkah 4: Menghitung probabilitas.}
+\[
+P(Y > 110) = P\left(\frac{Y - 100}{10} > \frac{110 - 100}{10}\right) = P(Z > 1) = 1 - \Phi(1.00)
+\]
+Dari tabel distribusi kumulatif normal baku: $\Phi(1.00) \approx 0.8413$.
+\[
+P(Y > 110) \approx 1 - 0.8413 = 0.1587 \quad (15.87\%)
+\]
+
+\[
+\boxed{P[Y > 110] \approx 0.1587 \quad (15.87\% \text{ via Pendekatan Normal})} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 3(b): Pendekatan $\chi^2$ dan Perbandingan Hasil}
+\textbf{Langkah 1: Transformasi peubah $Y$ ke distribusi Chi-Square.}
+Fungsi pembangkit momen (MGF) dari $2X_i$ adalah:
+\[
+M_{2X_i}(t) = M_{X_i}(2t) = (1 - 2t)^{-1}
+\]
+yang merupakan MGF dari peubah $\chi^2(2)$.
+Karena $X_1, \dots, X_{100}$ saling independen, MGF dari $2Y = \sum_{i=1}^{100} (2X_i)$ adalah:
+\[
+M_{2Y}(t) = \prod_{i=1}^{100} M_{2X_i}(t) = [(1 - 2t)^{-1}]^{100} = (1 - 2t)^{-100} = (1 - 2t)^{-200/2}
+\]
+Berdasarkan keunikan MGF:
+\[
+Q = 2Y \sim \chi^2(r = 200)
+\]
+
+\textbf{Langkah 2: Transformasi nilai ambang probabilitas.}
+\[
+P(Y > 110) = P(2Y > 2 \times 110) = P(Q > 220), \quad \text{di mana } Q \sim \chi^2(200)
+\]
+
+\textbf{Langkah 3: Evaluasi probabilitas Chi-Square derajat bebas besar.}
+Untuk peubah acak $\chi^2(r)$ dengan derajat bebas besar ($r = 200 \ge 30$):
+\begin{itemize}
+  \item Parameter eksak: $E(Q) = r = 200$, $\mathrm{Var}(Q) = 2r = 400 \implies \sigma_Q = \sqrt{400} = 20$.
+  \item Standardisasi Normal untuk peubah Chi-Square:
+  \[
+  Z = \frac{Q - 200}{20} = \frac{220 - 200}{20} = \frac{20}{20} = 1.00
+  \]
+  Maka:
+  \[
+  P(Q > 220) \approx P(Z > 1.00) = 1 - \Phi(1.00) = 0.1587
+  \]
+  \item \textit{(Metode Akar Fisher)}: Peubah $\sqrt{2Q} \approx N(\sqrt{2r-1}, 1)$:
+  \[
+  \sqrt{2(220)} - \sqrt{2(200)-1} = \sqrt{440} - \sqrt{399} \approx 20.9762 - 19.9750 = 1.0012 \approx 1.00
+  \]
+  yang juga menghasilkan $P(Z > 1.00) = 0.1587$.
+\end{itemize}
+
+\textbf{Langkah 4: Perbandingan Kedua Hasil.}
+\begin{itemize}
+  \item Hasil pendekatan Normal langsung dari CLT pada $Y$: $P[Y > 110] \approx 0.1587$.
+  \item Hasil pendekatan melalui representasi eksak $\chi^2(200)$: $P[2Y > 220] \approx 0.1587$.
+  \item \textbf{Kesimpulan Perbandingan:} Kedua pendekatan memberikan hasil numerik yang \textbf{sama persis hingga 4 tempat desimal} ($0.1587$). Hal ini terjadi karena distribusi jumlahan eksponensial $Y$ berkorespondensi satu-satu secara eksak dengan distribusi Chi-Square $2Y \sim \chi^2(200)$, dan derajat bebas $r = 200$ sudah sangat tinggi sehingga aproksimasi asimtotik normalitasnya telah konvergen sempurna.
+\end{itemize}
+
+\[
+\boxed{P[2Y > 220] \approx 0.1587 \quad (\text{Kedua pendekatan menghasilkan nilai identik } 0.1587)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 4 ETS 2022 ----------------------------------------------------------
+\begin{soalbox}{Soal 4: Sampel Normal, Varians Sampel $V^2$, \& Pembentukan Statistik Student-$t$}
+Andaikan $X_1, X_2, \dots, X_n$ adalah sampel acak $X_i \sim N(\mu, \sigma^2)$, $i = 1, \dots, n$. Jika $V^2 = \dfrac{1}{n} \sum_{i=1}^{n} (X_i - \bar{X})^2$ dengan $\bar{X} = \dfrac{1}{n} \sum_{i=1}^{n} X_i$. Misalkan $X_{n+1}$ merupakan sampel tambahan independen dengan distribusi yang sama dengan $X_i$.
+\begin{enumerate}[label=(\alph*)]
+  \item Tentukan distribusi dari $\bar{X} - X_{n+1}$.
+  \item Nyatakan sampel varians, $S^2$ dalam $V^2$.
+  \item Tentukan distribusi dari $W = \sqrt{\dfrac{n-1}{n+1}} \left(\dfrac{\bar{X} - X_{n+1}}{V}\right)$ dengan mempertimbangkan informasi yang diperoleh dari (a) dan (b).
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Teorema Dasar Distribusi Sampling Sampel Normal}
+\begin{itemize}
+  \item $\bar{X} \sim N(\mu, \sigma^2/n)$ dan saling independen terhadap $S^2 = \dfrac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$.
+  \item $\dfrac{(n-1)S^2}{\sigma^2} = \dfrac{n V^2}{\sigma^2} \sim \chi^2(n-1)$.
+  \item Definisi peubah Student-$t$: Jika $Z \sim N(0, 1)$ dan $U \sim \chi^2(r)$ saling independen, maka $\dfrac{Z}{\sqrt{U/r}} \sim t(r)$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4(a): Menentukan Distribusi dari $\bar{X} - X_{n+1}$}
+\textbf{Langkah 1: Menentukan distribusi masing-masing komponen.}
+\begin{itemize}
+  \item Rata-rata sampel dari $n$ pengamatan berdistribusi normal: $\bar{X} \sim N\left(\mu, \ \dfrac{\sigma^2}{n}\right)$.
+  \item Pengamatan tambahan ke-$(n+1)$: $X_{n+1} \sim N(\mu, \ \sigma^2)$.
+  \item Karena $X_{n+1}$ diambil secara independen dari sampel $X_1, \dots, X_n$, maka $\bar{X}$ dan $X_{n+1}$ saling independen.
+\end{itemize}
+
+\textbf{Langkah 2: Menghitung nilai harapan dan varians selisih.}
+Berdasarkan sifat kombinasi linear peubah acak normal saling bebas:
+\[
+E(\bar{X} - X_{n+1}) = E(\bar{X}) - E(X_{n+1}) = \mu - \mu = 0
+\]
+\[
+\mathrm{Var}(\bar{X} - X_{n+1}) = \mathrm{Var}(\bar{X}) + \mathrm{Var}(X_{n+1}) = \frac{\sigma^2}{n} + \sigma^2 = \sigma^2 \left(\frac{1}{n} + 1\right) = \sigma^2 \left(\frac{n+1}{n}\right)
+\]
+
+\textbf{Langkah 3: Kesimpulan distribusi.}
+Karena kombinasi linear peubah normal bebas adalah normal:
+\[
+\boxed{\bar{X} - X_{n+1} \sim N\left(0, \ \sigma^2 \left(\frac{n+1}{n}\right)\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(b): Menyatakan Sampel Varians $S^2$ dalam $V^2$}
+\textbf{Langkah 1: Tinjau rumus definisi masing-masing.}
+\begin{itemize}
+  \item Varians sampel tak-bias (sample variance):
+  \[
+  S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2
+  \]
+  \item Statistik $V^2$ yang diberikan (sample variance dengan pembagi $n$):
+  \[
+  V^2 = \frac{1}{n} \sum_{i=1}^n (X_i - \bar{X})^2 \iff \sum_{i=1}^n (X_i - \bar{X})^2 = n V^2
+  \]
+\end{itemize}
+
+\textbf{Langkah 2: Hubungkan kedua persamaan.}
+Substitusikan jumlahan kuadrat $\sum_{i=1}^n (X_i - \bar{X})^2 = n V^2$ ke dalam rumus $S^2$:
+\[
+S^2 = \frac{1}{n-1} \left(n V^2\right) = \frac{n}{n-1} V^2
+\]
+
+\[
+\boxed{S^2 = \frac{n}{n-1} V^2 \quad \left(\text{atau ekuivalen } V^2 = \frac{n-1}{n} S^2\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(c): Menentukan Distribusi dari Statistik $W$}
+\textbf{Langkah 1: Standardisasi peubah normal pembilang.}
+Dari bagian (a), $\bar{X} - X_{n+1} \sim N\left(0, \ \sigma^2 \dfrac{n+1}{n}\right)$. Bagi dengan simpangan bakunya:
+\[
+Z = \frac{\bar{X} - X_{n+1}}{\sigma \sqrt{\dfrac{n+1}{n}}} \sim N(0, 1)
+\]
+
+\textbf{Langkah 2: Menentukan distribusi Chi-Square untuk penyebut.}
+Dari teori distribusi sampling sampel normal, diketahui bahwa:
+\[
+\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)
+\]
+Berdasarkan bagian (b), $(n-1)S^2 = n V^2$. Oleh karena itu:
+\[
+U = \frac{n V^2}{\sigma^2} \sim \chi^2(n-1)
+\]
+
+\textbf{Langkah 3: Independensi pembilang dan penyebut.}
+Berdasarkan Teorema Cochran / sifat kebebasan rata-rata dan varians sampel pada populasi normal:
+$\bar{X}$ independen terhadap $V^2$ (atau $S^2$). Peubah tambahan $X_{n+1}$ juga independen terhadap seluruh pengamatan sampel awal. Akibatnya, peubah normal baku $Z$ independen terhadap peubah Chi-Square $U$.
+
+\textbf{Langkah 4: Membentuk statistik Student-$t$ dengan derajat bebas $n-1$.}
+Berdasarkan definisi distribusi $t$:
+\[
+T = \frac{Z}{\sqrt{U / (n-1)}} \sim t(n-1)
+\]
+Substitusikan bentuk eksplisit $Z$ dan $U$:
+\[
+T = \frac{\dfrac{\bar{X} - X_{n+1}}{\sigma \sqrt{\dfrac{n+1}{n}}}}{\sqrt{\dfrac{n V^2 / \sigma^2}{n-1}}} = \frac{\dfrac{\bar{X} - X_{n+1}}{\sigma \sqrt{\dfrac{n+1}{n}}}}{\dfrac{\sqrt{n} V}{\sigma \sqrt{n-1}}}
+\]
+Sederhanakan pecahan bertingkat (perhatikan konstanta parameter $\sigma$ saling membagi habis):
+\[
+T = \frac{\bar{X} - X_{n+1}}{V} \cdot \frac{\sigma \sqrt{n-1}}{\sigma \sqrt{n} \cdot \sqrt{\dfrac{n+1}{n}}} = \frac{\bar{X} - X_{n+1}}{V} \cdot \frac{\sqrt{n-1}}{\sqrt{n \cdot \dfrac{n+1}{n}}} = \frac{\bar{X} - X_{n+1}}{V} \cdot \frac{\sqrt{n-1}}{\sqrt{n+1}}
+\]
+Tuliskan kembali suku akar:
+\[
+T = \sqrt{\frac{n-1}{n+1}} \left(\frac{\bar{X} - X_{n+1}}{V}\right)
+\]
+\[
+\boxed{W = \sqrt{\frac{n-1}{n+1}} \left(\frac{\bar{X} - X_{n+1}}{V}\right) \sim t(n-1)} \qquad \blacksquare
+\]
+\textit{Distribusi dari $W$ adalah distribusi Student-$t$ dengan derajat kebebasan $n - 1$.}
+\end{solbox}
+
+% =============================================================================
+% PAKET 7: KUIS BAB 7 - BARISAN VARIABEL RANDOM & LIMITING DISTRIBUTION
+% =============================================================================
+\paketsoal{KUIS BAB 7: BARISAN PEUBAH ACAK \& DISTRIBUSI LIMIT}{%
+Mata Kuliah: Matematika Statistika --- Materi: Konsep Dasar Limit Distribusi, Order Statistics Pareto, CLT Uniform, Teorema Slutsky \& CMT}
+
+%--- SOAL 1 KUIS BAB 7 --------------------------------------------------------
+\begin{soalbox}{Soal 1: Definisi Formal Limiting Distribution \& Konvergensi Stokastik}
+Jika diketahui $Y_1, Y_2, \dots$ adalah barisan variabel random dengan CDF, $Y_n \sim G_n(y)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Sebutkan definisi limiting distribusi dari $Y_n$. (10)
+  \item Sebutkan definisi barisan $Y_n$ konvergen stokastik ke $c$. (10)
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Konvergensi dalam Distribusi vs Konvergensi dalam Probabilitas}
+\begin{itemize}
+  \item Konvergensi dalam distribusi ($Y_n \xrightarrow{d} Y$) berfokus pada kekonvergenan fungsi distribusi kumulatif $G_n(y) \to G(y)$ di setiap titik kekontinuan.
+  \item Konvergensi stokastik / dalam peluang ($Y_n \xrightarrow{P} c$) berfokus pada probabilitas peubah acak mendekati konstanta $c$ dengan margin kesalahan sebarang $\epsilon > 0$.
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): Definisi Formal Limiting Distribution}
+\textbf{Definisi Limiting Distribution (Distribusi Limit / Konvergensi dalam Distribusi):}
+
+Misalkan $Y_1, Y_2, \dots$ adalah suatu barisan peubah acak dengan fungsi distribusi kumulatif (CDF) masing-masing $G_n(y) = P(Y_n \le y)$, untuk $n = 1, 2, \dots$.
+
+Barisan peubah acak $Y_n$ dikatakan memiliki \textbf{limiting distribution} (distribusi limit) dengan CDF $G(y)$, dinotasikan:
+\[
+Y_n \xrightarrow{d} Y \quad \text{atau} \quad Y_n \xrightarrow{d} G(y)
+\]
+jika dan hanya jika:
+\[
+\lim_{n \to \infty} G_n(y) = G(y)
+\]
+berlaku untuk \textbf{setiap titik $y$ di mana fungsi $G(y)$ kontinu}, dengan $G(y)$ merupakan suatu fungsi distribusi kumulatif yang sah (yaitu memenuhi sifat monoton naik, kontinu kanan, $\lim_{y \to -\infty} G(y) = 0$, dan $\lim_{y \to \infty} G(y) = 1$).
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Definisi Formal Konvergensi Stokastik}
+\textbf{Definisi Konvergensi Stokastik (Konvergensi dalam Peluang / Convergence in Probability):}
+
+Misalkan $Y_1, Y_2, \dots$ adalah suatu barisan peubah acak dan $c$ adalah suatu konstanta riil ($c \in \mathbb{R}$).
+
+Barisan peubah acak $Y_n$ dikatakan \textbf{konvergen stokastik} (atau konvergen dalam peluang) ke konstanta $c$, dinotasikan dengan:
+\[
+Y_n \xrightarrow{P} c
+\]
+jika dan hanya jika untuk setiap bilangan positif $\epsilon > 0$ yang diberikan (seberapapun kecilnya), berlaku:
+\[
+\lim_{n \to \infty} P(|Y_n - c| \ge \epsilon) = 0
+\]
+atau secara ekuivalen:
+\[
+\lim_{n \to \infty} P(|Y_n - c| < \epsilon) = 1
+\]
+\textit{Artinya, seiring ukuran $n$ membesar menuju tak hingga, seluruh massa probabilitas dari peubah acak $Y_n$ terkonsentrasi secara penuh di dalam interval lingkungan $(c - \epsilon, c + \epsilon)$.}
+\end{solbox}
+
+%--- SOAL 2 KUIS BAB 7 --------------------------------------------------------
+\begin{soalbox}{Soal 2: Derivasi Lengkap Order Statistics \& Distribusi Limit FrÃ©chet}
+Diketahui CDF dari suatu random sampel $X$ berukuran $n$ adalah:
+\[
+F(x) = \begin{cases} 1 - x^{-2}, & x \ge 1 \\ 0, & x < 1 \end{cases}
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan PDF dari $X$.
+  \item Dapatkan CDF dari $W_n = X_{n:n}$.
+  \item Dapatkan CDF dari $Y_n = n^{-1/2} X_{n:n}$.
+  \item Tunjukkan limiting distribusi dari $Y_n = n^{-1/2} X_{n:n}$. (30)
+\end{enumerate}
+\end{soalbox}
+
+\begin{solbox}{Solusi 2(a): Menentukan PDF dari $X$}
+\textbf{Langkah 1: Menghitung turunan pertama dari CDF $F(x)$.}
+Fungsi kepekatan peluang (PDF) diperoleh dari turunan CDF terhadap $x$:
+\[
+f(x) = \frac{d}{dx} F(x)
+\]
+Untuk $x \ge 1$:
+\[
+f(x) = \frac{d}{dx}\left(1 - x^{-2}\right) = 0 - (-2 x^{-3}) = 2x^{-3} = \frac{2}{x^3}
+\]
+Untuk $x < 1$: $f(x) = \frac{d}{dx}(0) = 0$.
+
+\[
+\boxed{f(x) = \begin{cases} \dfrac{2}{x^3}, & x \ge 1 \\ 0, & x < 1 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(b): Menentukan CDF dari $W_n = X_{n:n}$}
+\textbf{Langkah 1: Rumus CDF maksimum sampel.}
+Karena pengamatan $X_1, X_2, \dots, X_n$ saling independen dan berdistribusi identik:
+\[
+F_{W_n}(w) = P(X_{n:n} \le w) = [F(w)]^n
+\]
+\textbf{Langkah 2: Substitusikan ke dalam domain $w$.}
+\begin{itemize}
+  \item Untuk $w < 1$: $F_{W_n}(w) = 0$.
+  \item Untuk $w \ge 1$: $F_{W_n}(w) = \left(1 - w^{-2}\right)^n = \left(1 - \dfrac{1}{w^2}\right)^n$.
+\end{itemize}
+
+\[
+\boxed{F_{W_n}(w) = \begin{cases} \left(1 - \dfrac{1}{w^2}\right)^n, & w \ge 1 \\ 0, & w < 1 \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(c): Menentukan CDF dari $Y_n = n^{-1/2} X_{n:n}$}
+\textbf{Langkah 1: Transformasi probabilitas kumulatif.}
+Untuk $y > 0$:
+\[
+F_{Y_n}(y) = P(Y_n \le y) = P\left(n^{-1/2} X_{n:n} \le y\right) = P(X_{n:n} \le n^{1/2} y) = F_{W_n}(n^{1/2} y)
+\]
+\textbf{Langkah 2: Menentukan batas domain.}
+Karena $X_{n:n} \ge 1$, peubah bernilai tak-nol saat $n^{1/2} y \ge 1 \iff y \ge n^{-1/2}$:
+\[
+F_{Y_n}(y) = \left[1 - (n^{1/2} y)^{-2}\right]^n = \left(1 - \frac{1}{n y^2}\right)^n = \left(1 - \frac{y^{-2}}{n}\right)^n
+\]
+Untuk $y < n^{-1/2}$, $F_{Y_n}(y) = 0$.
+
+\[
+\boxed{F_{Y_n}(y) = \begin{cases} \left(1 - \dfrac{1}{n y^2}\right)^n, & y \ge n^{-1/2} \\ 0, & y < n^{-1/2} \end{cases}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(d): Limiting Distribution dari $Y_n = n^{-1/2} X_{n:n}$}
+\textbf{Langkah 1: Evaluasi limit saat $n \to \infty$.}
+Ambil sebarang $y > 0$. Untuk $n$ yang cukup besar, berlaku $y \ge n^{-1/2}$.
+Gunakan identitas limit eksponensial fundamental:
+\[
+\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^n = e^c, \quad \text{dengan } c = -y^{-2}
+\]
+Sehingga untuk setiap $y > 0$:
+\[
+\lim_{n \to \infty} F_{Y_n}(y) = \lim_{n \to \infty} \left(1 - \frac{y^{-2}}{n}\right)^n = e^{-y^{-2}} = e^{-1/y^2}
+\]
+Sedangkan untuk $y \le 0$, karena $y < n^{-1/2}$ untuk seluruh $n$, berlaku $\lim_{n \to \infty} F_{Y_n}(y) = 0$.
+
+\textbf{Langkah 2: Karakterisasi fungsi distribusi limit.}
+Definisikan:
+\[
+G(y) = \begin{cases} e^{-1/y^2}, & y > 0 \\ 0, & y \le 0 \end{cases}
+\]
+Fungsi $G(y)$ memenuhi:
+\begin{itemize}
+  \item Monoton naik pada $(0, \infty)$.
+  \item $\lim_{y \to 0^+} G(y) = \lim_{y \to 0^+} e^{-1/y^2} = 0$, dan $\lim_{y \to \infty} G(y) = e^0 = 1$.
+\end{itemize}
+Ini adalah CDF dari **distribusi FrÃ©chet** (Distribusi Nilai Ekstrem Tipe II) dengan parameter bentuk $\alpha = 2$.
+PDF limitnya adalah:
+\[
+g(y) = G'(y) = \frac{d}{dy}\left(e^{-y^{-2}}\right) = 2y^{-3} e^{-y^{-2}} = \frac{2}{y^3} e^{-1/y^2}, \quad y > 0
+\]
+
+\[
+\boxed{Y_n = n^{-1/2} X_{n:n} \xrightarrow{d} \text{FrÃ©chet}(2) \quad \left(G(y) = e^{-1/y^2}, \ y > 0\right)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 3 KUIS BAB 7 --------------------------------------------------------
+\begin{soalbox}{Soal 3: Pendekatan Normal (CLT) untuk Jumlahan Uniform Standar}
+Misalkan diketahui sampel random $X_i \sim \text{UNIF}(0,1)$, $i = 1, \dots, 20$. Dapatkan pendekatan normal untuk:
+\[
+P\left[\sum_{i=1}^{20} X_i \le 12\right] \quad \text{(15)}
+\]
+\end{soalbox}
+
+\begin{tipbox}{Rata-Rata \& Varians Distribusi Uniform Standar}
+Jika $X_i \sim \text{UNIF}(0, 1)$, maka:
+\[
+E(X_i) = \frac{0 + 1}{2} = \frac{1}{2}, \qquad \mathrm{Var}(X_i) = \frac{(1 - 0)^2}{12} = \frac{1}{12}
+\]
+\end{tipbox}
+
+\begin{solbox}{Solusi 3: Perhitungan Peluang via Pendekatan Normal}
+\textbf{Langkah 1: Menentukan parameter rata-rata dan varians jumlahan $S_{20}$.}
+Misalkan $S_{20} = \sum_{i=1}^{20} X_i$. Karena $X_1, \dots, X_{20}$ saling independen:
+\begin{itemize}
+  \item Nilai harapan jumlahan:
+  \[
+  \mu_{S} = E(S_{20}) = \sum_{i=1}^{20} E(X_i) = 20 \times \frac{1}{2} = 10
+  \]
+  \item Varians jumlahan:
+  \[
+  \sigma_{S}^2 = \mathrm{Var}(S_{20}) = \sum_{i=1}^{20} \mathrm{Var}(X_i) = 20 \times \frac{1}{12} = \frac{20}{12} = \frac{5}{3} \approx 1.6667
+  \]
+  \item Simpangan baku jumlahan:
+  \[
+  \sigma_{S} = \sqrt{\frac{5}{3}} = \frac{\sqrt{15}}{3} \approx 1.29099
+  \]
+\end{itemize}
+
+\textbf{Langkah 2: Menerapkan Central Limit Theorem (CLT).}
+Berdasarkan Teorema Limit Pusat, peubah jumlahan $S_{20}$ dihampiri oleh distribusi Normal:
+\[
+S_{20} \approx N\left(10, \ \frac{5}{3}\right)
+\]
+Standardisasi ke peubah acak normal baku $Z$:
+\[
+Z = \frac{S_{20} - \mu_S}{\sigma_S} = \frac{S_{20} - 10}{\sqrt{5/3}}
+\]
+
+\textbf{Langkah 3: Menghitung nilai $Z$ untuk nilai batas 12.}
+\[
+z = \frac{12 - 10}{\sqrt{5/3}} = \frac{2}{\sqrt{5/3}} = 2\sqrt{\frac{3}{5}} = \frac{2\sqrt{15}}{5} \approx \frac{2(3.87298)}{5} \approx 1.5492 \approx 1.55
+\]
+
+\textbf{Langkah 4: Evaluasi nilai probabilitas kumulatif.}
+\[
+P\left(\sum_{i=1}^{20} X_i \le 12\right) \approx P(Z \le 1.55) = \Phi(1.55)
+\]
+Berdasarkan Tabel Distribusi Kumulatif Normal Baku:
+\[
+\Phi(1.55) \approx 0.9394 \quad (93.94\%)
+\]
+*(Jika dihitung tanpa pembulatan awal: $\Phi(1.5492) \approx 0.9393$)*.
+
+\[
+\boxed{P\left[\sum_{i=1}^{20} X_i \le 12\right] \approx 0.9394 \quad (93.94\%)} \qquad \blacksquare
+\]
+\end{solbox}
+
+%--- SOAL 4 KUIS BAB 7 --------------------------------------------------------
+\begin{soalbox}{Soal 4: Asimtotik Proporsi Bernoulli, Teorema Slutsky, \& CMT}
+Diketahui sampel random berukuran $n$ dari distribusi Bernoulli, $X_i \sim \text{Bin}(1, p)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Dapatkan Distribusi dari $Y = \sum_{i=1}^{n} X_i$.
+  \item Jika $\hat{p} = \dfrac{Y}{n}$, tunjukkan bahwa $\hat{p} \xrightarrow{P} p$.
+  \item Buktikan bahwa $\dfrac{\hat{p}-p}{\sqrt{\frac{p(1-p)}{n}}} \xrightarrow{d} Z \sim N(0,1)$. (35)
+  \item Apakah $\hat{p}(1-\hat{p}) \xrightarrow{P} p(1-p)$? Jelaskan.
+  \item Buktikan bahwa $\dfrac{\hat{p}-p}{\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}} \xrightarrow{d} Z \sim N(0,1)$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Teorema Slutsky \& Continuous Mapping Theorem (CMT)}
+\begin{itemize}
+  \item \textbf{Continuous Mapping Theorem (CMT):} Jika $T_n \xrightarrow{P} \theta$ dan $g$ kontinu di $\theta$, maka $g(T_n) \xrightarrow{P} g(\theta)$.
+  \item \textbf{Teorema Slutsky:} Jika $A_n \xrightarrow{d} A$ dan $B_n \xrightarrow{P} c$ (dengan $c$ konstanta), maka:
+  \[
+  A_n \cdot B_n \xrightarrow{d} c A, \qquad \frac{A_n}{B_n} \xrightarrow{d} \frac{A}{c} \quad (\text{jika } c \ne 0)
+  \]
+\end{itemize}
+\end{tipbox}
+
+\begin{solbox}{Solusi 4(a): Distribusi dari $Y = \sum_{i=1}^n X_i$}
+\textbf{Langkah 1: Menggunakan Fungsi Pembangkit Momen (MGF).}
+Untuk $X_i \sim \text{Bin}(1, p)$, fungsi pembangkit momen dari $X_i$ adalah:
+\[
+M_{X_i}(t) = E(e^{tX_i}) = (1 - p)e^{0} + p e^{t(1)} = 1 - p + p e^t
+\]
+Karena $X_1, X_2, \dots, X_n$ saling independen:
+\[
+M_Y(t) = \prod_{i=1}^n M_{X_i}(t) = (1 - p + p e^t)^n
+\]
+Berdasarkan keunikan MGF, ini adalah MGF dari peubah acak berdistribusi Binomial:
+\[
+\boxed{Y = \sum_{i=1}^n X_i \sim \text{Bin}(n, p)} \qquad \blacksquare
+\]
+dengan fungsi peluang: $P(Y = y) = \binom{n}{y} p^y (1-p)^{n-y}$ untuk $y = 0, 1, \dots, n$.
+\end{solbox}
+
+\begin{solbox}{Solusi 4(b): Membuktikan $\hat{p} \xrightarrow{P} p$ via Chebyshev}
+\textbf{Langkah 1: Menghitung mean dan varians dari $\hat{p} = \frac{Y}{n}$.}
+\[
+E(\hat{p}) = E\left(\frac{Y}{n}\right) = \frac{E(Y)}{n} = \frac{np}{n} = p
+\]
+\[
+\mathrm{Var}(\hat{p}) = \mathrm{Var}\left(\frac{Y}{n}\right) = \frac{\mathrm{Var}(Y)}{n^2} = \frac{np(1-p)}{n^2} = \frac{p(1-p)}{n}
+\]
+Karena $p(1-p) \le 1/4$ untuk semua $p \in [0, 1]$, maka $\mathrm{Var}(\hat{p}) \le \dfrac{1}{4n}$.
+
+\textbf{Langkah 2: Terapkan Ketidaksamaan Chebyshev.}
+Untuk sebarang $\epsilon > 0$:
+\[
+0 \le P(|\hat{p} - p| \ge \epsilon) \le \frac{\mathrm{Var}(\hat{p})}{\epsilon^2} \le \frac{p(1-p)}{n \epsilon^2} \le \frac{1}{4n \epsilon^2}
+\]
+Mengambil limit saat $n \to \infty$:
+\[
+\lim_{n \to \infty} \frac{1}{4n \epsilon^2} = 0 \implies \lim_{n \to \infty} P(|\hat{p} - p| \ge \epsilon) = 0
+\]
+\[
+\boxed{\hat{p} \xrightarrow{P} p \quad \text{(Terbukti konvergen stokastik)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(c): Pembuktian CLT untuk Proporsi Sampel}
+\textbf{Langkah 1: Representasi rata-rata sampel.}
+Perhatikan bahwa $\hat{p} = \dfrac{1}{n}\sum_{i=1}^n X_i = \bar{X}_n$ adalah rata-rata sampel dari $n$ peubah acak iid $X_i \sim \text{Bin}(1, p)$ dengan rata-rata populasi $\mu = p$ dan varians populasi berhingga $\sigma^2 = p(1-p) > 0$.
+
+\textbf{Langkah 2: Menerapkan Teorema Limit Pusat (CLT Lindeberg-LÃ©vy).}
+Berdasarkan Central Limit Theorem:
+\[
+\frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} N(0, 1)
+\]
+Substitusikan $\bar{X}_n = \hat{p}$, $\mu = p$, dan $\sigma = \sqrt{p(1-p)}$:
+\[
+\frac{\hat{p} - p}{\sqrt{\dfrac{p(1-p)}{n}}} = \frac{\sqrt{n}(\hat{p} - p)}{\sqrt{p(1-p)}} \xrightarrow{d} Z \sim N(0, 1)
+\]
+\[
+\boxed{\frac{\hat{p}-p}{\sqrt{\frac{p(1-p)}{n}}} \xrightarrow{d} Z \sim N(0, 1) \quad \text{(Teorema De Moivre-Laplace / CLT)}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(d): Penyelidikan Konvergensi $\hat{p}(1-\hat{p}) \xrightarrow{P} p(1-p)$}
+\textbf{Pertanyaan:} Apakah $\hat{p}(1-\hat{p}) \xrightarrow{P} p(1-p)$? Jelaskan!
+
+\textbf{Jawaban: YA, benar.}
+
+\textbf{Penjelasan Matematis:}
+\begin{enumerate}[label=\arabic*.]
+  \item Berdasarkan hasil bagian (b), telah terbukti bahwa $\hat{p} \xrightarrow{P} p$.
+  \item Definisikan fungsi transformasi $g: [0, 1] \to \mathbb{R}$ sebagai:
+  \[
+  g(u) = u(1 - u) = u - u^2
+  \]
+  Fungsi $g(u)$ adalah fungsi polinom kontinu di setiap titik $u \in \mathbb{R}$, khususnya kontinu pada $u = p$.
+  \item Berdasarkan **Continuous Mapping Theorem (CMT)**: Jika suatu barisan peubah acak $T_n \xrightarrow{P} \theta$ dan fungsi $g$ kontinu di $\theta$, maka:
+  \[
+  g(T_n) \xrightarrow{P} g(\theta)
+  \]
+  \item Dengan menetapkan $T_n = \hat{p}$ dan $\theta = p$:
+  \[
+  g(\hat{p}) \xrightarrow{P} g(p) \iff \hat{p}(1 - \hat{p}) \xrightarrow{P} p(1 - p)
+  \]
+\end{enumerate}
+
+\[
+\boxed{\textbf{YA}, \ \hat{p}(1-\hat{p}) \xrightarrow{P} p(1-p) \ \text{berdasarkan Continuous Mapping Theorem.}} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 4(e): Pembuktian Asimtotik dengan Standar Error Sampel via Slutsky}
+\textbf{Langkah 1: Dekomposisi ekspresi statistik uji.}
+Tuliskan peubah yang ingin dibuktikan sebagai perkalian dua komponen acak:
+\[
+\frac{\hat{p}-p}{\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}} = \left(\frac{\hat{p}-p}{\sqrt{\dfrac{p(1-p)}{n}}}\right) \cdot \left(\sqrt{\frac{p(1-p)}{\hat{p}(1-\hat{p})}}\right)
+\]
+Misalkan:
+\[
+A_n = \frac{\hat{p}-p}{\sqrt{\dfrac{p(1-p)}{n}}} \qquad \text{dan} \qquad B_n = \sqrt{\frac{p(1-p)}{\hat{p}(1-\hat{p})}}
+\]
+
+\textbf{Langkah 2: Menentukan sifat limit dari masing-masing komponen.}
+\begin{itemize}
+  \item Dari bagian (c), $A_n \xrightarrow{d} Z \sim N(0, 1)$.
+  \item Dari bagian (d), $\hat{p}(1-\hat{p}) \xrightarrow{P} p(1-p)$.
+  Karena $p \in (0, 1)$, maka $p(1-p) > 0$. Fungsi $h(t) = \sqrt{\dfrac{p(1-p)}{t}}$ kontinu pada $t > 0$.
+  Berdasarkan Continuous Mapping Theorem (CMT):
+  \[
+  B_n = h(\hat{p}(1-\hat{p})) \xrightarrow{P} h(p(1-p)) = \sqrt{\frac{p(1-p)}{p(1-p)}} = \sqrt{1} = 1
+  \]
+\end{itemize}
+
+\textbf{Langkah 3: Menerapkan Teorema Slutsky.}
+Teorema Slutsky menyatakan bahwa jika $A_n \xrightarrow{d} A$ dan $B_n \xrightarrow{P} c$ (dengan $c$ konstanta):
+\[
+A_n \cdot B_n \xrightarrow{d} c A
+\]
+Di sini $A = Z \sim N(0, 1)$ dan $c = 1$:
+\[
+A_n \cdot B_n = \frac{\hat{p}-p}{\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}} \xrightarrow{d} 1 \cdot Z = Z \sim N(0, 1)
+\]
+
+\[
+\boxed{\frac{\hat{p}-p}{\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}} \xrightarrow{d} Z \sim N(0, 1) \quad \text{(Terbukti via Teorema Slutsky)}} \qquad \blacksquare
+\]
+\textit{Hasil ini merupakan dasar pembentukan interval kepercayaan dan uji hipotesis Wald untuk proporsi populasi pada sampel besar!}
+\end{solbox}
+
+% =============================================================================
+% PAKET 8: LATIHAN SOAL BAB 8 -- DISTRIBUSI SAMPLING & PERSENTIL TABEL
+% =============================================================================
+\paketsoal{LATIHAN SOAL BAB 8: DISTRIBUSI SAMPLING \& PERSENTIL TABEL}{%
+Materi: Teorema 8.3.6, Distribusi Normal, Chi-Square, Student $t$, Snedecor $F$, dan Beta (Bain \& Engelhardt Bab 8 No. 16 \& 18)}
+
+% -----------------------------------------------------------------------------
+% SOAL 1 (BAB 8 NO. 16)
+% -----------------------------------------------------------------------------
+\begin{soalbox}{Soal 1: Sampling dari Populasi Normal (Bain \& Engelhardt Bab 8 No. 16)}
+Misalkan $X_1, X_2, \dots, X_9$ adalah sampel acak dari distribusi normal, $X_i \sim N(6, 25)$, dan $\bar{X}$ serta $S^2$ menyatakan mean sampel dan varians sampel. Gunakan tabel untuk menentukan:
+\begin{enumerate}[label=(\alph*)]
+    \item $P[3 < \bar{X} < 7]$.
+    \item $P\left[1.860 < \dfrac{3(\bar{X} - 6)}{S}\right]$.
+    \item $P[S^2 \le 31.9375]$.
+\end{enumerate}
+\end{soalbox}
+
+\begin{tipbox}{Teorema Keramat 8.3.6 untuk Soal 1}
+Diberikan sampel acak $X_1, \dots, X_n \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$ dengan $n=9$, $\mu=6$, dan $\sigma^2=25$ ($\sigma = 5$):
+\begin{enumerate}
+  \item \textbf{Distribusi Mean Sampel:} $\bar{X} \sim N\left(\mu, \dfrac{\sigma^2}{n}\right) = N\left(6, \dfrac{25}{9}\right) \implies \text{SD}(\bar{X}) = \dfrac{5}{3}$.
+  \item \textbf{Statistik Uji $t$ Student:} Karena $\sigma$ tidak diketahui dan diganti $S$, maka:
+    \[
+    T = \frac{\bar{X} - \mu}{S/\sqrt{n}} = \frac{\bar{X} - 6}{S/\sqrt{9}} = \frac{3(\bar{X} - 6)}{S} \sim t(n-1) = t(8).
+    \]
+  \item \textbf{Statistik Varians Sampel $\chi^2$:}
+    \[
+    V = \frac{(n-1)S^2}{\sigma^2} = \frac{8 S^2}{25} \sim \chi^2(n-1) = \chi^2(8).
+    \]
+\end{enumerate}
+\end{tipbox}
+
+\begin{solbox}{Solusi 1(a): Peluang Mean Sampel Normal $P[3 < \bar{X} < 7]$}
+\textbf{Langkah 1: Tentukan distribusi dari $\bar{X}$.}
+Berdasarkan sifat sampling normal, $\bar{X} \sim N\left(\mu_{\bar{X}}, \sigma_{\bar{X}}^2\right)$ dengan:
+\[
+\mu_{\bar{X}} = \mu = 6, \qquad \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{5}{\sqrt{9}} = \frac{5}{3} \approx 1.6667
+\]
+
+\textbf{Langkah 2: Transformasi ke variabel Normal Baku ($Z \sim N(0, 1)$).}
+Standardisasi kedua batas interval:
+\[
+Z = \frac{\bar{X} - \mu_{\bar{X}}}{\sigma_{\bar{X}}} = \frac{\bar{X} - 6}{5/3} = \frac{3(\bar{X} - 6)}{5}
+\]
+\begin{itemize}
+  \item Untuk batas bawah $\bar{X} = 3$:
+    \[
+    z_1 = \frac{3(3 - 6)}{5} = \frac{3(-3)}{5} = -\frac{9}{5} = -1.80
+    \]
+  \item Untuk batas atas $\bar{X} = 7$:
+    \[
+    z_2 = \frac{3(7 - 6)}{5} = \frac{3(1)}{5} = \frac{3}{5} = 0.60
+    \]
+\end{itemize}
+
+\textbf{Langkah 3: Pembacaan Tabel Normal Baku (Tabel A.3).}
+Peluang interval dinyatakan sebagai selisih CDF kumulatif:
+\[
+P[3 < \bar{X} < 7] = P[-1.80 < Z < 0.60] = \Phi(0.60) - \Phi(-1.80)
+\]
+Melihat \textbf{Tabel A.3}:
+\begin{itemize}
+  \item Pada halaman 736 (z positif): Baris $0.6$, kolom $.00 \implies \Phi(0.60) = \mathbf{0.7257}$.
+  \item Pada halaman 735 (z negatif): Baris $-1.8$, kolom $.00 \implies \Phi(-1.80) = \mathbf{0.0359}$.
+\end{itemize}
+Maka:
+\[
+P[3 < \bar{X} < 7] = 0.7257 - 0.0359 = 0.6898
+\]
+
+\[
+\boxed{P[3 < \bar{X} < 7] = 0.6898} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(b): Peluang Statistik $t$ Student $P\left[1.860 < \frac{3(\bar{X}-6)}{S}\right]$}
+\textbf{Langkah 1: Identifikasi peubah acak sebagai distribusi $t$.}
+Bentuk peubah acak pada soal adalah:
+\[
+T = \frac{3(\bar{X} - 6)}{S} = \frac{\bar{X} - 6}{S/\sqrt{9}} = \frac{\bar{X} - \mu}{S/\sqrt{n}}
+\]
+Berdasarkan Teorema 8.3.6 dan definisi distribusi Student $t$, karena pembilang berdistribusi normal baku setelah dibagi $\sigma$ dan penyebut berakar kuadrat $\chi^2$ dibagi derajat bebasnya, maka:
+\[
+T \sim t(\nu = n - 1) = t(8)
+\]
+
+\textbf{Langkah 2: Pembacaan Tabel $t$ Student (Tabel A.4).}
+Kita diminta menentukan peluang ekor kanan:
+\[
+P[T > 1.860] \quad \text{untuk } T \sim t(8)
+\]
+Buka \textbf{Tabel A.4 (halaman 737)}:
+\begin{enumerate}
+  \item Lihat baris derajat bebas $\nu = 8$.
+  \item Telusuri baris tersebut hingga menemukan angka persis $\mathbf{1.860}$.
+  \item Perhatikan kepala kolom di atasnya: tertulis $\mathbf{\alpha = 0.05}$.
+\end{enumerate}
+Karena tabel $t$ menyajikan luas ekor kanan $P(T > t_\alpha) = \alpha$, maka diperoleh langsung:
+\[
+P[T > 1.860] = 0.05
+\]
+
+\[
+\boxed{P\left[1.860 < \frac{3(\bar{X} - 6)}{S}\right] = 0.05} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 1(c): Peluang Varians Sampel Chi-Square $P[S^2 \le 31.9375]$}
+\textbf{Langkah 1: Transformasi $S^2$ ke peubah Chi-Square.}
+Menurut Teorema 8.3.6, statistik varians sampel berdistribusi Chi-Square:
+\[
+V = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)
+\]
+Dengan $n = 9$ dan $\sigma^2 = 25$:
+\[
+V = \frac{8 S^2}{25} \sim \chi^2(8)
+\]
+
+\textbf{Langkah 2: Hitung nilai kritis Chi-Square yang bersesuaian.}
+Substitusikan nilai batas $S^2 = 31.9375$:
+\[
+P[S^2 \le 31.9375] = P\left[\frac{8 S^2}{25} \le \frac{8(31.9375)}{25}\right]
+\]
+Hitung pembilang: $8 \times 31.9375 = 255.5$. Maka:
+\[
+\frac{255.5}{25} = 10.22
+\]
+Sehingga kita mencari nilai kumulatif kiri:
+\[
+P[V \le 10.22] \quad \text{di mana } V \sim \chi^2(8)
+\]
+
+\textbf{Langkah 3: Pembacaan Tabel Chi-Square (Tabel A.5).}
+Buka \textbf{Tabel A.5 (halaman 740)}:
+\begin{enumerate}
+  \item Cari baris derajat bebas $\nu = 8$.
+  \item Pada baris $\nu = 8$, temukan angka kritis $\mathbf{10.219} \approx 10.22$.
+  \item Perhatikan kepala kolom di atasnya: tertulis $\mathbf{\alpha = 0.25}$.
+\end{enumerate}
+Ingat bahwa tabel Chi-Square menyajikan luas \textbf{ekor kanan}:
+\[
+P(V > 10.219) = 0.25
+\]
+Maka luas \textbf{kumulatif kiri} adalah komplemennya:
+\[
+P(V \le 10.22) = 1 - P(V > 10.22) = 1 - 0.25 = 0.75
+\]
+
+\[
+\boxed{P[S^2 \le 31.9375] = 0.75} \qquad \blacksquare
+\]
+\end{solbox}
+
+% -----------------------------------------------------------------------------
+% SOAL 2 (BAB 8 NO. 18)
+% -----------------------------------------------------------------------------
+\begin{soalbox}{Soal 2: Operasi Peubah Acak $Z$, $\chi^2$, $t$, $F$, \& Beta (Bab 8 No. 18)}
+Asumsikan $Z$, $V_1$, dan $V_2$ adalah variabel acak independen dengan $Z \sim N(0, 1)$, $V_1 \sim \chi^2(5)$, dan $V_2 \sim \chi^2(9)$. Tentukan:
+\begin{enumerate}[label=(\alph*)]
+    \item $P[V_1 + V_2 < 8.6]$.
+    \item $P[Z / \sqrt{V_1 / 5} < 2.015]$.
+    \item $P[Z > 0.611\sqrt{V_2}]$.
+    \item $P[V_1 / V_2 < 1.450]$.
+    \item Nilai $b$ sehingga $P\left[\dfrac{V_1}{V_1 + V_2} < b\right] = 0.90$.
+\end{enumerate}
+\textit{Catatan untuk (a):} nilai $8.6$ bukan persentil yang ada di tabel, sehingga dari tabel hanya dapat ditentukan batas bawah dan batas atasnya; nilai tepatnya dapat dihitung dengan software R, \texttt{pchisq(8.6, 14)}.
+\end{soalbox}
+
+\begin{tipbox}{Teorema Sampling untuk Soal 2}
+\begin{enumerate}
+  \item \textbf{Penjumlahan Chi-Square Bebas:} Jika $V_1 \sim \chi^2(\nu_1)$ dan $V_2 \sim \chi^2(\nu_2)$ independen, maka:
+    \[
+    U = V_1 + V_2 \sim \chi^2(\nu_1 + \nu_2)
+    \]
+  \item \textbf{Distribusi $t$ Student:} Jika $Z \sim N(0, 1)$ dan $V \sim \chi^2(\nu)$ independen, maka:
+    \[
+    T = \frac{Z}{\sqrt{V/\nu}} \sim t(\nu)
+    \]
+  \item \textbf{Distribusi $F$ Snedecor:} Jika $V_1 \sim \chi^2(\nu_1)$ dan $V_2 \sim \chi^2(\nu_2)$ independen, maka:
+    \[
+    F = \frac{V_1 / \nu_1}{V_2 / \nu_2} \sim F(\nu_1, \nu_2)
+    \]
+  \item \textbf{Distribusi Beta:} Peubah $Y = \dfrac{V_1}{V_1 + V_2} = \dfrac{(\nu_1/\nu_2)F}{1 + (\nu_1/\nu_2)F} \sim \text{Beta}\left(\dfrac{\nu_1}{2}, \dfrac{\nu_2}{2}\right)$.
+\end{enumerate}
+\end{tipbox}
+
+\begin{solbox}{Solusi 2(a): Peluang Jumlahan Chi-Square $P[V_1 + V_2 < 8.6]$}
+\textbf{Langkah 1: Tentukan distribusi dari $U = V_1 + V_2$.}
+Karena $V_1 \sim \chi^2(5)$ dan $V_2 \sim \chi^2(9)$ saling bebas, menurut sifat aditif distribusi Gamma/Chi-Square:
+\[
+U = V_1 + V_2 \sim \chi^2(5 + 9) = \chi^2(14)
+\]
+
+\textbf{Langkah 2: Menjepit nilai peluang dari Tabel Chi-Square (Tabel A.5).}
+Buka \textbf{Tabel A.5 (halaman 739)} pada baris derajat bebas $\nu = 14$:
+\begin{itemize}
+  \item Untuk $\alpha = 0.90 \implies \chi^2_{0.90}(14) = 7.790 \iff P(U \le 7.790) = 1 - 0.90 = \mathbf{0.10}$.
+  \item Untuk $\alpha = 0.80 \implies \chi^2_{0.80}(14) = 9.467 \iff P(U \le 9.467) = 1 - 0.80 = \mathbf{0.20}$.
+\end{itemize}
+Karena nilai $8.6$ terletak di antara $7.790$ dan $9.467$:
+\[
+7.790 < 8.6 < 9.467 \implies 0.10 < P(U < 8.6) < 0.20
+\]
+
+\textbf{Langkah 3: Nilai eksak melalui komputasi R.}
+Menggunakan fungsi \texttt{pchisq(q, df)}:
+\[
+\texttt{pchisq(8.6, 14)} = \mathbf{0.1442}
+\]
+
+\[
+\boxed{\text{Berdasarkan tabel: } 0.10 < P[V_1 + V_2 < 8.6] < 0.20 \quad (\text{Eksak R: } 0.1442)} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(b): Peluang Statistik $t$ Student $P\left[Z / \sqrt{V_1 / 5} < 2.015\right]$}
+\textbf{Langkah 1: Identifikasi distribusi.}
+Karena $Z \sim N(0, 1)$ dan $V_1 \sim \chi^2(5)$ saling bebas, maka berdasarkan definisi:
+\[
+T = \frac{Z}{\sqrt{V_1 / 5}} \sim t(5)
+\]
+
+\textbf{Langkah 2: Pembacaan Tabel $t$ (Tabel A.4).}
+Kita mencari peluang kumulatif $P(T < 2.015)$.
+Buka \textbf{Tabel A.4 (halaman 737)}:
+\begin{enumerate}
+  \item Pada baris $\nu = 5$, temukan angka kritis $\mathbf{2.015}$.
+  \item Kepala kolom di atasnya menunjukkan $\mathbf{\alpha = 0.05}$.
+\end{enumerate}
+Artinya, luas ekor kanan adalah $P(T > 2.015) = 0.05$. Maka luas kumulatif kiri:
+\[
+P(T < 2.015) = 1 - P(T > 2.015) = 1 - 0.05 = 0.95
+\]
+
+\[
+\boxed{P\left[\frac{Z}{\sqrt{V_1 / 5}} < 2.015\right] = 0.95} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(c): Peluang Pertidaksamaan $P[Z > 0.611\sqrt{V_2}]$}
+\textbf{Langkah 1: Manipulasi aljabar ke bentuk rasio Student $t$.}
+Bagi kedua ruas dengan $\sqrt{V_2}$ (karena $V_2 > 0$ dengan peluang 1):
+\[
+P\left[Z > 0.611\sqrt{V_2}\right] = P\left[\frac{Z}{\sqrt{V_2}} > 0.611\right]
+\]
+Bentuk penyebut menjadi standar $t$ dengan derajat bebas $\nu = 9$, yakni dibagi $\sqrt{9} = 3$:
+\[
+P\left[\frac{Z}{\sqrt{V_2 / 9} \cdot 3} > 0.611\right] = P\left[\frac{Z}{\sqrt{V_2 / 9}} > 0.611 \times 3\right]
+\]
+Hitung ruas kanan: $0.611 \times 3 = 1.833$.
+Maka pertidaksamaan ekuivalen dengan:
+\[
+P[T > 1.833] \quad \text{di mana } T = \frac{Z}{\sqrt{V_2 / 9}} \sim t(9)
+\]
+
+\textbf{Langkah 2: Pembacaan Tabel $t$ (Tabel A.4).}
+Buka \textbf{Tabel A.4 (halaman 737)}:
+\begin{enumerate}
+  \item Pada baris $\nu = 9$, temukan angka kritis persis $\mathbf{1.833}$.
+  \item Kepala kolom di atasnya menunjukkan $\mathbf{\alpha = 0.05}$.
+\end{enumerate}
+Maka langsung diperoleh:
+\[
+P[T > 1.833] = 0.05
+\]
+
+\[
+\boxed{P[Z > 0.611\sqrt{V_2}] = 0.05} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(d): Peluang Rasio Variabel Chi-Square $P[V_1 / V_2 < 1.450]$}
+\textbf{Langkah 1: Transformasi ke distribusi $F$ Snedecor.}
+Diketahui $V_1 \sim \chi^2(5)$ dan $V_2 \sim \chi^2(9)$ saling bebas.
+Bentuk distribusi $F$ dengan derajat bebas $(5, 9)$ adalah:
+\[
+F = \frac{V_1 / 5}{V_2 / 9} = \frac{9}{5} \left(\frac{V_1}{V_2}\right) \sim F(5, 9)
+\]
+Maka rasio $\dfrac{V_1}{V_2}$ dapat dinyatakan sebagai:
+\[
+\frac{V_1}{V_2} = \frac{5}{9} F
+\]
+
+\textbf{Langkah 2: Substitusikan ke dalam pertidaksamaan peluang.}
+\[
+P\left[\frac{V_1}{V_2} < 1.450\right] = P\left[\frac{5}{9} F < 1.450\right] = P\left[F < 1.450 \times \frac{9}{5}\right]
+\]
+Hitung nilai batas kanan:
+\[
+1.450 \times \frac{9}{5} = 1.450 \times 1.8 = 2.610
+\]
+Sehingga kita mencari peluang kumulatif:
+\[
+P[F < 2.610] \quad \text{untuk } F \sim F(5, 9)
+\]
+
+\textbf{Langkah 3: Menentukan peluang via persentil tabel / Software.}
+Persentil ke-90 untuk distribusi $F(5, 9)$ adalah nilai $f_{0.10}(5, 9)$.
+Dari hubungan distribusi $F(5, 9)$, nilai kritis untuk $\alpha = 0.10$ adalah persis $f_{0.10}(5, 9) = 2.6106 \approx 2.61$.
+Artinya, luas ekor kanan adalah:
+\[
+P(F > 2.610) = 0.10 \implies P(F < 2.610) = 1 - 0.10 = 0.90
+\]
+
+\[
+\boxed{P\left[\frac{V_1}{V_2} < 1.450\right] = 0.90} \qquad \blacksquare
+\]
+\end{solbox}
+
+\begin{solbox}{Solusi 2(e): Menentukan Nilai $b$ pada Distribusi Beta / $F$}
+\textbf{Langkah 1: Manipulasi aljabar menghubungkan bagian (e) dengan bagian (d).}
+Kita ingin mencari nilai $b$ sehingga:
+\[
+P\left[\frac{V_1}{V_1 + V_2} < b\right] = 0.90
+\]
+Perhatikan bahwa jika kita manipulasi pecahan tersebut:
+\begin{align*}
+  \frac{V_1}{V_1 + V_2} < b &\iff \frac{V_1 + V_2}{V_1} > \frac{1}{b} \\
+  &\iff 1 + \frac{V_2}{V_1} > \frac{1}{b} \iff \frac{V_2}{V_1} > \frac{1 - b}{b} \iff \frac{V_1}{V_2} < \frac{b}{1 - b}
+\end{align*}
+Maka persamaan peluang di atas ekuivalen dengan:
+\[
+P\left[\frac{V_1}{V_2} < \frac{b}{1 - b}\right] = 0.90
+\]
+
+\textbf{Langkah 2: Menyamakan dengan hasil bagian (d).}
+Dari hasil bagian (d), kita telah membuktikan secara eksak bahwa:
+\[
+P\left[\frac{V_1}{V_2} < 1.450\right] = 0.90
+\]
+Karena fungsi CDF bersifat monoton naik tegas, maka nilai batas harus sama:
+\[
+\frac{b}{1 - b} = 1.450 = \frac{29}{20}
+\]
+
+\textbf{Langkah 3: Selesaikan untuk $b$.}
+\begin{align*}
+  20 b &= 29(1 - b) \\
+  20 b &= 29 - 29 b \\
+  49 b &= 29 \\
+  b &= \frac{29}{49} \approx 0.5918367
+\end{align*}
+
+\textbf{Catatan Verifikasi Teoretis (Teorema 8.4.2 Distribusi Beta):}
+Peubah $Y = \dfrac{V_1}{V_1 + V_2} \sim \text{Beta}(a = 2.5, b = 4.5)$.
+Persentil ke-90 dari Beta diperoleh lewat rumus:
+\[
+y_{0.90}(a, b) = \frac{a f_{0.10}(2a, 2b)}{b + a f_{0.10}(2a, 2b)} = \frac{2.5(2.6106)}{4.5 + 2.5(2.6106)} = \frac{6.5265}{11.0265} \approx 0.5918
+\]
+Hasilnya identik secara sempurna!
+
+\[
+\boxed{b = \frac{29}{49} \approx 0.5918} \qquad \blacksquare
+\]
+\end{solbox}
+
+\end{document}
+

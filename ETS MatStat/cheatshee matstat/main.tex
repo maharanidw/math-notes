@@ -1,0 +1,470 @@
+\documentclass[a4paper, landscape]{article}
+\input{src/default.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Global settings - 4 Kolom Padat Komplit Tanpa Cite
+\def\subject{Matematika Statistika - BAB VII \& VIII}
+\def\semester{5}
+\def\author{Matematika ITS}
+\def\cols{4}
+
+% Rapatkan list
+\setlist{leftmargin=*, itemsep=0pt, topsep=1pt, parsep=0pt, partopsep=0pt}
+
+\cheatsheet{
+\setlength{\abovedisplayskip}{3pt plus 1pt}
+\setlength{\belowdisplayskip}{2pt plus 1pt}
+\setlength{\abovedisplayshortskip}{2pt}
+\setlength{\belowdisplayshortskip}{2pt}
+%==================================================
+\section{DASAR}
+%==================================================
+
+\subsection{PDF, CDF, \& Persentil}
+\begin{itemize}
+\item \textbf{CDF dari PDF:}
+\[
+F(x)=\int_{-\infty}^{x} f(t)\,dt \quad \text{atau} \quad \sum_{t \le x} f(t)
+\]
+\item \textbf{PDF dari CDF:} $f(x)=F'(x)$
+\item $P(a<X\le b)=F(b)-F(a)$, \quad $P(X>x)=1-F(x)$
+\item \textbf{Persentil ke-$p$:} $F(x_p)=p$ (selesaikan $x_p$)
+\item \textbf{Teknik CDF:} untuk $Y=g(X)$, cari $G(y)=P(g(X)\le y)$ lalu $g_Y(y)=G'(y)$. Jika $g$ monoton:
+\[
+f_Y(y)=f_X\!\left(g^{-1}(y)\right)\left|\frac{d g^{-1}(y)}{dy}\right|
+\]
+\end{itemize}
+
+\subsection{Momen \& MGF}
+\begin{itemize}
+\item $E[g(X)]=\int g(x)f(x)\,dx$ \; atau \; $\sum g(x)f(x)$
+\item $E(aX+b)=aE(X)+b$, \quad $\text{Var}(aX+b)=a^2\text{Var}(X)$
+\item $\text{Var}(X)=E(X^2)-[E(X)]^2$
+\item \textbf{MGF:} $M_X(t)=E(e^{tX})$, \quad $E(X^r)=M_X^{(r)}(0)$
+\item $M_{aX+b}(t)=e^{bt}M_X(at)$
+\item $X,Y$ independen $\implies M_{X+Y}(t)=M_X(t)M_Y(t)$
+\item \textbf{Ketunggalan:} MGF yang sama (pada $-h<t<h$) $\implies$ distribusi yang sama.
+\end{itemize}
+
+\subsection{Identitas \& Limit Berguna}
+\begin{itemize}
+\item $\displaystyle\lim_{n\to\infty}\left(1+\frac{c}{n}\right)^{nb}=e^{bc}$, \quad $\displaystyle\lim_{n\to\infty}\left(1-\frac{1}{n}\right)^{n}=e^{-1}$
+\item $\Gamma(\kappa)=\int_0^\infty x^{\kappa-1}e^{-x}dx$, \quad $\Gamma(\kappa+1)=\kappa\Gamma(\kappa)$
+\item $\Gamma(n)=(n-1)!$, \quad $\Gamma(\tfrac12)=\sqrt{\pi}$
+\item $\displaystyle\int_0^\infty x^{\kappa-1}e^{-x/\theta}dx=\theta^\kappa\Gamma(\kappa)$
+\item \textbf{Beta:} $\displaystyle\int_0^1 y^{a-1}(1-y)^{b-1}dy=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$
+\item \textbf{Deret geometri:} $\sum_{k=0}^{\infty}r^k=\frac{1}{1-r}$ \; ($|r|<1$)
+\item \textbf{Deret eksponensial:} $\sum_{k=0}^{\infty}\frac{x^k}{k!}=e^x$
+\item \textbf{Binomial:} $\sum_{k=0}^{n}\binom{n}{k}a^kb^{n-k}=(a+b)^n$
+\item \textbf{Stirling:} $n!\approx\sqrt{2\pi n}\,(n/e)^n$
+\end{itemize}
+
+%==================================================
+\section{BAB 0: DASAR STATISTIK URUTAN}
+%==================================================
+
+\subsection{Order Statistics}
+\begin{itemize}
+\item \textbf{Urutan sampel:}
+\[
+a < X_{1:n} \le X_{2:n} \le \dots \le X_{n:n} < b
+\]
+\item \textbf{Joint PDF seluruh order statistik:}
+\[
+g(y_1, \dots, y_n) = n! \prod_{i=1}^n f(y_i)
+\]
+untuk $a < y_1 < \dots < y_n < b$.
+\item \textbf{Marginal PDF order statistik ke-$k$} ($Y_k = X_{k:n}$):
+\[
+\begin{aligned}
+g_k(y_k) = {}& \frac{n!}{(k-1)!\,(n-k)!} [F(y_k)]^{k-1} \\
+& \times [1 - F(y_k)]^{n-k} f(y_k)
+\end{aligned}
+\]
+\item \textbf{CDF order statistik ke-$k$:}
+\[
+G_k(y_k) = \sum_{j=k}^{n} \binom{n}{j} [F(y_k)]^j [1 - F(y_k)]^{n-j}
+\]
+\item \textbf{Minimum} ($Y_1 = X_{1:n}$):
+\[
+g_1(y_1) = n [1 - F(y_1)]^{n-1} f(y_1)
+\]
+\[
+G_1(y_1) = 1 - [1 - F(y_1)]^n
+\]
+\item \textbf{Maksimum} ($Y_n = X_{n:n}$):
+\[
+g_n(y_n) = n [F(y_n)]^{n-1} f(y_n)
+\]
+\[
+G_n(y_n) = [F(y_n)]^n
+\]
+\item \textbf{Joint PDF min \& maks} ($Y_1,Y_n$; untuk Range $R=Y_n-Y_1$ dan Midrange):
+\[
+\begin{aligned}
+g_{1,n}(y_1,y_n) = {}& n(n-1)\,[F(y_n)-F(y_1)]^{n-2} \\
+& \times f(y_1)\,f(y_n)
+\end{aligned}
+\]
+untuk $a < y_1 < y_n < b$.
+\end{itemize}
+
+%==================================================
+\section{BAB 7: DISTRIBUSI LIMIT}
+%==================================================
+
+\subsection{1. Konvergensi \& Definisi Dasar}
+\begin{itemize}
+\item \textbf{Konvergensi dalam Distribusi:}
+\[
+Y_n \xrightarrow{d} Y \iff \lim_{n \to \infty} G_n(y) = G(y)
+\]
+pada setiap titik kontinuitas $G(y)$.
+\item \textbf{Distribusi Degenerat:}
+\[
+G(y) = \begin{cases} 0, & y < c \\ 1, & y \ge c \end{cases}
+\]
+\item \textbf{Konvergensi Stokastik} (\textit{in probability} ke konstanta $c$):
+\[
+Y_n \xrightarrow{P} c \iff \forall \epsilon > 0,\; \lim_{n \to \infty} P(|Y_n - c| < \epsilon) = 1
+\]
+\end{itemize}
+
+\subsection{2. Kriteria MGF untuk Distribusi Limit}
+\begin{itemize}
+\item \textbf{Teorema Limit MGF:} Jika $\lim\limits_{n \to \infty} M_n(t) = M(t)$ untuk $-h < t < h$, maka $Y_n \xrightarrow{d} Y$ dengan CDF $G(y)$.
+\item \textbf{Identitas Limit Penting:}
+\[
+\lim_{n \to \infty} \left(1 + \frac{c}{n}\right)^n = e^c
+\]
+\[
+\lim_{n \to \infty} \left[1 + \frac{c_n}{n}\right]^b = e^{cb} \quad (c_n \to c)
+\]
+\end{itemize}
+
+\subsection{3. Teorema Limit Pusat \& Hukum Bilangan Besar}
+\begin{itemize}
+\item \textbf{Bernoulli LLN:}
+\[
+\hat{p}_n = \frac{Y_n}{n} \xrightarrow{P} p
+\]
+\item \textbf{CLT:} Jika $X_1, \dots, X_n \stackrel{\text{iid}}{\sim} (\mu, \sigma^2 < \infty)$, maka
+\[
+Z_n = \frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} = \frac{\sum X_i - n\mu}{\sigma\sqrt{n}} \xrightarrow{d} N(0, 1)
+\]
+\end{itemize}
+
+\subsection{4. Aproksimasi Binomial \& Poisson}
+\begin{itemize}
+\item \textbf{Poisson untuk Binomial:}
+\[
+\begin{gathered}X_n \sim \text{Bin}(n, p),\; n \to \infty,\; p \to 0,\; np \to \mu \\ \implies X_n \xrightarrow{d} \text{Poi}(\mu)\end{gathered}
+\]
+\item \textbf{Normal untuk Binomial} (koreksi kontinuitas):
+\[
+\begin{aligned}P(a \le X \le b) \approx{}& \Phi\!\left(\frac{b + 0.5 - np}{\sqrt{npq}}\right) \\ &- \Phi\!\left(\frac{a - 0.5 - np}{\sqrt{npq}}\right)\end{aligned}
+\]
+\item \textbf{Normal untuk Poisson:}
+\[
+Y \sim \text{Poi}(n) \implies \frac{Y - n}{\sqrt{n}} \xrightarrow{d} N(0, 1)
+\]
+\end{itemize}
+
+\subsection{5. Normal Asimtotik \& Statistik Urutan}
+\begin{itemize}
+\item \textbf{Definisi Normal Asimtotik:}
+\[
+Y_n \sim AN\!\left(m, \tfrac{\sigma^2}{n}\right) \iff \frac{\sqrt{n}(Y_n - m)}{\sigma} \xrightarrow{d} N(0, 1)
+\]
+\item \textbf{Statistik Urutan Persentil} ($X_{k:n}$ dengan $k/n \to p$):
+\[
+X_{k:n} \stackrel{\text{asy}}{\sim} N\!\left(x_p, \frac{p(1-p)}{n [f(x_p)]^2}\right)
+\]
+\item \textit{Median sampel} ($p = 0.5$):
+\[
+X_{\text{med}} \stackrel{\text{asy}}{\sim} N\!\left(x_{0.5}, \frac{1}{4n [f(x_{0.5})]^2}\right)
+\]
+\end{itemize}
+
+\subsection{6. Sifat Konvergensi \& Teorema Tambahan}
+\begin{itemize}
+\item \textbf{WLLN:} $\bar{X}_n \xrightarrow{P} \mu$
+\item \textbf{Ketaksamaan Chebyshev:}
+\[
+P(|X-\mu| \ge k\sigma) \le \frac{1}{k^2}
+\]
+\[
+P(|X-\mu| < k\sigma) \ge 1 - \frac{1}{k^2}
+\]
+\item \textbf{Continuous Mapping:} Jika $Y_n \xrightarrow{P} c$ dan $g$ kontinu di $c$, maka $g(Y_n) \xrightarrow{P} g(c)$.
+\item \textbf{Aljabar Konvergensi Stokastik:} Jika $X_n \xrightarrow{P} c$ dan $Y_n \xrightarrow{P} d$, maka
+\[
+aX_n + bY_n \xrightarrow{P} ac + bd
+\]
+\[
+X_n Y_n \xrightarrow{P} cd, \qquad X_n / Y_n \xrightarrow{P} c/d \;\, (d \neq 0)
+\]
+\item \textbf{Teorema Slutsky:} Jika $X_n \xrightarrow{P} c$ dan $Y_n \xrightarrow{d} Y$, maka
+\[
+X_n + Y_n \xrightarrow{d} c + Y, \qquad X_n Y_n \xrightarrow{d} cY
+\]
+\[
+Y_n / X_n \xrightarrow{d} Y/c \;\, (c \neq 0)
+\]
+\item \textbf{Metode Delta:} Jika $\frac{\sqrt{n}(Y_n - m)}{\sigma} \xrightarrow{d} N(0, 1)$ dan $g'(m) \neq 0$, maka
+\[
+g(Y_n) \stackrel{\text{asy}}{\sim} N\!\left(g(m), \frac{\sigma^2 [g'(m)]^2}{n}\right)
+\]
+\end{itemize}
+
+\subsection{7. Distribusi Limit Statistik Ekstrem}
+\begin{itemize}
+\item \textbf{Maksimum terstandardisasi:}
+$Y_n = \frac{X_{n:n} - b_n}{a_n} \xrightarrow{d} G(y)$ dengan $n[1 - F(u_n)] = 1$ (nilai karakteristik terbesar $u_n$).
+  \begin{itemize}
+  \item \textbf{Tipe I (Gumbel):} $G_1(y) = \exp(-e^{-y})$, $-\infty < y < \infty$
+  \item \textbf{Tipe II (Fr\'echet):} $G_2(y) = \exp(-y^{-\gamma})$, $y > 0,\, \gamma > 0$
+  \item \textbf{Tipe III (Weibull):} $G_3(y) = \exp(-(-y)^\gamma)$, $y < 0,\, \gamma > 0$
+  \end{itemize}
+\item \textbf{Konstanta penstandaran maksimum} ($u_n$: $n[1-F(u_n)]=1$):
+  \begin{itemize}
+  \item \textbf{Tipe I:} $b_n=u_n$, dan $a_n$ dari $F(a_n+u_n)=1-(ne)^{-1}$
+  \item \textbf{Tipe II:} $a_n=u_n$, $b_n=0$
+  \item \textbf{Tipe III:} $b_n=x_0$ (batas atas $x$), $a_n=x_0-u_n$
+  \end{itemize}
+\item \textbf{Minimum terstandardisasi:}
+$W_n = \frac{X_{1:n} - b_n}{a_n} \xrightarrow{d} H(w)$ dengan $nF(s_n) = 1$ (nilai karakteristik terkecil $s_n$).
+\[
+H(w) = 1 - G(-w)
+\]
+\end{itemize}
+
+%==================================================
+\section{BAB 8: STATISTIK \& DISTRIBUSI SAMPLING}
+%==================================================
+
+\subsection{1. Mean, Proporsi, \& Varians Sampel}
+\begin{itemize}
+\item \textbf{Mean sampel} ($\bar{X}$, tak berbias untuk $\mu$):
+\[
+E(\bar{X}) = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}
+\]
+\item \textbf{Proporsi sampel} ($\hat{p} = Y/n$):
+\[
+E(\hat{p}) = p, \qquad \text{Var}(\hat{p}) = \frac{pq}{n}
+\]
+\item \textbf{Varians sampel} ($S^2$):
+\[
+S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2 = \frac{\sum X_i^2 - n\bar{X}^2}{n-1}
+\]
+\[
+E(S^2) = \sigma^2
+\]
+\[
+\text{Var}(S^2) = \frac{1}{n} \left( \mu_4 - \frac{n-3}{n-1}\sigma^4 \right)
+\]
+\end{itemize}
+
+\subsection{2. Kombinasi Linear \& Sampling Normal}
+\begin{itemize}
+\item \textbf{Kombinasi linear:} Jika $X_i \sim N(\mu_i, \sigma_i^2)$ independen,
+\[
+\sum a_i X_i \sim N\!\left(\sum a_i \mu_i,\, \sum a_i^2 \sigma_i^2\right)
+\]
+\item \textbf{Selisih mean dua sampel normal:}
+\[
+\bar{X} - \bar{Y} \sim N\!\left(\mu_1 - \mu_2, \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}\right)
+\]
+\end{itemize}
+
+\subsection{3. Distribusi Chi-Square ($\chi^2$)}
+\begin{itemize}
+\item \textbf{Definisi:} $\chi^2(\nu) \equiv \text{Gam}(2, \nu/2)$
+\item \textbf{MGF \& momen:}
+\[
+M(t) = (1 - 2t)^{-\nu/2}
+\]
+\[
+E(Y) = \nu, \qquad \text{Var}(Y) = 2\nu
+\]
+\item \textbf{Hubungan Gamma:} $X \sim \text{Gam}(\theta, \kappa) \implies \frac{2X}{\theta} \sim \chi^2(2\kappa)$
+\item \textbf{Persentil Gamma:} $x_p = \theta\,\chi^2_p(2\kappa)$
+\item \textbf{Penjumlahan:} $Y_i \sim \chi^2(\nu_i)$ independen $\implies \sum Y_i \sim \chi^2\!\left(\sum \nu_i\right)$
+\item \textbf{Normal standar:} $Z \sim N(0, 1) \implies Z^2 \sim \chi^2(1)$
+\item \textbf{Sampel dari $N(\mu,\sigma^2)$:}
+\[
+\sum_{i=1}^{n}\left(\frac{X_i-\mu}{\sigma}\right)^2 \sim \chi^2(n)
+\]
+\[
+\frac{n(\bar{X}-\mu)^2}{\sigma^2} \sim \chi^2(1)
+\]
+\item \textbf{Teorema 8.3.6} (sampling normal): Jika $X_1, \dots, X_n \sim N(\mu, \sigma^2)$, maka
+  \begin{enumerate}
+  \item $\bar{X} \sim N(\mu, \sigma^2/n)$
+  \item $\bar{X}$ dan $S^2$ saling independen
+  \item $\dfrac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$
+  \end{enumerate}
+\end{itemize}
+
+\subsection{4. Distribusi $t$, $F$, dan Beta}
+\subsubsection{Distribusi $t$ Student}
+\begin{itemize}
+\item \textbf{Definisi:} $T = \dfrac{Z}{\sqrt{V/\nu}}$ dengan $Z \sim N(0, 1)$, $V \sim \chi^2(\nu)$ independen $\implies T \sim t(\nu)$
+\item \textbf{PDF:}
+\[
+f(t) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\,\Gamma\!\left(\frac{\nu}{2}\right)} \left(1 + \frac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}}
+\]
+\item \textbf{Momen:}
+\[
+E(T) = 0 \;(\nu > 1), \qquad \text{Var}(T) = \frac{\nu}{\nu - 2} \;(\nu > 2)
+\]
+\item \textbf{Momen umum} ($\nu > 2r$):
+\[
+E(T^{2r}) = \frac{\Gamma\!\left(\frac{2r+1}{2}\right)\Gamma\!\left(\frac{\nu-2r}{2}\right)}{\sqrt{\pi}\,\Gamma\!\left(\frac{\nu}{2}\right)}\,\nu^r
+\]
+\[
+E(T^{2r-1}) = 0, \quad r = 1, 2, \dots
+\]
+\item \textbf{Hubungan $t$ dan $F$:}
+\[
+T \sim t(\nu) \implies T^2 \sim F(1,\nu)
+\]
+\item \textbf{Statistik sampling:}
+\[
+\frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n-1)
+\]
+\end{itemize}
+
+\subsubsection{Distribusi $F$ Snedecor}
+\begin{itemize}
+\item \textbf{Definisi:} $X = \dfrac{V_1/\nu_1}{V_2/\nu_2}$ dengan $V_i \sim \chi^2(\nu_i)$ independen $\implies X \sim F(\nu_1, \nu_2)$
+\item \textbf{Resiprokal:}
+\[
+\frac{1}{X} \sim F(\nu_2, \nu_1) \implies f_\gamma(\nu_1, \nu_2) = \frac{1}{f_{1-\gamma}(\nu_2, \nu_1)}
+\]
+\item \textbf{Momen:}
+\[
+E(X) = \frac{\nu_2}{\nu_2 - 2} \;(\nu_2 > 2)
+\]
+\[
+\text{Var}(X) = \frac{2\nu_2^2(\nu_1 + \nu_2 - 2)}{\nu_1(\nu_2 - 2)^2(\nu_2 - 4)} \;(\nu_2 > 4)
+\]
+\item \textbf{Rasio varians sampel:}
+\[
+\frac{S_1^2 / \sigma_1^2}{S_2^2 / \sigma_2^2} \sim F(n_1 - 1, n_2 - 1)
+\]
+\end{itemize}
+
+\subsubsection{Distribusi Beta}
+\begin{itemize}
+\item \textbf{Hubungan dengan $F$:} Jika $X \sim F(\nu_1, \nu_2)$, maka
+\[
+Y = \frac{(\nu_1/\nu_2)X}{1 + (\nu_1/\nu_2)X} \sim \text{Beta}\!\left(\tfrac{\nu_1}{2}, \tfrac{\nu_2}{2}\right)
+\]
+\item \textbf{PDF:} ($0<y<1$)
+\[
+f(y;a,b) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\, y^{a-1}(1-y)^{b-1}
+\]
+\item \textbf{Momen:}
+\[
+E(Y) = \frac{a}{a+b}, \qquad \text{Var}(Y) = \frac{ab}{(a+b+1)(a+b)^2}
+\]
+\item \textbf{Persentil Beta} (lewat persentil $F$):
+\[
+y_\gamma(a,b) = \frac{a\, f_\gamma(2a,2b)}{b + a\, f_\gamma(2a,2b)}
+\]
+\item \textbf{Order statistik seragam:}
+\[
+U_{k:n} = F(X_{k:n}) \sim \text{Beta}(k, n - k + 1)
+\]
+\end{itemize}
+
+\subsection{5. Pendekatan Sampel Besar}
+\begin{itemize}
+\item \textbf{Chi-Square ke Normal:} $Y_\nu \sim \chi^2(\nu)$,
+\[
+\frac{Y_\nu - \nu}{\sqrt{2\nu}} \xrightarrow{d} N(0, 1)
+\]
+\[
+\sqrt{2Y_\nu} - \sqrt{2\nu - 1} \stackrel{\text{asy}}{\sim} N(0, 1)
+\]
+\item \textbf{Wilson-Hilferty} (persentil $\chi^2$):
+\[
+\chi^2_\gamma(\nu) \approx \nu\left(1 - \frac{2}{9\nu} + z_\gamma\sqrt{\frac{2}{9\nu}}\right)^{3}
+\]
+\item \textbf{Standar deviasi sampel:}
+\[
+S_n \stackrel{\text{asy}}{\sim} N\!\left(\sigma, \frac{\sigma^2}{2(n-1)}\right)
+\]
+\item \textbf{Limit $t$ \& $F$:}
+\[
+t(\nu) \xrightarrow{d} N(0, 1) \quad (\nu \to \infty)
+\]
+\[
+F(\nu_1, \nu_2) \to \frac{\chi^2(\nu_1)}{\nu_1} \quad (\nu_2 \to \infty)
+\]
+\end{itemize}
+
+\columnbreak
+%==================================================
+\section{TABEL DISTRIBUSI}
+%==================================================
+{\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.3}
+
+\subsection{Diskrit: PDF}
+\noindent\begin{tabular}{|l|l|l|}
+\hline
+Ber & $B(1,p)$ & $p^x(1-p)^{1-x}$ \\ \hline
+Bin & $B(n,p)$ & $\binom{n}{x}p^x(1-p)^{n-x}$ \\ \hline
+NB & $NB(r,p)$ & $\binom{x-1}{r-1}p^r(1-p)^{x-r},\; x\ge r$ \\ \hline
+Geo & $G(p)$ & $p(1-p)^{x-1}$ \\ \hline
+Hip & $H(n,M,N)$ & $\dfrac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}$ \\ \hline
+Mul & $M(n,p_1..p_k)$ & $\dfrac{n!}{x_1!\cdots x_k!}p_1^{x_1}\cdots p_k^{x_k}$ \\ \hline
+Poi & $P(\mu)$ & $e^{-\mu}\mu^x/x!$ \\ \hline
+Uni & $U\{1..N\}$ & $1/N$ \\ \hline
+\end{tabular}
+
+\columnbreak
+\subsection{Diskrit: $E$, Var, MGF}
+\noindent\begin{tabular}{|l|l|l|l|}
+\hline
+ & $E$ & Var & $M(t)$ \\ \hline
+Ber & $p$ & $p(1-p)$ & $1-p+pe^t$ \\ \hline
+Bin & $np$ & $np(1-p)$ & $(1-p+pe^t)^n$ \\ \hline
+NB & $\dfrac{r}{p}$ & $\dfrac{r(1-p)}{p^2}$ & $\left(\dfrac{pe^t}{1-(1-p)e^t}\right)^{r}$ \\ \hline
+Geo & $\dfrac{1}{p}$ & $\dfrac{1-p}{p^2}$ & $\dfrac{pe^t}{1-(1-p)e^t}$ \\ \hline
+Hip & $n\pi$ & $n\pi(1-\pi)\dfrac{N-n}{N-1}$ & -- \\ \hline
+Mul & $np_i$ & $np_i(1-p_i)$ & $\left(\sum p_ie^{t_i}\right)^n$ \\ \hline
+Poi & $\mu$ & $\mu$ & $e^{\mu(e^t-1)}$ \\ \hline
+Uni & $\dfrac{N+1}{2}$ & $\dfrac{N^2-1}{12}$ & $\dfrac{1}{N}\sum_{j=1}^{N}e^{jt}$ \\ \hline
+\end{tabular}
+
+\noindent Hip: $\pi=M/N$.
+
+\subsection{Kontinu: PDF}
+\noindent\begin{tabular}{|l|l|l|}
+\hline
+Unif & $UNIF(a,b)$ & $\dfrac{1}{b-a}$ \\ \hline
+Nor & $N(\mu,\sigma^2)$ & $\dfrac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu)^2/2\sigma^2}$ \\ \hline
+Gam & $GAM(\theta,\kappa)$ & $\dfrac{1}{\theta^\kappa\Gamma(\kappa)}x^{\kappa-1}e^{-x/\theta}$ \\ \hline
+Exp & $EXP(\theta)$ & $\dfrac{1}{\theta}e^{-x/\theta}$ \\ \hline
+Wei & $WEI(\theta,\beta)$ & $\dfrac{\beta}{\theta^\beta}x^{\beta-1}e^{-(x/\theta)^\beta}$ \\ \hline
+Par & $PAR(\theta,\kappa)$ & $\dfrac{\kappa}{\theta(1+x/\theta)^{\kappa+1}}$ \\ \hline
+\end{tabular}
+
+\subsection{Kontinu: $E$, Var, MGF}
+\noindent\begin{tabular}{|l|l|l|l|}
+\hline
+ & $E$ & Var & $M(t)$ \\ \hline
+Unif & $\dfrac{a+b}{2}$ & $\dfrac{(b-a)^2}{12}$ & $\dfrac{e^{bt}-e^{at}}{(b-a)t}$ \\ \hline
+Nor & $\mu$ & $\sigma^2$ & $e^{\mu t+\sigma^2t^2/2}$ \\ \hline
+Gam & $\kappa\theta$ & $\kappa\theta^2$ & $(1-\theta t)^{-\kappa}$ \\ \hline
+Exp & $\theta$ & $\theta^2$ & $(1-\theta t)^{-1}$ \\ \hline
+Wei & $\theta g_1$ & $\theta^2(g_2-g_1^2)$ & -- \\ \hline
+Par & $\dfrac{\theta}{\kappa-1}$ & $\dfrac{\theta^2\kappa}{(\kappa-1)^2(\kappa-2)}$ & -- \\ \hline
+\end{tabular}
+
+\noindent Wei: $g_k=\Gamma(1+k/\beta)$. Par: $E$ untuk $\kappa>1$, Var untuk $\kappa>2$.
+}
+}

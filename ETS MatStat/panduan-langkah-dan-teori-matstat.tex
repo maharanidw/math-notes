@@ -1,0 +1,447 @@
+\documentclass[10pt,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+
+% =============================================================================
+% 1. PENGATURAN KERTAS B5 LOOSE LEAF (26 HOLES) DUPLEX
+% =============================================================================
+\usepackage[
+  paperwidth=182mm,
+  paperheight=257.5mm,
+  inner=2.4cm,        % 2.4 cm untuk ruang lubang binder ring (kiri di ganjil, kanan di genap)
+  outer=1.3cm,        % 1.3 cm margin tepi luar
+  top=1.5cm,
+  bottom=1.5cm,
+  headheight=14pt,
+  headsep=10pt,
+  footskip=20pt
+]{geometry}
+
+% =============================================================================
+% 2. IDENTITAS & INFORMASI MATA KULIAH
+% =============================================================================
+\newcommand{\matakuliah}{Matematika Statistika}
+\newcommand{\kodemk}{KM184501}
+\newcommand{\dokumen}{Panduan Framework \& Teori Fundamental (BAB 7 \& 8)}
+
+% =============================================================================
+% 3. PAKET TAMPILAN, WARNA, & TCOLORBOX
+% =============================================================================
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{array}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.18cm}
+\setlist{noitemsep, topsep=2pt, leftmargin=1.3em}
+
+% Format Judul Bagian
+\titleformat{\section}{\large\bfseries\color{blue!75!black}}{\thesection}{0.8em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{teal!75!black}}{\thesubsection}{0.6em}{}
+
+% Definisi Box Tampilan Elegan
+\tcbset{
+  enhanced, breakable, arc=2.5pt, boxrule=0.6pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  before skip=6pt, after skip=6pt,
+  fonttitle=\bfseries\small, coltitle=white
+}
+
+% Kotak Teori Fundamental (Biru Elegan)
+\newtcolorbox{teoribox}[1]{
+  colback=blue!3, colframe=blue!70!black,
+  title={\textbf{Teori Fundamental: #1}}
+}
+
+% Kotak Langkah Kerja / Framework (Teal / Hijau Kebiruan)
+\newtcolorbox{stepbox}[1]{
+  colback=teal!3, colframe=teal!70!black,
+  title={\textbf{Langkah Pengerjaan Standar: #1}}
+}
+
+% Kotak Peringatan / Jebakan Ujian (Merah)
+\newtcolorbox{warningbox}[1]{
+  colback=red!3, colframe=red!70!black,
+  title={\textbf{Peringatan \& Jebakan Ujian: #1}}
+}
+
+% Kotak Rumus Kilat / Tip (Kuning Emas / Oranye)
+\newtcolorbox{tipbox}[1]{
+  colback=yellow!5, colframe=orange!85!black,
+  title={\textbf{Rumus Kunci \& Kaidah: #1}}
+}
+
+% =============================================================================
+% 4. HEADER & FOOTER DINAMIS (BOLAK-BALIK / TWOSIDE)
+% =============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO,RE]{\small\itshape \matakuliah\ -- \kodemk}
+\fancyhead[RO,LE]{\small\nouppercase{\rightmark}}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% =============================================================================
+% MULAI DOKUMEN
+% =============================================================================
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% JUDUL DOKUMEN
+% -----------------------------------------------------------------------------
+\begin{center}
+  {\LARGE\bfseries PANDUAN SISTEMATIS \& TEORI FUNDAMENTAL}\\[4pt]
+  {\Large\bfseries MATEMATIKA STATISTIKA -- PERSIAPAN ETS}\\[4pt]
+  {\normalsize\bfseries CAKUPAN LENGKAP: BAB VII (LIMIT) \& BAB VIII (SAMPLING)}\\[4pt]
+  \rule{0.95\textwidth}{1pt}\\[4pt]
+  {\small\bfseries Departemen Matematika -- Fakultas Sains dan Analitika Data}\\[2pt]
+  {\footnotesize\itshape Buku Panduan Alur Logika, Rumus Baku, Konstruksi Statistik, dan Solusi Pola Soal}
+\end{center}
+\vspace{0.15cm}
+
+\begin{tipbox}{Pohon Keputusan Identifikasi Soal ETS (Bab 7 vs Bab 8)}
+\begin{enumerate}
+  \item \textbf{Ciri Khas Bab 7 (Distribusi Limit / Asimtotik):}
+  \begin{itemize}
+    \item Ada variabel berindeks ukuran sampel $n \to \infty$ ($X_n, Y_n, W_n$).
+    \item Kata kunci: \textit{"order statistik maksimum/minimum", "distribusi terbatas (limiting distribution)", "konvergen stokastik", "ketaksamaan Chebyshev", "pendekatan CLT"}.
+  \end{itemize}
+  \item \textbf{Ciri Khas Bab 8 (Statistik \& Distribusi Sampling):}
+  \begin{itemize}
+    \item Sampel acak berukuran tertentu $n$ (bisa kecil misal $n=4, 5, 16$ atau $n$ tetap).
+    \item Kata kunci: \textit{"populasi Normal $N(\mu,\sigma^2)$", "mean $\bar{X}$ dan varians sampel $S^2$", "Chi-Square $\chi^2$", "bentuklah statistik $t$", "rasio varians / distribusi $F$", "Gamma ke Chi-Square"}.
+  \end{itemize}
+\end{enumerate}
+\end{tipbox}
+
+% =============================================================================
+% BAGIAN 1: ORDER STATISTICS (BAB 7 & BAB 0)
+% =============================================================================
+\section{Order Statistics (Statistik Urutan)}
+
+\begin{teoribox}{Definisi dan Rumus Fundamental}
+Misalkan $X_1, X_2, \dots, X_n$ IID dengan PDF $f(x)$ dan CDF $F(x)$.
+Urutan terurut: $X_{1:n} \le X_{2:n} \le \dots \le X_{n:n}$.
+\begin{enumerate}
+  \item \textbf{Maksimum ($Y_n = X_{n:n}$):}
+    \begin{equation*}
+      F_{Y_n}(y) = P(Y_n \le y) = [F(y)]^n, \qquad f_{Y_n}(y) = n [F(y)]^{n-1} f(y)
+    \end{equation*}
+  \item \textbf{Minimum ($Y_1 = X_{1:n}$):}
+    \begin{align*}
+      P(Y_1 > y) &= [1 - F(y)]^n \\
+      F_{Y_1}(y) &= 1 - [1 - F(y)]^n, \qquad f_{Y_1}(y) = n [1 - F(y)]^{n-1} f(y)
+    \end{align*}
+  \item \textbf{Order Statistik ke-$k$ ($Y_k = X_{k:n}$):}
+    \begin{equation*}
+      f_{Y_k}(y) = \frac{n!}{(k-1)!(n-k)!} [F(y)]^{k-1} [1 - F(y)]^{n-k} f(y)
+    \end{equation*}
+  \item \textbf{Distribusi Gabungan $Y_1$ dan $Y_n$ (untuk Range $R = Y_n - Y_1$):}
+    \begin{equation*}
+      f_{1,n}(y_1, y_n) = n(n-1) [F(y_n) - F(y_1)]^{n-2} f(y_1) f(y_n), \quad y_1 < y_n
+    \end{equation*}
+\end{enumerate}
+\end{teoribox}
+
+\begin{stepbox}{Framework Pengerjaan Soal Order Statistics}
+\begin{description}
+  \item[Langkah 1 (CDF Populasi):] Hitung $F(x) = \int_{-\infty}^x f(t)\,dt$ lengkap dengan daerah potongan interval ($x < a$, $a \le x \le b$, $x > b$).
+  \item[Langkah 2 (Turunkan CDF Terlebih Dahulu):]
+    \begin{itemize}
+      \item Maksimum: $[F(y)]^n$.
+      \item Minimum: $1 - [1 - F(y)]^n$. Tuliskan kejadian komplementernya $P(Y_1 > y)$ agar mendapat nilai penuh dalam ujian!
+    \end{itemize}
+  \item[Langkah 3 (Cari PDF jika Ditanya):] Gunakan aturan rantai: $f_{Y_n}(y) = \frac{d}{dy}[F(y)]^n$.
+  \item[Langkah 4 (Tetapkan Domain):] Support dari $Y_1, Y_k, Y_n$ persis sama dengan domain peubah asal $X$.
+\end{description}
+\end{stepbox}
+
+% =============================================================================
+% BAGIAN 2: TEORI ASIMTOTIK & KONVERGENSI STOKASTIK (BAB 7)
+% =============================================================================
+\section{Teori Asimtotik \& Konvergensi Stokastik (Bab 7)}
+
+\begin{teoribox}{Teorema Konvergensi Baku}
+\begin{enumerate}
+  \item \textbf{Konvergensi Stokastik ($X_n \xrightarrow{P} c$):}
+    $\forall \varepsilon > 0, \; \lim_{n \to \infty} P(|X_n - c| < \varepsilon) = 1 \iff \lim_{n \to \infty} P(|X_n - c| \ge \varepsilon) = 0$.
+  \item \textbf{Ketaksamaan Chebyshev:}
+    $P(|X_n - E(X_n)| \ge \varepsilon) \le \frac{\mathrm{Var}(X_n)}{\varepsilon^2}$.
+  \item \textbf{Central Limit Theorem (CLT):}
+    Jika $X_i \stackrel{\text{iid}}{\sim} (\mu, \sigma^2 < \infty)$, maka $Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$.
+  \item \textbf{Continuous Mapping Theorem (CMT):}
+    Jika $X_n \xrightarrow{P} c$ dan fungsi $g$ kontinu di $c$, maka $g(X_n) \xrightarrow{P} g(c)$.
+  \item \textbf{Teorema Slutsky:}
+    Jika $X_n \xrightarrow{d} X$ dan $Y_n \xrightarrow{P} c$, maka $X_n + Y_n \xrightarrow{d} X + c$ dan $X_n Y_n \xrightarrow{d} cX$.
+\end{enumerate}
+\end{teoribox}
+
+\begin{stepbox}{Template Pembuktian Chebyshev ($X_n \xrightarrow{P} c$)}
+\begin{enumerate}
+  \item Hitung momen: Tunjukkan $E(X_n) = c$ (atau $\lim E(X_n) = c$) dan $\mathrm{Var}(X_n) = \frac{K}{n} \to 0$.
+  \item Tulis pertidaksamaan Chebyshev: $P(|X_n - c| \ge \varepsilon) \le \frac{\mathrm{Var}(X_n)}{\varepsilon^2}$.
+  \item Bentuk apitan Squeeze: $0 \le P(|X_n - c| \ge \varepsilon) \le \frac{\mathrm{Var}(X_n)}{\varepsilon^2}$.
+  \item Ambil limit $n \to \infty$: Sisi kanan menuju 0, maka $\lim_{n \to \infty} P(|X_n - c| \ge \varepsilon) = 0$.
+  \item Simpulkan: $\lim_{n \to \infty} P(|X_n - c| < \varepsilon) = 1 - 0 = 1 \implies X_n \xrightarrow{P} c$.
+\end{enumerate}
+\end{stepbox}
+
+% =============================================================================
+% BAGIAN 3: DISTRIBUSI PEMBATAS (LIMITING DISTRIBUTION)
+% =============================================================================
+\section{Distribusi Pembatas / Limiting Distribution (Bab 7)}
+
+\begin{teoribox}{Dua Jalur Menentukan Limiting Distribution}
+\begin{enumerate}
+  \item \textbf{Jalur Limit CDF:} $F_{W_n}(w) = P(W_n \le w)$. Ambil $\lim_{n \to \infty} F_{W_n}(w) = F_W(w)$.\\
+  Identitas limit fundamental: $\lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n = e^x, \quad \lim_{n \to \infty} \left(1 - \frac{x}{n}\right)^n = e^{-x}$.
+  \item \textbf{Jalur Limit MGF (Teorema Ketunggalan):}
+  Jika $\lim_{n \to \infty} M_{Y_n}(t) = M_Y(t)$ pada suatu interval di sekitar 0, maka $Y_n \xrightarrow{d} Y$.
+\end{enumerate}
+\end{teoribox}
+
+\begin{warningbox}{Penyekalaan Melawan Distribusi Degenerat}
+Jika menghitung $\lim_{n \to \infty} F(y)$ menghasilkan fungsi tangga (0 lalu mendadak 1), peubah tersebut konvergen ke distribusi \textbf{degenerat di suatu titik konstanta}.\\
+Agar menghasilkan distribusi kontinu yang bermakna (*non-degenerate*), soal ujian selalu memberikan faktor pengali penormalisasi:
+\begin{itemize}
+  \item Pada mean: dikalikan $\sqrt{n} \implies \sqrt{n}(\bar{X} - \mu) \xrightarrow{d} N(0, \sigma^2)$.
+  \item Pada order statistik maksimum: dikalikan $n$ atau $\sqrt{n} \implies W_n = n(b - Y_n) \xrightarrow{d} \text{Eksponensial}$.
+\end{itemize}
+\end{warningbox}
+
+% =============================================================================
+% BAGIAN 4: STATISTIK & DISTRIBUSI SAMPLING (BAB 8 MURNI)
+% =============================================================================
+\section{Statistik \& Distribusi Sampling (Bab 8 Murni)}
+
+\begin{tipbox}{Peta Silsilah 4 Distribusi Sampling Utama}
+Seluruh bab 8 berputar pada pohon turunan distribusi sampling berikut:
+\begin{center}
+\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{ccccc}
+\textbf{Normal Standar} & $\implies$ & \textbf{Chi-Square} & $\implies$ & \textbf{Student $t$ \& Snedecor $F$} \\
+$Z \sim N(0, 1)$ & $\xrightarrow{Z^2}$ & $\chi^2(1)$ & $\xrightarrow{T = \frac{Z}{\sqrt{V/\nu}}}$ & $T \sim t(\nu)$ \\
+$Z_1,\dots,Z_n$ & $\xrightarrow{\sum Z_i^2}$ & $\chi^2(n)$ & $\xrightarrow{F = \frac{V_1/\nu_1}{V_2/\nu_2}}$ & $F \sim F(\nu_1, \nu_2)$
+\end{tabular}
+\end{center}
+\end{tipbox}
+
+\subsection{1. Momen Sampel \& Varians Sampel ($S^2$ vs $V^2$)}
+\begin{teoribox}{Definisi Varians Sampel}
+Diberikan sampel acak $X_1, \dots, X_n$ dari populasi dengan mean $\mu$ dan varians $\sigma^2$:
+\begin{enumerate}
+  \item \textbf{Mean Sampel:} $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$, dengan $E(\bar{X}) = \mu$ dan $\mathrm{Var}(\bar{X}) = \frac{\sigma^2}{n}$.
+  \item \textbf{Varians Sampel Tak Bias ($S^2$):}
+    \begin{equation*}
+      S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2 = \frac{\sum X_i^2 - n\bar{X}^2}{n-1}, \qquad E(S^2) = \sigma^2
+    \end{equation*}
+  \item \textbf{Varians Sampel Berbias ($V^2$ / deviasi rata-rata):}
+    \begin{equation*}
+      V^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2 \implies S^2 = \frac{n}{n-1}V^2 \quad \text{atau} \quad V^2 = \frac{n-1}{n}S^2
+    \end{equation*}
+    \textit{(Hubungan ini keluar persis pada Soal 4 ETS 2022!)}
+\end{enumerate}
+\end{teoribox}
+
+\subsection{2. Jembatan Emas: Hubungan Gamma $\iff$ Chi-Square}
+\begin{teoribox}{Teorema Transformasi Gamma ke Chi-Square}
+Distribusi Chi-Square dengan derajat kebebasan $\nu$ adalah kasus khusus dari Gamma: $\chi^2(\nu) \equiv \text{Gam}(\theta = 2, \kappa = \nu/2)$.
+\begin{enumerate}
+  \item \textbf{Teorema Fundamental:} Jika $X \sim \text{Gam}(\theta, \kappa)$, maka:
+    \begin{equation*}
+      Y = \frac{2X}{\theta} \sim \chi^2(2\kappa)
+    \end{equation*}
+  \item \textbf{Penerapan Menghitung Peluang Gamma (Soal ETS 2025 No 3 \& ETS 2024 No 2):}
+    Jika $X \sim \text{Gam}(\theta = 1.5, \kappa = 2)$, maka derajat bebas $\nu = 2(2) = 4$.
+    \begin{equation*}
+      P(X \ge c) = P\left(\frac{2X}{\theta} \ge \frac{2c}{\theta}\right) = P\left(Y \ge \frac{2c}{\theta}\right) \quad \text{dengan } Y \sim \chi^2(2\kappa)
+    \end{equation*}
+  \item \textbf{Jumlahan Peubah Eksponensial:}
+    Jika $T_1, \dots, T_n \stackrel{\text{iid}}{\sim} \text{Exp}(\theta) \equiv \text{Gam}(\theta, 1)$, maka jumlahan waktu kerjanya:
+    \begin{equation*}
+      \sum_{i=1}^n T_i \sim \text{Gam}(\theta, n) \implies \frac{2}{\theta}\sum_{i=1}^n T_i \sim \chi^2(2n)
+    \end{equation*}
+\end{enumerate}
+\end{teoribox}
+
+\subsection{3. Teorema Keramat 8.3.6 (Sampling dari Populasi Normal)}
+\begin{teoribox}{Teorema 8.3.6 (Bain \& Engelhardt)}
+Jika $X_1, X_2, \dots, X_n \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, maka berlaku tiga sifat fundamental:
+\begin{enumerate}
+  \item $\bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right)$
+  \item $\bar{X}$ dan $S^2$ \textbf{saling bebas (independen)}!
+  \item Statistik Chi-Square varians sampel:
+    \begin{equation*}
+      \frac{(n-1)S^2}{\sigma^2} = \frac{\sum_{i=1}^n (X_i - \bar{X})^2}{\sigma^2} \sim \chi^2(n-1)
+    \end{equation*}
+\end{enumerate}
+\end{teoribox}
+
+\subsection{4. Distribusi $t$ Student \& Distribusi $F$ Snedecor}
+\begin{teoribox}{Definisi Baku \& Sifat-Sifatnya}
+\begin{enumerate}
+  \item \textbf{Distribusi $t$ Student:}
+    Misalkan $Z \sim N(0, 1)$ dan $V \sim \chi^2(\nu)$ saling independen, maka:
+    \begin{equation*}
+      T = \frac{Z}{\sqrt{V/\nu}} \sim t(\nu)
+    \end{equation*}
+    \begin{itemize}
+      \item Simetri di sekitar 0: $t_{1-\gamma}(\nu) = -t_\gamma(\nu)$.
+      \item $E(T) = 0$ ($\nu > 1$), $\mathrm{Var}(T) = \frac{\nu}{\nu - 2}$ ($\nu > 2$).
+      \item Hubungan dengan $F$: $T \sim t(\nu) \implies T^2 \sim F(1, \nu)$.
+      \item Statistik Uji Rataan: $\frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n-1)$.
+    \end{itemize}
+  \item \textbf{Distribusi $F$ Snedecor:}
+    Misalkan $V_1 \sim \chi^2(\nu_1)$ dan $V_2 \sim \chi^2(\nu_2)$ saling independen, maka:
+    \begin{equation*}
+      X = \frac{V_1/\nu_1}{V_2/\nu_2} \sim F(\nu_1, \nu_2)
+    \end{equation*}
+    \begin{itemize}
+      \item \textbf{Sifat Resiprokal (Wajib untuk Tabel $F$):}
+        \begin{equation*}
+          \frac{1}{X} \sim F(\nu_2, \nu_1) \implies f_\gamma(\nu_1, \nu_2) = \frac{1}{f_{1-\gamma}(\nu_2, \nu_1)}
+        \end{equation*}
+      \item Rasio dua varians sampel: $\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F(n_1-1, n_2-1)$.
+    \end{itemize}
+  \item \textbf{Distribusi Beta:}
+    Jika $X \sim F(\nu_1, \nu_2)$, maka peubah $Y = \frac{(\nu_1/\nu_2)X}{1 + (\nu_1/\nu_2)X} \sim \text{Beta}\left(\frac{\nu_1}{2}, \frac{\nu_2}{2}\right)$.
+\end{enumerate}
+\end{teoribox}
+
+\begin{stepbox}{Framework Menyelesaikan Soal Konstruksi Statistik Sampling}
+\textbf{Tipe Soal: "Bentuklah statistik $T \sim t(\nu)$ atau $W \sim F(\nu_1, \nu_2)$ dari data sampel acak"}
+\begin{description}
+  \item[Langkah 1 (Cari Peubah Normal Standar $Z$):]
+    Cari kombinasi linear yang menghasilkan Normal Standar $Z \sim N(0, 1)$.
+    Misal dari $\bar{X} - \mu \sim N(0, \sigma^2/n) \implies Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$.\\
+    Atau dari selisih dengan sampel baru: $\bar{X} - X_{n+1} \sim N\left(0, \sigma^2\left(\frac{1}{n} + 1\right)\right)$.
+  \item[Langkah 2 (Cari Peubah Chi-Square $V$):]
+    Identifikasi komponen kuadratik yang bebas dari $Z$:
+    Gunakan Teorema 8.3.6: $V = \frac{(n-1)S^2}{\sigma^2} = \frac{n V^2}{\sigma^2} \sim \chi^2(n-1)$.
+  \item[Langkah 3 (Rakit Rasio $T$ atau $F$):]
+    Bagi $Z$ dengan $\sqrt{V/\nu}$. Perhatikan bahwa konstanta parameter yang tidak diketahui ($\sigma$) **akan saling mencoret**:
+    $$T = \frac{\frac{\bar{X} - X_{n+1}}{\sigma\sqrt{\frac{n+1}{n}}}}{\sqrt{\frac{(n-1)S^2/\sigma^2}{n-1}}} = \frac{\bar{X} - X_{n+1}}{S\sqrt{\frac{n+1}{n}}} = \sqrt{\frac{n-1}{n+1}}\left(\frac{\bar{X} - X_{n+1}}{V}\right) \sim t(n-1)$$
+    *(Ini membuktikan rumus persis Soal 4 ETS 2022!)*
+  \item[Langkah 4 (Jika Rasio Kuadrat $\to$ Distribusi $F$):]
+    Jika ada bentuk kuadrat rasio dua normal standar (Soal ETS 2024 No 3 \& ETS 2023 No 4):
+    Bentuk menjadi $\frac{U / \nu_1}{V / \nu_2}$ di mana $U = \sum_{i=1}^{\nu_1} Z_i^2 \sim \chi^2(\nu_1)$ dan $V = \sum_{j=1}^{\nu_2} Z_j^2 \sim \chi^2(\nu_2)$.
+\end{description}
+\end{stepbox}
+
+% =============================================================================
+% BAGIAN 5: TABEL RANGKUMAN DISTRIBUSI SAMPLING
+% =============================================================================
+\section{Tabel Cepat Statistik \& Karakteristik Distribusi Sampling}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Distribusi} & \textbf{Struktur Pembentuk} & \textbf{Derajat Bebas} & \textbf{Mean $E$} & \textbf{Varians $\mathrm{Var}$} \\
+\midrule
+$\chi^2(\nu)$ & $\sum_{i=1}^\nu Z_i^2$ & $\nu$ & $\nu$ & $2\nu$ \\
+$t(\nu)$ & $\frac{Z}{\sqrt{V/\nu}}$ & $\nu$ & $0 \; (\nu > 1)$ & $\frac{\nu}{\nu - 2} \; (\nu > 2)$ \\
+$F(\nu_1, \nu_2)$ & $\frac{V_1/\nu_1}{V_2/\nu_2}$ & $\nu_1, \nu_2$ & $\frac{\nu_2}{\nu_2 - 2} \; (\nu_2 > 2)$ & $\frac{2\nu_2^2(\nu_1+\nu_2-2)}{\nu_1(\nu_2-2)^2(\nu_2-4)}$ \\
+$\text{Beta}(a, b)$ & Rasio fungsi $F$ & $a, b$ & $\frac{a}{a+b}$ & $\frac{ab}{(a+b+1)(a+b)^2}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+\begin{warningbox}{Tips Ekstra Ujian Besok}
+\begin{itemize}
+  \item \textbf{Independensi adalah Syarat Mutlak:} Dalam mendefinisikan $t = \frac{Z}{\sqrt{V/\nu}}$ atau $F = \frac{V_1/\nu_1}{V_2/\nu_2}$, Anda **wajib menyebutkan** kata: \textit{"karena pembilang dan penyebut saling independen menurut Teorema 8.3.6"}. Dosen Matematika Statistika sangat ketat memeriksa alasan independensi ini.
+  \item \textbf{Hubungan $t^2 \sim F$:} Ingat bahwa $[t(\nu)]^2 \sim F(1, \nu)$. Jika di soal ada kuadrat dari statistik $t$, ia langsung berdistribusi $F$ dengan derajat bebas $(1, \nu)$.
+  \item \textbf{Peluang Simetri $t$:} $P(-2.131 < T < 2.131) = 1 - 2P(T \ge 2.131) = 1 - 2\alpha$.
+\end{itemize}
+\end{warningbox}
+
+% =============================================================================
+% BAGIAN 6: PANDUAN PRAKTIS MEMBACA TABEL STATISTIKA (Z, t, CHI-SQUARE, F)
+% =============================================================================
+\section{Panduan Praktis Membaca Tabel Distribusi Statistika}
+
+\begin{tipbox}{Ringkasan Arah Arsir Diagram Kurva pada Lampiran Ujian}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\footnotesize\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{3.2cm}p{3.6cm}p{6.8cm}}
+\toprule
+\textbf{Nama Tabel} & \textbf{Arah Arsir Peluang} & \textbf{Kaidah Pokok Pembacaan} \\
+\midrule
+\textbf{Tabel $Z$ (Normal A.3)} & \textbf{Ekor Kiri} ($-\infty$ s.d. $z$) & Langsung menyajikan $P(Z \le z)$. \\
+\textbf{Tabel $t$ (Student A.4)} & \textbf{Ekor Kanan} ($t$ s.d. $+\infty$) & Kolom $\alpha$ adalah luas ekor kanan: $P(T > t_\alpha) = \alpha$. \\
+\textbf{Tabel $\chi^2$ (Chi-Square A.5)} & \textbf{Ekor Kanan} ($\chi^2$ s.d. $+\infty$) & Kolom $\alpha$ adalah luas ekor kanan: $P(X > \chi^2_\alpha) = \alpha$. \\
+\textbf{Tabel $F$ (Snedecor A.6)} & \textbf{Ekor Kanan} ($f$ s.d. $+\infty$) & Kolom $=\nu_1$ (pembilang), Baris $=\nu_2$ (penyebut). \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{tipbox}
+
+\subsection{1. Tabel Normal Baku ($Z$) -- Tabel A.3}
+\begin{itemize}
+  \item \textbf{Membaca $P(Z \le z)$:} Cari baris $z$ (hingga 1 desimal), lalu geser ke kolom desimal kedua.
+  Contoh: $P(Z \le 1.96) \implies$ Baris $1.9$, kolom $.06 \implies \mathbf{0.9750}$.
+  \item \textbf{Membaca $P(Z > z)$:} Gunakan komplemen $1 - P(Z \le z)$.
+  Contoh: $P(Z > 1.50) = 1 - 0.9332 = \mathbf{0.0668}$.
+  \item \textbf{Mencari Persentil / Nilai Kritis:} Cari angka di dalam tubuh tabel yang mendekati peluang yang diminta, lalu baca kombinasi baris dan kolomnya.
+  Contoh: Untuk persentil ke-90 ($P \approx 0.9000$), cari angka $0.8997$ (1.28) $\implies z_{0.10} \approx \mathbf{1.282}$.
+\end{itemize}
+
+\subsection{2. Tabel $t$ Student -- Tabel A.4}
+\begin{itemize}
+  \item Tubuh tabel menyajikan nilai kritis $t_\alpha(\nu)$ sedemikian hingga luas ekor kanan $P(T > t_\alpha) = \alpha$.
+  \item \textbf{Peluang Interval Simetris (Kasus Soal ETS 2025 No 4c):}
+  Jika $T \sim t(15)$ dan diketahui batas $t = 2.131$:
+  \begin{enumerate}
+    \item Buka baris $\nu = 15$, temukan angka $2.131$.
+    \item Lihat kepala kolom di atasnya: tertulis $\mathbf{\alpha = 0.025}$.
+    \item Berarti luas ekor kanan $P(T > 2.131) = 0.025$, dan luas ekor kiri $P(T < -2.131) = 0.025$.
+    \item Maka peluang tengah: $P(-2.131 < T < 2.131) = 1 - 2(0.025) = \mathbf{0.95}$.
+  \end{enumerate}
+\end{itemize}
+
+\subsection{3. Tabel Chi-Square ($\chi^2$) -- Tabel A.5}
+\begin{itemize}
+  \item Tabel menyajikan nilai $\chi^2_\alpha(\nu)$ untuk ekor kanan $P(X > \chi^2_\alpha) = \alpha$.
+  \item \textbf{Ekor Kanan (Peluang Kecil):} Gunakan tabel sebelah kanan ($\alpha = 0.30$, $0.20$, $0.10$, $0.05$, $0.025$, $0.01$).
+  \item \textbf{Ekor Kiri (Peluang Besar):} Gunakan tabel sebelah kiri ($\alpha = 0.995$, $0.99$, \dots, $0.50$).
+  \item \textbf{Menentukan Interval Nilai Peluang (Kasus ETS 2025 No 3):}
+  Jika dicari $P(Y \ge 8)$ untuk $Y \sim \chi^2(4)$:
+  Pada baris $\nu = 4$, nilai $8$ terjepit di antara $\chi^2_{0.10}(4) = 7.779$ dan $\chi^2_{0.05}(4) = 9.488$.
+  Sehingga disimpulkan: $\mathbf{0.05 < P(Y \ge 8) < 0.10}$.
+\end{itemize}
+
+\subsection{4. Tabel $F$ Snedecor -- Tabel A.6 \& Sifat Resiprokal}
+\begin{stepbox}{Kaidah Membaca Tabel $F$ \& Menghitung Persentil Kiri}
+\begin{description}
+  \item[Persentil Kanan ($\alpha = 0.05$ atau $0.01$):]
+  Buka halaman tabel yang sesuai ($f_{0.05}$ atau $f_{0.01}$).
+  \begin{itemize}
+    \item Cari kolom pembilang $\nu_1$.
+    \item Cari baris penyebut $\nu_2$.
+    \item Titik temu baris dan kolom adalah $f_\alpha(\nu_1, \nu_2)$.
+  \end{itemize}
+  Contoh (ETS 2024 No 3): $f_{0.05}(4, 5) \implies$ Kolom $\nu_1 = 4$, Baris $\nu_2 = 5 \implies \mathbf{5.19}$.
+  \item[Persentil Kiri (Peluang Kumulatif Kecil, misal $\alpha = 0.95$):]
+  Karena lampiran tabel tidak memuat $\alpha = 0.95$, gunakan \textbf{Sifat Resiprokal $F$}:
+  \begin{equation*}
+    f_{1-\gamma}(\nu_1, \nu_2) = \frac{1}{f_\gamma(\nu_2, \nu_1)}
+  \end{equation*}
+  \textit{Catatan Penting:} Jangan lupa menukar derajat bebasnya! $\nu_1$ dan $\nu_2$ bertukar posisi di penyebut.
+  Contoh:
+  \begin{equation*}
+    f_{0.95}(5, 4) = \frac{1}{f_{0.05}(4, 5)} = \frac{1}{5.19} \approx \mathbf{0.1927}
+  \end{equation*}
+\end{description}
+\end{stepbox}
+
+\end{document}
+
